@@ -54,6 +54,18 @@
             background-size: 1em;
             padding-right: 2.5rem;
         }
+        .loader {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #3498db;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-sm">
@@ -136,11 +148,19 @@
                         <div id="restaurant-actions" class="items-center space-x-3 hidden sm:flex">
                             <button id="add-restaurant-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add Restaurant</button>
                         </div>
+                         <div id="menu-actions" class="items-center space-x-3 hidden sm:flex">
+                             <select id="menuRestaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                                <option value="">Select Restaurant</option>
+                            </select>
+                            <button id="add-menu-item-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs whitespace-nowrap">Add Item</button>
+                            <button id="delete-selected-menu-items-btn" class="bg-red-600 text-white px-3 py-1.5 rounded-md hover:bg-red-700 text-xs whitespace-nowrap hidden">Delete Selected</button>
+                        </div>
                         <div id="user-actions" class="items-center space-x-3 hidden sm:flex">
                              <select id="restaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
                                 <option value="all">All Restaurants</option>
                             </select>
-                            <button id="add-user-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add User</button>
+                            <button id="add-user-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs whitespace-nowrap">Add User</button>
+                             <button id="delete-selected-users-btn" class="bg-red-600 text-white px-3 py-1.5 rounded-md hover:bg-red-700 text-xs whitespace-nowrap hidden">Delete Selected</button>
                         </div>
                         
                          <div class="relative">
@@ -198,39 +218,28 @@
                                     <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <!-- Table Rows -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">The Golden Spoon</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-blue-500 font-medium underline">Emily Carter</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">+1-555-123-4567</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">123 Main St, Anytown, USA</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2023-01-15</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Premium</span></td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$199.99</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
+                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Menu Table -->
+            <main id="menu-content" class="flex-1 overflow-x-auto overflow-y-auto bg-white p-4 md:p-8 hidden">
+                 <div class="min-w-full inline-block align-middle">
+                    <div class="overflow-hidden border rounded-lg">
+                        <table id="menuTable" class="min-w-full divide-y divide-gray-200">
+                             <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="p-4"><input type="checkbox" id="select-all-menu-items" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Name</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Category</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Price</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Time to Prep.</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
-                                 <tr class="bg-gray-50 hover:bg-gray-100">
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">The Cozy Corner</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-blue-500 font-medium underline">David Lee</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">+1-555-987-6543</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">456 Oak Ave, Anytown, USA</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2023-03-22</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-800">Basic</span></td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$99.99</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
-                                </tr>
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">The Spicy Grill</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-blue-500 font-medium underline">Sophia Rodriguez</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">+1-555-246-8013</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">789 Pine Ln, Anytown, USA</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2023-05-10</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Premium</span></td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$199.99</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
-                                </tr>
-                            </tbody>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
                         </table>
                     </div>
                 </div>
@@ -243,45 +252,17 @@
                         <table id="userTable" class="min-w-full divide-y divide-gray-200">
                            <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="0">Name</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Email</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Restaurant</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Status</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Role</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Last log in</th>
+                                    <th scope="col" class="p-4"><input type="checkbox" id="select-all-users" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Name</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Email</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Restaurant</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Status</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Role</th>
+                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="6">Last log in</th>
                                     <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <!-- User Rows -->
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">Emily Carter</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">emily.carter@example.com</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500"><div class="flex flex-wrap gap-1"><span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">The Golden Spoon</span></div></td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span></td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">Admin</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2024-08-26 10:30 AM</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
-                                </tr>
-                                <tr class="bg-gray-50 hover:bg-gray-100">
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">David Lee</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">david.lee@example.com</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500"><div class="flex flex-wrap gap-1"><span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">The Cozy Corner</span></div></td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span></td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">User</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2024-08-25 08:00 PM</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
-                                </tr>
-                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">Sophia Rodriguez</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">sophia.rodriguez@example.com</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500"><div class="flex flex-wrap gap-1"><span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">The Spicy Grill</span></div></td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Inactive</span></td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">User</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2024-07-15 02:15 PM</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
-                                </tr>
-                            </tbody>
+                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
                         </table>
                     </div>
                 </div>
@@ -306,6 +287,7 @@
                 </button>
             </div>
             <form id="restaurant-form" class="space-y-4">
+                <input type="hidden" id="res-id">
                 <div>
                     <label for="res-name" class="block text-xs font-medium text-gray-700">Name</label>
                     <input type="text" id="res-name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
@@ -358,6 +340,7 @@
                 </button>
             </div>
             <form id="user-form" class="space-y-4">
+                 <input type="hidden" id="user-id">
                 <div>
                     <label for="user-name" class="block text-xs font-medium text-gray-700">Name</label>
                     <input type="text" id="user-name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
@@ -400,11 +383,159 @@
         </div>
     </div>
 
+    <!-- Add/Edit Menu Item Modal -->
+    <div id="menu-item-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-3xl">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 id="menu-item-modal-title" class="text-lg font-semibold">Add Menu Item</h3>
+                <button id="close-menu-item-modal-btn" class="text-gray-500 hover:text-gray-800">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="menu-item-form" class="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+                <input type="hidden" id="menu-item-id">
+                <input type="hidden" id="menu-item-restaurant-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Left Column -->
+                    <div class="space-y-4">
+                        <div>
+                            <label for="item-name" class="block text-xs font-medium text-gray-700">Name <span class="text-red-500">*</span></label>
+                            <input type="text" id="item-name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center">
+                                <label for="item-description" class="block text-xs font-medium text-gray-700">Description</label>
+                            </div>
+                            <textarea id="item-description" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"></textarea>
+                             <button type="button" id="generate-description-btn" class="mt-2 flex items-center justify-center gap-2 text-xs text-white px-3 py-1.5 rounded-md bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700">
+                                <i data-lucide="sparkles" class="w-4 h-4"></i> Generate with AI
+                            </button>
+                        </div>
+                         <div>
+                            <label for="item-category" class="block text-xs font-medium text-gray-700">Category <span class="text-red-500">*</span></label>
+                            <select id="item-category" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option>Starter</option>
+                                <option>Main Course</option>
+                                <option>Dessert</option>
+                                <option>Beverage</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="item-cuisine" class="block text-xs font-medium text-gray-700">Cuisine</label>
+                            <select id="item-cuisine" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option>American</option>
+                                <option>Italian</option>
+                                <option>Mexican</option>
+                                <option>Japanese</option>
+                                <option>Chinese</option>
+                                <option>Indian</option>
+                                <option>Thai</option>
+                                <option>French</option>
+                                <option>Spanish</option>
+                                <option>Greek</option>
+                                <option>Mediterranean</option>
+                                <option>Lebanese</option>
+                                <option>Vietnamese</option>
+                                <option>Korean</option>
+                                <option>Other</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="item-taste" class="block text-xs font-medium text-gray-700">Taste</label>
+                            <select id="item-taste" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                                <option>Sweet</option>
+                                <option>Creamy</option>
+                                <option>Mild Spicy</option>
+                                <option>Medium Spicy</option>
+                                <option>Super Spicy</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Right Column -->
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-gray-700">Image</label>
+                            <div id="image-preview-container" class="mt-1 h-40 w-full bg-gray-100 rounded flex items-center justify-center border-2 border-dashed">
+                                <img id="item-image-preview" src="" class="max-h-full max-w-full hidden object-contain">
+                                <div id="image-loader" class="loader hidden"></div>
+                                <span id="image-placeholder" class="text-gray-400 text-xs">Image Preview</span>
+                            </div>
+                             <input type="file" id="item-image-upload" class="hidden" accept="image/*">
+                             <input type="hidden" id="item-image-url">
+                            <div class="flex gap-2 mt-2">
+                                <button type="button" id="upload-image-btn" class="flex-1 text-xs bg-white border border-gray-300 px-3 py-1.5 rounded-md hover:bg-gray-50">Upload</button>
+                                <button type="button" id="generate-image-btn" class="flex-1 flex items-center justify-center gap-2 text-xs text-white px-3 py-1.5 rounded-md bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700">
+                                    <i data-lucide="sparkles" class="w-4 h-4"></i> Generate
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="item-price" class="block text-xs font-medium text-gray-700">Price ($) <span class="text-red-500">*</span></label>
+                            <input type="number" step="0.01" id="item-price" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                        <div>
+                            <label for="item-prep-time" class="block text-xs font-medium text-gray-700">Time to Preparation (mins) <span class="text-red-500">*</span></label>
+                            <input type="number" id="item-prep-time" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                        </div>
+                        <div>
+                             <label class="block text-xs font-medium text-gray-700">Portion Size</label>
+                             <div class="mt-2 flex flex-wrap gap-x-4 gap-y-2">
+                                <label class="inline-flex items-center"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded" value="Mini"> <span class="ml-2">Mini</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded" value="Small"> <span class="ml-2">Small</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded" value="Medium"> <span class="ml-2">Medium</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded" value="Large"> <span class="ml-2">Large</span></label>
+                                <label class="inline-flex items-center"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded" value="Extra Large"> <span class="ml-2">Extra Large</span></label>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
+                    <button type="button" id="cancel-menu-item-modal-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
+            <h3 id="confirm-title" class="text-lg font-semibold">Confirm Deletion</h3>
+            <p id="confirm-message" class="text-sm text-gray-600 mt-2 mb-4">Are you sure?</p>
+            <div id="confirm-input-container" class="hidden">
+                 <label for="confirm-input" class="block text-xs font-medium text-gray-700">Please type "Delete" to confirm.</label>
+                 <input type="text" id="confirm-input" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm">
+            </div>
+            <div class="flex justify-end pt-4 space-x-2 mt-4">
+                <button type="button" id="cancel-confirm-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                <button type="button" id="confirm-btn" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 disabled:bg-red-300">Confirm</button>
+            </div>
+        </div>
+    </div>
+
 
     <script>
         lucide.createIcons();
         
         document.addEventListener('DOMContentLoaded', () => {
+
+            // --- DATA STORE ---
+            let restaurantData = [
+                { id: 1, name: 'The Golden Spoon', owner: 'Emily Carter', contact: '+1-555-123-4567', address: '123 Main St, Anytown, USA', onboarding: '2023-01-15', plan: 'Premium', payment: '199.99' },
+                { id: 2, name: 'The Cozy Corner', owner: 'David Lee', contact: '+1-555-987-6543', address: '456 Oak Ave, Anytown, USA', onboarding: '2023-03-22', plan: 'Basic', payment: '99.99' },
+                { id: 3, name: 'The Spicy Grill', owner: 'Sophia Rodriguez', contact: '+1-555-246-8013', address: '789 Pine Ln, Anytown, USA', onboarding: '2023-05-10', plan: 'Premium', payment: '199.99' }
+            ];
+
+            let userData = [
+                { id: 1, name: 'Emily Carter', email: 'emily.carter@example.com', restaurants: ['The Golden Spoon'], status: 'Active', role: 'Admin', lastLogin: '2024-08-26 10:30 AM' },
+                { id: 2, name: 'David Lee', email: 'david.lee@example.com', restaurants: ['The Cozy Corner'], status: 'Active', role: 'User', lastLogin: '2024-08-25 08:00 PM' },
+                { id: 3, name: 'Sophia Rodriguez', email: 'sophia.rodriguez@example.com', restaurants: ['The Spicy Grill'], status: 'Inactive', role: 'User', lastLogin: '2024-07-15 02:15 PM' }
+            ];
+
+            let menuData = [
+                { id: 1, restaurantId: 1, name: 'Golden Soup', description: 'Our signature soup.', imageUrl: '', price: '12.50', cuisine: 'International', taste: 'Creamy', category: 'Starter', portionSizes: ['Small', 'Medium'], prepTime: '15' },
+                { id: 2, restaurantId: 2, name: 'Cozy Burger', description: 'A classic beef burger.', imageUrl: '', price: '15.00', cuisine: 'American', taste: 'Medium Spicy', category: 'Main Course', portionSizes: ['Medium', 'Large'], prepTime: '20' },
+            ];
 
             // --- ELEMENTS ---
             const loginScreen = document.getElementById('login-screen');
@@ -414,16 +545,17 @@
             const closeMenuButton = document.getElementById('close-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const searchInput = document.getElementById('searchInput');
-            const restaurantTable = document.getElementById('restaurantTable');
-            const restaurantTableBody = restaurantTable.querySelector('tbody');
-            const userTable = document.getElementById('userTable');
-            const userTableBody = userTable.querySelector('tbody');
+            const restaurantTableBody = document.querySelector('#restaurantTable tbody');
+            const menuTableBody = document.querySelector('#menuTable tbody');
+            const userTableBody = document.querySelector('#userTable tbody');
             const navLinks = document.querySelectorAll('#sidebar-nav a, #mobile-nav a');
             const contentSections = document.querySelectorAll('main');
             const headerTitle = document.getElementById('header-title');
             const restaurantActions = document.getElementById('restaurant-actions');
+            const menuActions = document.getElementById('menu-actions');
             const userActions = document.getElementById('user-actions');
             const restaurantFilter = document.getElementById('restaurantFilter');
+            const menuRestaurantFilter = document.getElementById('menuRestaurantFilter');
             let currentView = 'restaurant-management-content';
 
             // Restaurant Modal elements
@@ -435,8 +567,7 @@
             const addRestaurantBtn = document.getElementById('add-restaurant-btn');
             const ownerSearchInput = document.getElementById('res-owner-search');
             const ownerDropdown = document.getElementById('owner-dropdown');
-            let editingRow = null;
-
+            
             // User Modal elements
             const userModal = document.getElementById('user-modal');
             const userModalTitle = document.getElementById('user-modal-title');
@@ -447,24 +578,48 @@
             const multiSelectContainer = document.getElementById('multi-select-container');
             const restaurantSearchInput = document.getElementById('restaurant-search-input');
             const restaurantDropdown = document.getElementById('restaurant-dropdown');
-            let editingUserRow = null;
-            let allRestaurants = [];
 
+            // Menu Item Modal elements
+            const menuItemModal = document.getElementById('menu-item-modal');
+            const menuItemModalTitle = document.getElementById('menu-item-modal-title');
+            const closeMenuItemModalBtn = document.getElementById('close-menu-item-modal-btn');
+            const cancelMenuItemModalBtn = document.getElementById('cancel-menu-item-modal-btn');
+            const menuItemForm = document.getElementById('menu-item-form');
+            const addMenuItemBtn = document.getElementById('add-menu-item-btn');
+            const generateDescriptionBtn = document.getElementById('generate-description-btn');
+            const generateImageBtn = document.getElementById('generate-image-btn');
+            const imagePreview = document.getElementById('item-image-preview');
+            const imageLoader = document.getElementById('image-loader');
+            const imagePlaceholder = document.getElementById('image-placeholder');
+            const uploadImageBtn = document.getElementById('upload-image-btn');
+            const imageUploadInput = document.getElementById('item-image-upload');
 
-            // --- EVENT LISTENERS ---
+            // Confirm Modal Elements
+            const confirmModal = document.getElementById('confirm-modal');
+            const confirmTitle = document.getElementById('confirm-title');
+            const confirmMessage = document.getElementById('confirm-message');
+            const confirmInputContainer = document.getElementById('confirm-input-container');
+            const confirmInput = document.getElementById('confirm-input');
+            const cancelConfirmBtn = document.getElementById('cancel-confirm-btn');
+            let confirmBtn = document.getElementById('confirm-btn');
+            
 
+            // --- INITIALIZATION ---
             loginButton.addEventListener('click', () => {
                 loginScreen.classList.add('hidden');
                 dashboardScreen.classList.remove('hidden');
                 dashboardScreen.classList.add('flex');
-                populateRestaurantFilter();
+                renderAll();
                 setupView(currentView);
             });
 
+
+            // --- EVENT LISTENERS ---
             menuButton.addEventListener('click', () => mobileMenu.classList.remove('-translate-x-full'));
             closeMenuButton.addEventListener('click', () => mobileMenu.classList.add('-translate-x-full'));
             searchInput.addEventListener('keyup', handleSearch);
-            restaurantFilter.addEventListener('change', handleUserFilter);
+            restaurantFilter.addEventListener('change', () => renderUserTable());
+            menuRestaurantFilter.addEventListener('change', () => renderMenuTable());
 
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
@@ -474,9 +629,6 @@
                 });
             });
 
-            setupTableSorting(restaurantTable, restaurantTableBody);
-            setupTableSorting(userTable, userTableBody);
-
             // Restaurant Modal listeners
             addRestaurantBtn.addEventListener('click', () => openRestaurantModal('add'));
             closeModalBtn.addEventListener('click', closeRestaurantModal);
@@ -485,7 +637,9 @@
             restaurantForm.addEventListener('submit', handleRestaurantFormSubmit);
             restaurantTableBody.addEventListener('click', (e) => {
                 const editButton = e.target.closest('.edit-btn');
-                if (editButton) openRestaurantModal('edit', editButton.closest('tr'));
+                if (editButton) openRestaurantModal('edit', parseInt(editButton.closest('tr').dataset.id));
+                const deleteButton = e.target.closest('.delete-btn');
+                if (deleteButton) handleDeleteRestaurant(parseInt(deleteButton.closest('tr').dataset.id));
             });
             ownerSearchInput.addEventListener('focus', () => ownerDropdown.classList.remove('hidden'));
             ownerSearchInput.addEventListener('blur', () => setTimeout(() => ownerDropdown.classList.add('hidden'), 150));
@@ -499,33 +653,207 @@
             userForm.addEventListener('submit', handleUserFormSubmit);
             userTableBody.addEventListener('click', (e) => {
                 const editButton = e.target.closest('.edit-user-btn');
-                if (editButton) openUserModal('edit', editButton.closest('tr'));
+                if (editButton) openUserModal('edit', parseInt(editButton.closest('tr').dataset.id));
+                const deleteButton = e.target.closest('.delete-user-btn');
+                if (deleteButton) handleDeleteUser(parseInt(deleteButton.closest('tr').dataset.id));
             });
             restaurantSearchInput.addEventListener('focus', () => restaurantDropdown.classList.remove('hidden'));
             restaurantSearchInput.addEventListener('blur', () => setTimeout(() => restaurantDropdown.classList.add('hidden'), 150));
             restaurantSearchInput.addEventListener('keyup', filterRestaurantsForDropdown);
 
+            // Menu Item Modal Listeners
+            addMenuItemBtn.addEventListener('click', () => openMenuItemModal('add'));
+            closeMenuItemModalBtn.addEventListener('click', closeMenuItemModal);
+            cancelMenuItemModalBtn.addEventListener('click', closeMenuItemModal);
+            menuItemModal.addEventListener('click', (e) => { if(e.target === menuItemModal) closeMenuItemModal(); });
+            menuItemForm.addEventListener('submit', handleMenuItemFormSubmit);
+            menuTableBody.addEventListener('click', (e) => {
+                const editButton = e.target.closest('.edit-menu-item-btn');
+                if (editButton) openMenuItemModal('edit', parseInt(editButton.closest('tr').dataset.id));
+            });
+            generateDescriptionBtn.addEventListener('click', handleGenerateDescription);
+            generateImageBtn.addEventListener('click', handleGenerateImage);
+            uploadImageBtn.addEventListener('click', () => imageUploadInput.click());
+            imageUploadInput.addEventListener('change', handleImageUpload);
 
-            // --- FUNCTIONS ---
+            // Confirm Modal Listeners
+            cancelConfirmBtn.addEventListener('click', () => confirmModal.style.display = 'none');
+            confirmModal.addEventListener('click', (e) => { if(e.target === confirmModal) confirmModal.style.display = 'none'; });
 
+
+            // --- RENDER FUNCTIONS ---
+            function renderAll() {
+                renderRestaurantTable();
+                renderUserTable();
+                renderMenuTable();
+                populateAllRestaurantFilters();
+            }
+
+            function renderRestaurantTable() {
+                restaurantTableBody.innerHTML = '';
+                const searchTerm = searchInput.value.toLowerCase();
+                const filteredData = (currentView === 'restaurant-management-content' && searchTerm)
+                    ? restaurantData.filter(r => r.name.toLowerCase().includes(searchTerm) || r.owner.toLowerCase().includes(searchTerm))
+                    : restaurantData;
+
+                if (restaurantData.length === 0) {
+                    showEmptyState(restaurantTableBody, 8, 'No restaurants found.', 'Add Restaurant', () => openRestaurantModal('add'));
+                } else if (filteredData.length === 0) {
+                    showEmptyState(restaurantTableBody, 8, 'No results found for your search.');
+                } else {
+                    filteredData.forEach((res, index) => {
+                        const newRow = restaurantTableBody.insertRow();
+                        newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
+                        newRow.dataset.id = res.id;
+                        newRow.innerHTML = `
+                            <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${res.name}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-blue-500 font-medium underline">${res.owner}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.contact}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.address}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.onboarding}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${res.plan === 'Premium' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}">${res.plan}</span></td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$${res.payment}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                                <button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
+                                <button class="delete-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
+                            </td>
+                        `;
+                    });
+                }
+                lucide.createIcons();
+            }
+             
+            function renderMenuTable() {
+                menuTableBody.innerHTML = '';
+                const selectedRestaurantId = parseInt(menuRestaurantFilter.value);
+                if (!selectedRestaurantId) {
+                    showEmptyState(menuTableBody, 6, 'Please select a restaurant to see its menu.');
+                    return;
+                }
+
+                const searchTerm = searchInput.value.toLowerCase();
+                const filteredData = menuData.filter(item => {
+                    const restaurantMatch = item.restaurantId === selectedRestaurantId;
+                    const searchMatch = (currentView === 'menu-content' && searchTerm)
+                        ? item.name.toLowerCase().includes(searchTerm) || item.category.toLowerCase().includes(searchTerm)
+                        : true;
+                    return restaurantMatch && searchMatch;
+                });
+
+                if (filteredData.length === 0 && !searchTerm) {
+                    showEmptyState(menuTableBody, 6, 'No menu items for this restaurant yet.', 'Add Item', () => openMenuItemModal('add'));
+                } else if (filteredData.length === 0) {
+                    showEmptyState(menuTableBody, 6, 'No results found for your search.');
+                } else {
+                    filteredData.forEach((item, index) => {
+                        const newRow = menuTableBody.insertRow();
+                        newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
+                        newRow.dataset.id = item.id;
+                        newRow.innerHTML = `
+                            <td class="p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded menu-item-checkbox" data-id="${item.id}"></td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${item.name}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${item.category}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$${item.price}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${item.prepTime} mins</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                                <button class="edit-menu-item-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
+                                <button class="delete-menu-item-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
+                            </td>
+                        `;
+                    });
+                }
+                 lucide.createIcons();
+            }
+
+            function renderUserTable() {
+                userTableBody.innerHTML = '';
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedRestaurant = restaurantFilter.value;
+                
+                const filteredData = userData.filter(user => {
+                    const searchMatch = (currentView === 'user-management-content' && searchTerm)
+                        ? user.name.toLowerCase().includes(searchTerm) || user.email.toLowerCase().includes(searchTerm)
+                        : true;
+                    const filterMatch = selectedRestaurant === 'all' || user.restaurants.includes(selectedRestaurant);
+                    return searchMatch && filterMatch;
+                });
+
+                if (userData.length === 0) {
+                    showEmptyState(userTableBody, 8, 'No users found.', 'Add User', () => openUserModal('add'));
+                } else if (filteredData.length === 0) {
+                     showEmptyState(userTableBody, 8, 'No results found for your search or filter.');
+                } else {
+                    filteredData.forEach((user, index) => {
+                        const newRow = userTableBody.insertRow();
+                        newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
+                        newRow.dataset.id = user.id;
+                        const restaurantHTML = user.restaurants.map(r => `<span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">${r}</span>`).join('');
+                        newRow.innerHTML = `
+                            <td class="p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded user-checkbox" data-id="${user.id}"></td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${user.name}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.email}</td>
+                            <td class="px-4 py-2 text-xs text-gray-500"><div class="flex flex-wrap gap-1">${restaurantHTML}</div></td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${user.status}</span></td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.role}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.lastLogin}</td>
+                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                                <button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
+                                <button class="delete-user-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
+                            </td>
+                        `;
+                    });
+                }
+                lucide.createIcons();
+            }
+
+            function showEmptyState(tbody, colspan, message, buttonText = null, buttonAction = null) {
+                const row = tbody.insertRow();
+                const cell = row.insertCell();
+                cell.colSpan = colspan;
+                cell.className = 'text-center py-12';
+                
+                let buttonHtml = '';
+                if (buttonText && buttonAction) {
+                    buttonHtml = `<button id="empty-state-btn" class="mt-4 bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">${buttonText}</button>`;
+                }
+
+                cell.innerHTML = `
+                    <div class="text-center">
+                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2z" />
+                        </svg>
+                        <h3 class="mt-2 text-sm font-medium text-gray-900">${message}</h3>
+                        ${buttonHtml}
+                    </div>
+                `;
+                
+                if (buttonAction) {
+                    cell.querySelector('#empty-state-btn').addEventListener('click', buttonAction);
+                }
+            }
+
+            // --- GENERAL FUNCTIONS ---
             function setupView(targetId) {
                 currentView = targetId;
                 contentSections.forEach(section => section.classList.add('hidden'));
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) targetSection.classList.remove('hidden');
 
+                restaurantActions.style.display = 'none';
+                menuActions.style.display = 'none';
+                userActions.style.display = 'none';
+
                 if (targetId === 'restaurant-management-content') {
                     headerTitle.textContent = 'Restaurant Management';
                     restaurantActions.style.display = 'flex';
-                    userActions.style.display = 'none';
+                } else if (targetId === 'menu-content') {
+                    headerTitle.textContent = 'Menu Management';
+                    menuActions.style.display = 'flex';
                 } else if (targetId === 'user-management-content') {
                     headerTitle.textContent = 'User Management';
-                    restaurantActions.style.display = 'none';
                     userActions.style.display = 'flex';
                 } else {
                      headerTitle.textContent = 'Dashboard';
-                     restaurantActions.style.display = 'none';
-                     userActions.style.display = 'none';
                 }
 
                 document.querySelectorAll('#sidebar-nav a, #mobile-nav a').forEach(nav => {
@@ -536,112 +864,63 @@
                         nav.classList.remove('text-gray-300');
                     }
                 });
+                handleSearch(); // Re-filter on view change
             }
 
             function handleSearch() {
-                const searchTerm = searchInput.value.toLowerCase();
                 if (currentView === 'restaurant-management-content') {
-                    filterTable(restaurantTableBody.rows, searchTerm, [0, 1, 2, 3]);
+                    renderRestaurantTable();
                 } else if (currentView === 'user-management-content') {
-                    filterTable(userTableBody.rows, searchTerm, [0, 1, 2]);
-                }
-            }
-            
-            function filterTable(rows, term, searchColumns) {
-                 for (let i = 0; i < rows.length; i++) {
-                    const row = rows[i];
-                    let match = false;
-                    for(const colIndex of searchColumns) {
-                        const cellText = row.cells[colIndex].textContent.toLowerCase();
-                        if (cellText.includes(term)) {
-                            match = true;
-                            break;
-                        }
-                    }
-                    row.style.display = match ? '' : 'none';
+                    renderUserTable();
+                } else if (currentView === 'menu-content') {
+                    renderMenuTable();
                 }
             }
 
-            function setupTableSorting(table, tableBody) {
-                const headers = table.querySelectorAll('.sortable-header');
-                const directions = Array.from(headers).map(() => '');
-
-                headers.forEach((header) => {
-                    header.addEventListener('click', () => {
-                        const columnIndex = header.dataset.columnIndex;
-                        const direction = directions[columnIndex] === 'asc' ? 'desc' : 'asc';
-                        const rows = Array.from(tableBody.querySelectorAll('tr'));
-
-                        const sortedRows = rows.sort((a, b) => {
-                            const aColText = a.querySelector(`td:nth-child(${parseInt(columnIndex) + 1})`).textContent.trim();
-                            const bColText = b.querySelector(`td:nth-child(${parseInt(columnIndex) + 1})`).textContent.trim();
-                            return aColText.localeCompare(bColText, undefined, {numeric: true}) * (direction === 'asc' ? 1 : -1);
-                        });
-
-                        while (tableBody.firstChild) {
-                            tableBody.removeChild(tableBody.firstChild);
-                        }
-                        tableBody.append(...sortedRows);
-
-                        directions.fill('');
-                        directions[columnIndex] = direction;
-
-                        headers.forEach(h => h.classList.remove('asc', 'desc'));
-                        header.classList.add(direction);
-                    });
-                });
-            }
-            
-            function populateRestaurantFilter() {
-                const existingOptions = restaurantFilter.querySelectorAll('option:not([value="all"])');
-                existingOptions.forEach(opt => opt.remove());
-
-                const restaurantNames = new Set();
-                for (let i = 0; i < restaurantTableBody.rows.length; i++) {
-                    const row = restaurantTableBody.rows[i];
-                    const restaurantName = row.cells[0].textContent.trim();
-                    restaurantNames.add(restaurantName);
-                }
-
+            function populateAllRestaurantFilters() {
+                const restaurantNames = new Set(restaurantData.map(r => r.name));
+                
+                // For user management filter
+                const existingUserFilterOptions = restaurantFilter.querySelectorAll('option:not([value="all"])');
+                existingUserFilterOptions.forEach(opt => opt.remove());
                 restaurantNames.forEach(name => {
                     const option = document.createElement('option');
                     option.value = name;
                     option.textContent = name;
                     restaurantFilter.appendChild(option);
                 });
+
+                // For menu management filter
+                const existingMenuFilterOptions = menuRestaurantFilter.querySelectorAll('option:not([value=""])');
+                existingMenuFilterOptions.forEach(opt => opt.remove());
+                restaurantData.forEach(res => {
+                    const option = document.createElement('option');
+                    option.value = res.id;
+                    option.textContent = res.name;
+                    menuRestaurantFilter.appendChild(option);
+                });
             }
 
-            function handleUserFilter() {
-                const selectedRestaurant = restaurantFilter.value;
-                for (let i = 0; i < userTableBody.rows.length; i++) {
-                    const row = userTableBody.rows[i];
-                    const restaurantCell = row.cells[2].textContent;
-                    if (selectedRestaurant === 'all' || restaurantCell.includes(selectedRestaurant)) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                }
-            }
-
-            // Restaurant Modal Functions
-            function openRestaurantModal(mode, row = null) {
+            // --- RESTAURANT MODAL ---
+            function openRestaurantModal(mode, id = null) {
                 restaurantForm.reset();
-                editingRow = null;
                 populateOwnerDropdown();
-
                 if (mode === 'add') {
                     modalTitle.textContent = 'Add Restaurant';
-                } else if (mode === 'edit' && row) {
+                    document.getElementById('res-id').value = '';
+                } else if (mode === 'edit' && id) {
                     modalTitle.textContent = 'Edit Restaurant';
-                    editingRow = row;
-                    document.getElementById('res-name').value = row.cells[0].textContent;
-                    document.getElementById('res-owner-search').value = row.cells[1].textContent;
-                    document.getElementById('res-contact').value = row.cells[2].textContent;
-                    document.getElementById('res-address').value = row.cells[3].textContent;
-                    document.getElementById('res-onboarding').value = row.cells[4].textContent;
-                    document.getElementById('res-plan').value = row.cells[5].querySelector('span').textContent;
-                    document.getElementById('res-payment').value = row.cells[6].textContent.replace('$', '');
+                    const res = restaurantData.find(r => r.id === id);
+                    if(res) {
+                        document.getElementById('res-id').value = res.id;
+                        document.getElementById('res-name').value = res.name;
+                        document.getElementById('res-owner-search').value = res.owner;
+                        document.getElementById('res-contact').value = res.contact;
+                        document.getElementById('res-address').value = res.address;
+                        document.getElementById('res-onboarding').value = res.onboarding;
+                        document.getElementById('res-plan').value = res.plan;
+                        document.getElementById('res-payment').value = res.payment;
+                    }
                 }
                 restaurantModal.style.display = 'flex';
                 lucide.createIcons();
@@ -654,6 +933,7 @@
             function handleRestaurantFormSubmit(e) {
                 e.preventDefault();
                 const formData = {
+                    id: document.getElementById('res-id').value ? parseInt(document.getElementById('res-id').value) : Date.now(),
                     name: document.getElementById('res-name').value,
                     owner: document.getElementById('res-owner-search').value,
                     contact: document.getElementById('res-contact').value,
@@ -663,44 +943,19 @@
                     payment: parseFloat(document.getElementById('res-payment').value).toFixed(2)
                 };
 
-                if (editingRow) {
-                    editingRow.cells[0].textContent = formData.name;
-                    editingRow.cells[1].textContent = formData.owner;
-                    editingRow.cells[2].textContent = formData.contact;
-                    editingRow.cells[3].textContent = formData.address;
-                    editingRow.cells[4].textContent = formData.onboarding;
-                    const planSpan = editingRow.cells[5].querySelector('span');
-                    planSpan.textContent = formData.plan;
-                    planSpan.className = `px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${formData.plan === 'Premium' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}`;
-                    editingRow.cells[6].textContent = `$${formData.payment}`;
+                const index = restaurantData.findIndex(r => r.id === formData.id);
+                if (index > -1) {
+                    restaurantData[index] = formData;
                 } else {
-                    const newRow = restaurantTableBody.insertRow();
-                    newRow.className = 'hover:bg-gray-50';
-                    newRow.innerHTML = `
-                        <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${formData.name}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-blue-500 font-medium underline">${formData.owner}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.contact}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.address}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.onboarding}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${formData.plan === 'Premium' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}">${formData.plan}</span></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$${formData.payment}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
-                            <button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
-                            <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
-                        </td>
-                    `;
-                    lucide.createIcons({ nodes: [newRow] });
+                    restaurantData.push(formData);
                 }
-                populateRestaurantFilter();
+                renderAll();
                 closeRestaurantModal();
             }
 
             function populateOwnerDropdown() {
                 ownerDropdown.innerHTML = '';
-                const userNames = new Set();
-                for (let i = 0; i < userTableBody.rows.length; i++) {
-                    userNames.add(userTableBody.rows[i].cells[0].textContent.trim());
-                }
+                const userNames = new Set(userData.map(u => u.name));
                 userNames.forEach(name => {
                     const optionDiv = document.createElement('div');
                     optionDiv.textContent = name;
@@ -725,27 +980,24 @@
                 }
             }
 
-             // User Modal Functions
-            function openUserModal(mode, row = null) {
+             // --- USER MODAL ---
+            function openUserModal(mode, id = null) {
                 userForm.reset();
-                editingUserRow = null;
-                getAllRestaurants();
                 clearMultiSelect();
-
                 if (mode === 'add') {
                     userModalTitle.textContent = 'Add User';
-                } else if (mode === 'edit' && row) {
+                    document.getElementById('user-id').value = '';
+                } else if (mode === 'edit' && id) {
                     userModalTitle.textContent = 'Edit User';
-                    editingUserRow = row;
-                    document.getElementById('user-name').value = row.cells[0].textContent;
-                    document.getElementById('user-email').value = row.cells[1].textContent;
-                    
-                    const restaurantTags = row.cells[2].querySelectorAll('span');
-                    const restaurants = Array.from(restaurantTags).map(tag => tag.textContent);
-                    restaurants.forEach(addRestaurantToMultiSelect);
-
-                    document.getElementById('user-status').value = row.cells[3].querySelector('span').textContent;
-                    document.getElementById('user-role').value = row.cells[4].textContent;
+                    const user = userData.find(u => u.id === id);
+                    if (user) {
+                        document.getElementById('user-id').value = user.id;
+                        document.getElementById('user-name').value = user.name;
+                        document.getElementById('user-email').value = user.email;
+                        user.restaurants.forEach(addRestaurantToMultiSelect);
+                        document.getElementById('user-status').value = user.status;
+                        document.getElementById('user-role').value = user.role;
+                    }
                 }
                 populateRestaurantDropdown();
                 userModal.style.display = 'flex';
@@ -760,6 +1012,7 @@
                 e.preventDefault();
                 const selectedRestaurants = Array.from(multiSelectContainer.querySelectorAll('.multi-select-pill')).map(pill => pill.dataset.value);
                 const formData = {
+                    id: document.getElementById('user-id').value ? parseInt(document.getElementById('user-id').value) : Date.now(),
                     name: document.getElementById('user-name').value,
                     email: document.getElementById('user-email').value,
                     restaurants: selectedRestaurants,
@@ -768,45 +1021,21 @@
                     lastLogin: 'Just now'
                 };
                 
-                const restaurantHTML = formData.restaurants.map(r => `<span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">${r}</span>`).join('');
-
-                if (editingUserRow) {
-                    editingUserRow.cells[0].textContent = formData.name;
-                    editingUserRow.cells[1].textContent = formData.email;
-                    editingUserRow.cells[2].innerHTML = `<div class="flex flex-wrap gap-1">${restaurantHTML}</div>`;
-                    const statusSpan = editingUserRow.cells[3].querySelector('span');
-                    statusSpan.textContent = formData.status;
-                    statusSpan.className = `px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${formData.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
-                    editingUserRow.cells[4].textContent = formData.role;
+                const index = userData.findIndex(u => u.id === formData.id);
+                if (index > -1) {
+                    userData[index] = formData;
                 } else {
-                    const newRow = userTableBody.insertRow();
-                    newRow.className = 'hover:bg-gray-50';
-                    newRow.innerHTML = `
-                        <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${formData.name}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.email}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500"><div class="flex flex-wrap gap-1">${restaurantHTML}</div></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${formData.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${formData.status}</span></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.role}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.lastLogin}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
-                            <button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
-                            <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
-                        </td>
-                    `;
-                    lucide.createIcons({ nodes: [newRow] });
+                    userData.push(formData);
                 }
+                renderUserTable();
                 closeUserModal();
             }
 
             // Multi-select functions
-            function getAllRestaurants() {
-                allRestaurants = Array.from(restaurantTableBody.rows).map(row => row.cells[0].textContent.trim());
-            }
-
             function populateRestaurantDropdown() {
                 restaurantDropdown.innerHTML = '';
                 const selected = getSelectedRestaurants();
-                const available = allRestaurants.filter(r => !selected.includes(r));
+                const available = restaurantData.map(r => r.name).filter(r => !selected.includes(r));
                 
                 available.forEach(name => {
                     const optionDiv = document.createElement('div');
@@ -844,6 +1073,7 @@
 
             function clearMultiSelect() {
                 multiSelectContainer.querySelectorAll('.multi-select-pill').forEach(pill => pill.remove());
+                restaurantSearchInput.value = '';
             }
 
             function filterRestaurantsForDropdown() {
@@ -855,6 +1085,214 @@
                     } else {
                         options[i].style.display = "none";
                     }
+                }
+            }
+
+            // --- MENU ITEM MODAL ---
+            function openMenuItemModal(mode, id = null) {
+                menuItemForm.reset();
+                imagePreview.src = '';
+                imagePreview.classList.add('hidden');
+                imagePlaceholder.classList.remove('hidden');
+
+                if (mode === 'add') {
+                    menuItemModalTitle.textContent = 'Add Menu Item';
+                    document.getElementById('menu-item-id').value = '';
+                } else if (mode === 'edit' && id) {
+                    menuItemModalTitle.textContent = 'Edit Menu Item';
+                    const item = menuData.find(i => i.id === id);
+                    if (item) {
+                        document.getElementById('menu-item-id').value = item.id;
+                        document.getElementById('item-name').value = item.name;
+                        document.getElementById('item-description').value = item.description;
+                        document.getElementById('item-image-url').value = item.imageUrl;
+                        if(item.imageUrl) {
+                            imagePreview.src = item.imageUrl;
+                            imagePreview.classList.remove('hidden');
+                            imagePlaceholder.classList.add('hidden');
+                        }
+                        document.getElementById('item-price').value = item.price;
+                        document.getElementById('item-cuisine').value = item.cuisine;
+                        document.getElementById('item-taste').value = item.taste;
+                        document.getElementById('item-category').value = item.category;
+                        document.getElementById('item-prep-time').value = item.prepTime;
+                        
+                        const checkboxes = menuItemForm.querySelectorAll('input[type="checkbox"]');
+                        checkboxes.forEach(cb => {
+                            cb.checked = item.portionSizes.includes(cb.value);
+                        });
+                    }
+                }
+                menuItemModal.style.display = 'flex';
+                lucide.createIcons();
+            }
+
+            function closeMenuItemModal() {
+                menuItemModal.style.display = 'none';
+            }
+
+            function handleMenuItemFormSubmit(e) {
+                e.preventDefault();
+                const selectedPortions = Array.from(menuItemForm.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+                const formData = {
+                    id: document.getElementById('menu-item-id').value ? parseInt(document.getElementById('menu-item-id').value) : Date.now(),
+                    restaurantId: parseInt(menuRestaurantFilter.value),
+                    name: document.getElementById('item-name').value,
+                    description: document.getElementById('item-description').value,
+                    imageUrl: document.getElementById('item-image-url').value,
+                    price: parseFloat(document.getElementById('item-price').value).toFixed(2),
+                    cuisine: document.getElementById('item-cuisine').value,
+                    taste: document.getElementById('item-taste').value,
+                    category: document.getElementById('item-category').value,
+                    prepTime: document.getElementById('item-prep-time').value,
+                    portionSizes: selectedPortions
+                };
+
+                const index = menuData.findIndex(i => i.id === formData.id);
+                if (index > -1) {
+                    menuData[index] = formData;
+                } else {
+                    menuData.push(formData);
+                }
+                renderMenuTable();
+                closeMenuItemModal();
+            }
+            
+            function handleImageUpload(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('item-image-url').value = e.target.result;
+                        imagePreview.src = e.target.result;
+                        imagePreview.classList.remove('hidden');
+                        imagePlaceholder.classList.add('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            // --- DELETION & CONFIRMATION ---
+            function openConfirmModal({ title, message, requiresInput, onConfirm }) {
+                confirmTitle.textContent = title;
+                confirmMessage.textContent = message;
+                confirmInput.value = '';
+
+                if (requiresInput) {
+                    confirmInputContainer.style.display = 'block';
+                    confirmBtn.disabled = true;
+                    confirmInput.onkeyup = () => {
+                        confirmBtn.disabled = confirmInput.value !== 'Delete';
+                    };
+                } else {
+                    confirmInputContainer.style.display = 'none';
+                    confirmBtn.disabled = false;
+                }
+
+                confirmModal.style.display = 'flex';
+
+                const newConfirmBtn = confirmBtn.cloneNode(true);
+                confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+                newConfirmBtn.addEventListener('click', () => {
+                    onConfirm();
+                    confirmModal.style.display = 'none';
+                });
+                confirmBtn = newConfirmBtn;
+            }
+
+            function handleDeleteRestaurant(id) {
+                const restaurant = restaurantData.find(r => r.id === id);
+                openConfirmModal({
+                    title: `Delete ${restaurant.name}`,
+                    message: `This action cannot be undone. This will permanently delete the restaurant.`,
+                    requiresInput: true,
+                    onConfirm: () => {
+                        restaurantData = restaurantData.filter(r => r.id !== id);
+                        renderAll();
+                    }
+                });
+            }
+
+            function handleDeleteUser(id) {
+                const user = userData.find(u => u.id === id);
+                openConfirmModal({
+                    title: `Delete ${user.name}`,
+                    message: `Are you sure you want to delete this user? This action cannot be undone.`,
+                    requiresInput: false,
+                    onConfirm: () => {
+                        userData = userData.filter(u => u.id !== id);
+                        renderUserTable();
+                    }
+                });
+            }
+
+            // --- AI FUNCTIONS ---
+            async function handleGenerateDescription(e) {
+                const btn = e.target;
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loader"></div>';
+
+                const prompt = `Generate a short, tantalizing menu description for a dish with these details:
+                - Name: ${document.getElementById('item-name').value}
+                - Category: ${document.getElementById('item-category').value}
+                - Cuisine: ${document.getElementById('item-cuisine').value}
+                - Taste Profile: ${document.getElementById('item-taste').value}
+                - Price: $${document.getElementById('item-price').value}`;
+                
+                try {
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    });
+                    const result = await response.json();
+                    const text = result.candidates[0].content.parts[0].text;
+                    document.getElementById('item-description').value = text.trim();
+                } catch (error) {
+                    console.error("Error generating description:", error);
+                    alert("Failed to generate description.");
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate with AI';
+                    lucide.createIcons();
+                }
+            }
+
+            async function handleGenerateImage(e) {
+                const btn = e.target;
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loader"></div>';
+                imageLoader.classList.remove('hidden');
+                imagePreview.classList.add('hidden');
+                imagePlaceholder.classList.add('hidden');
+
+                const prompt = `Professional, vibrant food photography of a dish named "${document.getElementById('item-name').value}". It is a ${document.getElementById('item-cuisine').value} ${document.getElementById('item-category').value} with a ${document.getElementById('item-taste').value} taste profile. The dish should look delicious and be presented on a clean, modern plate.`;
+
+                try {
+                    const apiKey = "";
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ instances: { prompt: prompt }, parameters: { "sampleCount": 1} })
+                    });
+                    const result = await response.json();
+                    if (result.predictions && result.predictions.length > 0) {
+                        const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
+                        document.getElementById('item-image-url').value = imageUrl;
+                        imagePreview.src = imageUrl;
+                        imagePreview.classList.remove('hidden');
+                    }
+                } catch (error) {
+                    console.error("Error generating image:", error);
+                    alert("Failed to generate image.");
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate';
+                    lucide.createIcons();
+                    imageLoader.classList.add('hidden');
                 }
             }
 
