@@ -1232,7 +1232,7 @@
                 btn.disabled = true;
                 btn.innerHTML = '<div class="loader"></div>';
 
-                const prompt = `Generate a short, tantalizing menu description for a dish with these details:
+                const prompt = `Generate a short, impactful menu description under 100 characters for a dish with these details. Do not use any markdown formatting:
                 - Name: ${document.getElementById('item-name').value}
                 - Category: ${document.getElementById('item-category').value}
                 - Cuisine: ${document.getElementById('item-cuisine').value}
@@ -1246,7 +1246,7 @@
                         body: JSON.stringify({ prompt })
                     });
                     const result = await response.json();
-                    document.getElementById('item-description').value = result.text.trim();
+                    document.getElementById('item-description').value = result.text.trim().replace(/\*/g, '');
                 } catch (error) {
                     console.error("Error generating description:", error);
                     alert("Failed to generate description.");
