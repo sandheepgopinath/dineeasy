@@ -1240,16 +1240,13 @@
                 - Price: $${document.getElementById('item-price').value}`;
                 
                 try {
-                    const apiKey = "";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
-                    const response = await fetch(apiUrl, {
+                    const response = await fetch('/api/generateDescription', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                        body: JSON.stringify({ prompt })
                     });
                     const result = await response.json();
-                    const text = result.candidates[0].content.parts[0].text;
-                    document.getElementById('item-description').value = text.trim();
+                    document.getElementById('item-description').value = result.text.trim();
                 } catch (error) {
                     console.error("Error generating description:", error);
                     alert("Failed to generate description.");
@@ -1271,18 +1268,15 @@
                 const prompt = `Professional, vibrant food photography of a dish named "${document.getElementById('item-name').value}". It is a ${document.getElementById('item-cuisine').value} ${document.getElementById('item-category').value} with a ${document.getElementById('item-taste').value} taste profile. The dish should look delicious and be presented on a clean, modern plate.`;
 
                 try {
-                    const apiKey = "";
-                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
-                    const response = await fetch(apiUrl, {
+                    const response = await fetch('/api/generateImage', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ instances: { prompt: prompt }, parameters: { "sampleCount": 1} })
+                        body: JSON.stringify({ prompt })
                     });
                     const result = await response.json();
-                    if (result.predictions && result.predictions.length > 0) {
-                        const imageUrl = `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`;
-                        document.getElementById('item-image-url').value = imageUrl;
-                        imagePreview.src = imageUrl;
+                    if (result.imageUrl) {
+                        document.getElementById('item-image-url').value = result.imageUrl;
+                        imagePreview.src = result.imageUrl;
                         imagePreview.classList.remove('hidden');
                     }
                 } catch (error) {
