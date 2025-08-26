@@ -117,19 +117,21 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         <div class="relative">
-                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1.2 w-4 h-4 text-gray-400"></i>
                             <input type="text" id="searchInput" placeholder="Search" class="pl-9 pr-4 py-1.5 w-40 md:w-56 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs">
                         </div>
-                        <div id="header-action-container" class="flex items-center space-x-3">
-                             <button id="add-restaurant-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 hidden sm:block text-xs">Add Restaurant</button>
-                             <button id="add-user-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 hidden sm:block text-xs">Add User</button>
-                             <div id="restaurant-filter-container" class="hidden">
-                                <label for="restaurantFilter" class="sr-only">Restaurant Filter</label>
-                                <select id="restaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
-                                    <option value="all">All Restaurants</option>
-                                </select>
-                            </div>
+                        
+                        <!-- Action Buttons Container -->
+                        <div id="restaurant-actions" class="items-center space-x-3 hidden sm:flex">
+                            <button class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add Restaurant</button>
                         </div>
+                        <div id="user-actions" class="items-center space-x-3 hidden sm:flex">
+                             <select id="restaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                                <option value="all">All Restaurants</option>
+                            </select>
+                            <button class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add User</button>
+                        </div>
+                        
                          <div class="relative">
                            <button class="w-9 h-9 bg-blue-500 text-white rounded-full flex items-center justify-center text-base font-semibold">U</button>
                         </div>
@@ -169,7 +171,7 @@
             </div>
 
             <!-- Restaurant Table -->
-            <main id="restaurant-management-con[BE]tent" class="flex-1 overflow-x-auto overflow-y-auto bg-white p-4 md:p-8">
+            <main id="restaurant-management-content" class="flex-1 overflow-x-auto overflow-y-auto bg-white p-4 md:p-8">
                 <div class="min-w-full inline-block align-middle">
                     <div class="overflow-hidden border rounded-lg">
                         <table id="restaurantTable" class="min-w-full divide-y divide-gray-200">
@@ -305,9 +307,8 @@
             const navLinks = document.querySelectorAll('#sidebar-nav a, #mobile-nav a');
             const contentSections = document.querySelectorAll('main');
             const headerTitle = document.getElementById('header-title');
-            const addRestaurantBtn = document.getElementById('add-restaurant-btn');
-            const addUserBtn = document.getElementById('add-user-btn');
-            const restaurantFilterContainer = document.getElementById('restaurant-filter-container');
+            const restaurantActions = document.getElementById('restaurant-actions');
+            const userActions = document.getElementById('user-actions');
             const restaurantFilter = document.getElementById('restaurantFilter');
             let currentView = 'restaurant-management-content'; // Default view
 
@@ -351,31 +352,26 @@
 
             function setupView(targetId) {
                 currentView = targetId;
-                // Hide all content sections
                 contentSections.forEach(section => section.classList.add('hidden'));
 
-                // Show the target section
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
                     targetSection.classList.remove('hidden');
                 }
 
-                // Update header title and actions
+                // Update header based on the current view
                 if (targetId === 'restaurant-management-content') {
                     headerTitle.textContent = 'Restaurant Management';
-                    addRestaurantBtn.classList.remove('hidden');
-                    addUserBtn.classList.add('hidden');
-                    restaurantFilterContainer.classList.add('hidden');
+                    restaurantActions.classList.remove('hidden');
+                    userActions.classList.add('hidden');
                 } else if (targetId === 'user-management-content') {
                     headerTitle.textContent = 'User Management';
-                    addRestaurantBtn.classList.add('hidden');
-                    addUserBtn.classList.remove('hidden');
-                    restaurantFilterContainer.classList.remove('hidden');
+                    restaurantActions.classList.add('hidden');
+                    userActions.classList.remove('hidden');
                 } else {
                      headerTitle.textContent = 'Dashboard';
-                     addRestaurantBtn.classList.add('hidden');
-                     addUserBtn.classList.add('hidden');
-                     restaurantFilterContainer.classList.add('hidden');
+                     restaurantActions.classList.add('hidden');
+                     userActions.classList.add('hidden');
                 }
 
                 // Update active link style
