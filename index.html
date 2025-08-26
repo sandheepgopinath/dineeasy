@@ -43,6 +43,17 @@
         .sortable-header.desc::after {
             opacity: 1;
         }
+        /* Custom dropdown arrow */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='lucide lucide-chevron-down'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1em;
+            padding-right: 2.5rem;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-sm">
@@ -117,19 +128,19 @@
                     </div>
                     <div class="flex items-center space-x-3">
                         <div class="relative">
-                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1.2 w-4 h-4 text-gray-400"></i>
+                            <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
                             <input type="text" id="searchInput" placeholder="Search" class="pl-9 pr-4 py-1.5 w-40 md:w-56 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs">
                         </div>
                         
                         <!-- Action Buttons Container -->
                         <div id="restaurant-actions" class="items-center space-x-3 hidden sm:flex">
-                            <button class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add Restaurant</button>
+                            <button id="add-restaurant-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add Restaurant</button>
                         </div>
                         <div id="user-actions" class="items-center space-x-3 hidden sm:flex">
                              <select id="restaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
                                 <option value="all">All Restaurants</option>
                             </select>
-                            <button class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add User</button>
+                            <button id="add-user-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add User</button>
                         </div>
                         
                          <div class="relative">
@@ -197,7 +208,7 @@
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2023-01-15</td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Premium</span></td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$199.99</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
                                 </tr>
                                  <tr class="bg-gray-50 hover:bg-gray-100">
                                     <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">The Cozy Corner</td>
@@ -207,7 +218,7 @@
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2023-03-22</td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-200 text-gray-800">Basic</span></td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$99.99</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
                                 </tr>
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">The Spicy Grill</td>
@@ -217,7 +228,7 @@
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2023-05-10</td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Premium</span></td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$199.99</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -244,31 +255,31 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 <!-- User Rows -->
                                 <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">John Doe</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">john.doe@example.com</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">The Golden Spoon</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">Emily Carter</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">emily.carter@example.com</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500"><div class="flex flex-wrap gap-1"><span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">The Golden Spoon</span></div></td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span></td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">Admin</td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2024-08-26 10:30 AM</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
                                 </tr>
                                 <tr class="bg-gray-50 hover:bg-gray-100">
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">Jane Smith</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">jane.smith@example.com</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">The Cozy Corner</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">David Lee</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">david.lee@example.com</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500"><div class="flex flex-wrap gap-1"><span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">The Cozy Corner</span></div></td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span></td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">User</td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2024-08-25 08:00 PM</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
                                 </tr>
                                  <tr class="hover:bg-gray-50">
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">Peter Jones</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">peter.jones@example.com</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">The Golden Spoon</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">Sophia Rodriguez</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">sophia.rodriguez@example.com</td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500"><div class="flex flex-wrap gap-1"><span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">The Spicy Grill</span></div></td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Inactive</span></td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">User</td>
                                     <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">2024-07-15 02:15 PM</td>
-                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
+                                    <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2"><button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -285,6 +296,111 @@
         </div>
     </div>
 
+    <!-- Add/Edit Restaurant Modal -->
+    <div id="restaurant-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 id="modal-title" class="text-lg font-semibold">Add Restaurant</h3>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-800">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="restaurant-form" class="space-y-4">
+                <div>
+                    <label for="res-name" class="block text-xs font-medium text-gray-700">Name</label>
+                    <input type="text" id="res-name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                 <div class="relative">
+                    <label for="res-owner-search" class="block text-xs font-medium text-gray-700">Owner</label>
+                    <input type="text" id="res-owner-search" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" autocomplete="off">
+                    <div id="owner-dropdown" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto hidden"></div>
+                </div>
+                <div>
+                    <label for="res-contact" class="block text-xs font-medium text-gray-700">Contact</label>
+                    <input type="text" id="res-contact" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="res-address" class="block text-xs font-medium text-gray-700">Address</label>
+                    <input type="text" id="res-address" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="res-onboarding" class="block text-xs font-medium text-gray-700">Onboarding Date</label>
+                        <input type="date" id="res-onboarding" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                    </div>
+                    <div>
+                        <label for="res-plan" class="block text-xs font-medium text-gray-700">Plan Type</label>
+                        <select id="res-plan" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option>Basic</option>
+                            <option>Premium</option>
+                        </select>
+                    </div>
+                </div>
+                 <div>
+                    <label for="res-payment" class="block text-xs font-medium text-gray-700">Last Payment ($)</label>
+                    <input type="number" step="0.01" id="res-payment" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
+                    <button type="button" id="cancel-modal-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit User Modal -->
+    <div id="user-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <div class="flex justify-between items-center border-b pb-3 mb-4">
+                <h3 id="user-modal-title" class="text-lg font-semibold">Add User</h3>
+                <button id="close-user-modal-btn" class="text-gray-500 hover:text-gray-800">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <form id="user-form" class="space-y-4">
+                <div>
+                    <label for="user-name" class="block text-xs font-medium text-gray-700">Name</label>
+                    <input type="text" id="user-name" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                <div>
+                    <label for="user-email" class="block text-xs font-medium text-gray-700">Email</label>
+                    <input type="email" id="user-email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                </div>
+                
+                <!-- Multi-select restaurant dropdown -->
+                <div class="relative">
+                    <label class="block text-xs font-medium text-gray-700">Restaurants</label>
+                    <div class="mt-1 flex flex-wrap gap-2 p-2 border border-gray-300 rounded-md" id="multi-select-container">
+                        <input type="text" id="restaurant-search-input" class="flex-grow focus:outline-none" placeholder="Select restaurants...">
+                    </div>
+                    <div id="restaurant-dropdown" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto hidden"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="user-status" class="block text-xs font-medium text-gray-700">Status</label>
+                        <select id="user-status" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="user-role" class="block text-xs font-medium text-gray-700">Role</label>
+                        <select id="user-role" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
+                            <option>Admin</option>
+                            <option>User</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
+                    <button type="button" id="cancel-user-modal-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
     <script>
         lucide.createIcons();
         
@@ -300,21 +416,43 @@
             const searchInput = document.getElementById('searchInput');
             const restaurantTable = document.getElementById('restaurantTable');
             const restaurantTableBody = restaurantTable.querySelector('tbody');
-            const restaurantTableRows = restaurantTableBody.getElementsByTagName('tr');
             const userTable = document.getElementById('userTable');
             const userTableBody = userTable.querySelector('tbody');
-            const userTableRows = userTableBody.getElementsByTagName('tr');
             const navLinks = document.querySelectorAll('#sidebar-nav a, #mobile-nav a');
             const contentSections = document.querySelectorAll('main');
             const headerTitle = document.getElementById('header-title');
             const restaurantActions = document.getElementById('restaurant-actions');
             const userActions = document.getElementById('user-actions');
             const restaurantFilter = document.getElementById('restaurantFilter');
-            let currentView = 'restaurant-management-content'; // Default view
+            let currentView = 'restaurant-management-content';
+
+            // Restaurant Modal elements
+            const restaurantModal = document.getElementById('restaurant-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const cancelModalBtn = document.getElementById('cancel-modal-btn');
+            const restaurantForm = document.getElementById('restaurant-form');
+            const addRestaurantBtn = document.getElementById('add-restaurant-btn');
+            const ownerSearchInput = document.getElementById('res-owner-search');
+            const ownerDropdown = document.getElementById('owner-dropdown');
+            let editingRow = null;
+
+            // User Modal elements
+            const userModal = document.getElementById('user-modal');
+            const userModalTitle = document.getElementById('user-modal-title');
+            const closeUserModalBtn = document.getElementById('close-user-modal-btn');
+            const cancelUserModalBtn = document.getElementById('cancel-user-modal-btn');
+            const userForm = document.getElementById('user-form');
+            const addUserBtn = document.getElementById('add-user-btn');
+            const multiSelectContainer = document.getElementById('multi-select-container');
+            const restaurantSearchInput = document.getElementById('restaurant-search-input');
+            const restaurantDropdown = document.getElementById('restaurant-dropdown');
+            let editingUserRow = null;
+            let allRestaurants = [];
+
 
             // --- EVENT LISTENERS ---
 
-            // Login
             loginButton.addEventListener('click', () => {
                 loginScreen.classList.add('hidden');
                 dashboardScreen.classList.remove('hidden');
@@ -323,29 +461,49 @@
                 setupView(currentView);
             });
 
-            // Mobile Menu
             menuButton.addEventListener('click', () => mobileMenu.classList.remove('-translate-x-full'));
             closeMenuButton.addEventListener('click', () => mobileMenu.classList.add('-translate-x-full'));
-
-            // Search
             searchInput.addEventListener('keyup', handleSearch);
-
-            // Restaurant Filter
             restaurantFilter.addEventListener('change', handleUserFilter);
 
-            // View Toggling
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const targetId = link.dataset.target;
-                    setupView(targetId);
+                    setupView(link.dataset.target);
                     mobileMenu.classList.add('-translate-x-full');
                 });
             });
 
-            // Table Sorting
             setupTableSorting(restaurantTable, restaurantTableBody);
             setupTableSorting(userTable, userTableBody);
+
+            // Restaurant Modal listeners
+            addRestaurantBtn.addEventListener('click', () => openRestaurantModal('add'));
+            closeModalBtn.addEventListener('click', closeRestaurantModal);
+            cancelModalBtn.addEventListener('click', closeRestaurantModal);
+            restaurantModal.addEventListener('click', (e) => { if(e.target === restaurantModal) closeRestaurantModal(); });
+            restaurantForm.addEventListener('submit', handleRestaurantFormSubmit);
+            restaurantTableBody.addEventListener('click', (e) => {
+                const editButton = e.target.closest('.edit-btn');
+                if (editButton) openRestaurantModal('edit', editButton.closest('tr'));
+            });
+            ownerSearchInput.addEventListener('focus', () => ownerDropdown.classList.remove('hidden'));
+            ownerSearchInput.addEventListener('blur', () => setTimeout(() => ownerDropdown.classList.add('hidden'), 150));
+            ownerSearchInput.addEventListener('keyup', filterOwners);
+
+            // User Modal Listeners
+            addUserBtn.addEventListener('click', () => openUserModal('add'));
+            closeUserModalBtn.addEventListener('click', closeUserModal);
+            cancelUserModalBtn.addEventListener('click', closeUserModal);
+            userModal.addEventListener('click', (e) => { if(e.target === userModal) closeUserModal(); });
+            userForm.addEventListener('submit', handleUserFormSubmit);
+            userTableBody.addEventListener('click', (e) => {
+                const editButton = e.target.closest('.edit-user-btn');
+                if (editButton) openUserModal('edit', editButton.closest('tr'));
+            });
+            restaurantSearchInput.addEventListener('focus', () => restaurantDropdown.classList.remove('hidden'));
+            restaurantSearchInput.addEventListener('blur', () => setTimeout(() => restaurantDropdown.classList.add('hidden'), 150));
+            restaurantSearchInput.addEventListener('keyup', filterRestaurantsForDropdown);
 
 
             // --- FUNCTIONS ---
@@ -353,28 +511,23 @@
             function setupView(targetId) {
                 currentView = targetId;
                 contentSections.forEach(section => section.classList.add('hidden'));
-
                 const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    targetSection.classList.remove('hidden');
-                }
+                if (targetSection) targetSection.classList.remove('hidden');
 
-                // Update header based on the current view
                 if (targetId === 'restaurant-management-content') {
                     headerTitle.textContent = 'Restaurant Management';
-                    restaurantActions.classList.remove('hidden');
-                    userActions.classList.add('hidden');
+                    restaurantActions.style.display = 'flex';
+                    userActions.style.display = 'none';
                 } else if (targetId === 'user-management-content') {
                     headerTitle.textContent = 'User Management';
-                    restaurantActions.classList.add('hidden');
-                    userActions.classList.remove('hidden');
+                    restaurantActions.style.display = 'none';
+                    userActions.style.display = 'flex';
                 } else {
                      headerTitle.textContent = 'Dashboard';
-                     restaurantActions.classList.add('hidden');
-                     userActions.classList.add('hidden');
+                     restaurantActions.style.display = 'none';
+                     userActions.style.display = 'none';
                 }
 
-                // Update active link style
                 document.querySelectorAll('#sidebar-nav a, #mobile-nav a').forEach(nav => {
                     nav.classList.remove('bg-gray-900', 'text-white');
                     nav.classList.add('text-gray-300');
@@ -388,9 +541,9 @@
             function handleSearch() {
                 const searchTerm = searchInput.value.toLowerCase();
                 if (currentView === 'restaurant-management-content') {
-                    filterTable(restaurantTableRows, searchTerm, [0, 1, 2, 3]);
+                    filterTable(restaurantTableBody.rows, searchTerm, [0, 1, 2, 3]);
                 } else if (currentView === 'user-management-content') {
-                    filterTable(userTableRows, searchTerm, [0, 1, 2]);
+                    filterTable(userTableBody.rows, searchTerm, [0, 1, 2]);
                 }
             }
             
@@ -444,8 +597,8 @@
                 existingOptions.forEach(opt => opt.remove());
 
                 const restaurantNames = new Set();
-                for (let i = 0; i < restaurantTableRows.length; i++) {
-                    const row = restaurantTableRows[i];
+                for (let i = 0; i < restaurantTableBody.rows.length; i++) {
+                    const row = restaurantTableBody.rows[i];
                     const restaurantName = row.cells[0].textContent.trim();
                     restaurantNames.add(restaurantName);
                 }
@@ -460,16 +613,251 @@
 
             function handleUserFilter() {
                 const selectedRestaurant = restaurantFilter.value;
-                for (let i = 0; i < userTableRows.length; i++) {
-                    const row = userTableRows[i];
-                    const restaurantCell = row.cells[2];
-                    if (selectedRestaurant === 'all' || restaurantCell.textContent.trim() === selectedRestaurant) {
+                for (let i = 0; i < userTableBody.rows.length; i++) {
+                    const row = userTableBody.rows[i];
+                    const restaurantCell = row.cells[2].textContent;
+                    if (selectedRestaurant === 'all' || restaurantCell.includes(selectedRestaurant)) {
                         row.style.display = '';
                     } else {
                         row.style.display = 'none';
                     }
                 }
             }
+
+            // Restaurant Modal Functions
+            function openRestaurantModal(mode, row = null) {
+                restaurantForm.reset();
+                editingRow = null;
+                populateOwnerDropdown();
+
+                if (mode === 'add') {
+                    modalTitle.textContent = 'Add Restaurant';
+                } else if (mode === 'edit' && row) {
+                    modalTitle.textContent = 'Edit Restaurant';
+                    editingRow = row;
+                    document.getElementById('res-name').value = row.cells[0].textContent;
+                    document.getElementById('res-owner-search').value = row.cells[1].textContent;
+                    document.getElementById('res-contact').value = row.cells[2].textContent;
+                    document.getElementById('res-address').value = row.cells[3].textContent;
+                    document.getElementById('res-onboarding').value = row.cells[4].textContent;
+                    document.getElementById('res-plan').value = row.cells[5].querySelector('span').textContent;
+                    document.getElementById('res-payment').value = row.cells[6].textContent.replace('$', '');
+                }
+                restaurantModal.style.display = 'flex';
+                lucide.createIcons();
+            }
+
+            function closeRestaurantModal() {
+                restaurantModal.style.display = 'none';
+            }
+
+            function handleRestaurantFormSubmit(e) {
+                e.preventDefault();
+                const formData = {
+                    name: document.getElementById('res-name').value,
+                    owner: document.getElementById('res-owner-search').value,
+                    contact: document.getElementById('res-contact').value,
+                    address: document.getElementById('res-address').value,
+                    onboarding: document.getElementById('res-onboarding').value,
+                    plan: document.getElementById('res-plan').value,
+                    payment: parseFloat(document.getElementById('res-payment').value).toFixed(2)
+                };
+
+                if (editingRow) {
+                    editingRow.cells[0].textContent = formData.name;
+                    editingRow.cells[1].textContent = formData.owner;
+                    editingRow.cells[2].textContent = formData.contact;
+                    editingRow.cells[3].textContent = formData.address;
+                    editingRow.cells[4].textContent = formData.onboarding;
+                    const planSpan = editingRow.cells[5].querySelector('span');
+                    planSpan.textContent = formData.plan;
+                    planSpan.className = `px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${formData.plan === 'Premium' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}`;
+                    editingRow.cells[6].textContent = `$${formData.payment}`;
+                } else {
+                    const newRow = restaurantTableBody.insertRow();
+                    newRow.className = 'hover:bg-gray-50';
+                    newRow.innerHTML = `
+                        <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${formData.name}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-blue-500 font-medium underline">${formData.owner}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.contact}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.address}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.onboarding}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${formData.plan === 'Premium' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}">${formData.plan}</span></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$${formData.payment}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                            <button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
+                            <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
+                        </td>
+                    `;
+                    lucide.createIcons({ nodes: [newRow] });
+                }
+                populateRestaurantFilter();
+                closeRestaurantModal();
+            }
+
+            function populateOwnerDropdown() {
+                ownerDropdown.innerHTML = '';
+                const userNames = new Set();
+                for (let i = 0; i < userTableBody.rows.length; i++) {
+                    userNames.add(userTableBody.rows[i].cells[0].textContent.trim());
+                }
+                userNames.forEach(name => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.textContent = name;
+                    optionDiv.className = 'px-3 py-2 cursor-pointer hover:bg-gray-100';
+                    optionDiv.addEventListener('mousedown', () => {
+                        ownerSearchInput.value = name;
+                        ownerDropdown.classList.add('hidden');
+                    });
+                    ownerDropdown.appendChild(optionDiv);
+                });
+            }
+
+            function filterOwners() {
+                const filter = ownerSearchInput.value.toLowerCase();
+                const options = ownerDropdown.getElementsByTagName('div');
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].textContent.toLowerCase().includes(filter)) {
+                        options[i].style.display = "";
+                    } else {
+                        options[i].style.display = "none";
+                    }
+                }
+            }
+
+             // User Modal Functions
+            function openUserModal(mode, row = null) {
+                userForm.reset();
+                editingUserRow = null;
+                getAllRestaurants();
+                clearMultiSelect();
+
+                if (mode === 'add') {
+                    userModalTitle.textContent = 'Add User';
+                } else if (mode === 'edit' && row) {
+                    userModalTitle.textContent = 'Edit User';
+                    editingUserRow = row;
+                    document.getElementById('user-name').value = row.cells[0].textContent;
+                    document.getElementById('user-email').value = row.cells[1].textContent;
+                    
+                    const restaurantTags = row.cells[2].querySelectorAll('span');
+                    const restaurants = Array.from(restaurantTags).map(tag => tag.textContent);
+                    restaurants.forEach(addRestaurantToMultiSelect);
+
+                    document.getElementById('user-status').value = row.cells[3].querySelector('span').textContent;
+                    document.getElementById('user-role').value = row.cells[4].textContent;
+                }
+                populateRestaurantDropdown();
+                userModal.style.display = 'flex';
+                lucide.createIcons();
+            }
+
+            function closeUserModal() {
+                userModal.style.display = 'none';
+            }
+
+            function handleUserFormSubmit(e) {
+                e.preventDefault();
+                const selectedRestaurants = Array.from(multiSelectContainer.querySelectorAll('.multi-select-pill')).map(pill => pill.dataset.value);
+                const formData = {
+                    name: document.getElementById('user-name').value,
+                    email: document.getElementById('user-email').value,
+                    restaurants: selectedRestaurants,
+                    status: document.getElementById('user-status').value,
+                    role: document.getElementById('user-role').value,
+                    lastLogin: 'Just now'
+                };
+                
+                const restaurantHTML = formData.restaurants.map(r => `<span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">${r}</span>`).join('');
+
+                if (editingUserRow) {
+                    editingUserRow.cells[0].textContent = formData.name;
+                    editingUserRow.cells[1].textContent = formData.email;
+                    editingUserRow.cells[2].innerHTML = `<div class="flex flex-wrap gap-1">${restaurantHTML}</div>`;
+                    const statusSpan = editingUserRow.cells[3].querySelector('span');
+                    statusSpan.textContent = formData.status;
+                    statusSpan.className = `px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${formData.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`;
+                    editingUserRow.cells[4].textContent = formData.role;
+                } else {
+                    const newRow = userTableBody.insertRow();
+                    newRow.className = 'hover:bg-gray-50';
+                    newRow.innerHTML = `
+                        <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${formData.name}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.email}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500"><div class="flex flex-wrap gap-1">${restaurantHTML}</div></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${formData.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${formData.status}</span></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.role}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${formData.lastLogin}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                            <button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
+                            <button><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
+                        </td>
+                    `;
+                    lucide.createIcons({ nodes: [newRow] });
+                }
+                closeUserModal();
+            }
+
+            // Multi-select functions
+            function getAllRestaurants() {
+                allRestaurants = Array.from(restaurantTableBody.rows).map(row => row.cells[0].textContent.trim());
+            }
+
+            function populateRestaurantDropdown() {
+                restaurantDropdown.innerHTML = '';
+                const selected = getSelectedRestaurants();
+                const available = allRestaurants.filter(r => !selected.includes(r));
+                
+                available.forEach(name => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.textContent = name;
+                    optionDiv.className = 'px-3 py-2 cursor-pointer hover:bg-gray-100';
+                    optionDiv.addEventListener('mousedown', () => {
+                        addRestaurantToMultiSelect(name);
+                        populateRestaurantDropdown();
+                    });
+                    restaurantDropdown.appendChild(optionDiv);
+                });
+            }
+            
+            function addRestaurantToMultiSelect(name) {
+                const pill = document.createElement('span');
+                pill.className = 'multi-select-pill flex items-center bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full';
+                pill.dataset.value = name;
+                pill.innerHTML = `
+                    ${name}
+                    <button type="button" class="ml-1.5 -mr-1 flex-shrink-0 inline-flex items-center justify-center h-4 w-4 rounded-full text-blue-400 hover:bg-blue-200 hover:text-blue-500 focus:outline-none focus:bg-blue-500 focus:text-white">
+                        <i data-lucide="x" class="h-3 w-3"></i>
+                    </button>
+                `;
+                pill.querySelector('button').addEventListener('click', () => {
+                    pill.remove();
+                    populateRestaurantDropdown();
+                });
+                multiSelectContainer.insertBefore(pill, restaurantSearchInput);
+                lucide.createIcons({nodes: [pill]});
+            }
+
+            function getSelectedRestaurants() {
+                return Array.from(multiSelectContainer.querySelectorAll('.multi-select-pill')).map(pill => pill.dataset.value);
+            }
+
+            function clearMultiSelect() {
+                multiSelectContainer.querySelectorAll('.multi-select-pill').forEach(pill => pill.remove());
+            }
+
+            function filterRestaurantsForDropdown() {
+                const filter = restaurantSearchInput.value.toLowerCase();
+                const options = restaurantDropdown.getElementsByTagName('div');
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].textContent.toLowerCase().includes(filter)) {
+                        options[i].style.display = "";
+                    } else {
+                        options[i].style.display = "none";
+                    }
+                }
+            }
+
         });
     </script>
 </body>
