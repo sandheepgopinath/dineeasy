@@ -15,11 +15,17 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
-    if (data.predictions && data.predictions.length > 0) {
+
+    if (data.predictions && data.predictions.length > 0 && data.predictions[0].bytesBase64Encoded) {
         const imageUrl = `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
         res.status(200).json({ imageUrl });
     } else {
-        throw new Error('No image data in response');
+        // Log the full response from the API for better debugging
+        console.error('Imagen API returned no predictions. Full response:', JSON.stringify(data, null, 2));
+        
+        // Send a more informative error back to the client
+        const errorMessage = data.error ? data.error.message : 'No image data in response from API.';
+        res.status(500).json({ error: errorMessage });
     }
   } catch (error) {
     console.error('Error calling Imagen API:', error);
