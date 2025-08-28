@@ -524,12 +524,12 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // --- FIREBASE CONFIG ---
         // IMPORTANT: Replace with your actual Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
         apiKey: "AIzaSyCBGMJzHbwD3Y95fwRKVgdYU2KBQ7oDYHQ",
         authDomain: "dineeasy-8176e.firebaseapp.com",
@@ -550,6 +550,8 @@
         let restaurantData = [];
         let userData = [];
         let menuData = [];
+        let currentUserProfile = null;
+        let unsubscribeListeners = [];
 
         // --- ELEMENTS ---
         const loginScreen = document.getElementById('login-screen');
@@ -624,8 +626,9 @@
         // --- INITIALIZATION ---
         setPersistence(auth, browserLocalPersistence)
             .then(() => {
-                onAuthStateChanged(auth, user => {
+                onAuthStateChanged(auth, async user => {
                     if (user) {
+                        await fetchUserProfile(user);
                         loginScreen.classList.add('hidden');
                         dashboardScreen.classList.remove('hidden');
                         dashboardScreen.classList.add('flex');
@@ -633,6 +636,7 @@
                     } else {
                         loginScreen.classList.remove('hidden');
                         dashboardScreen.classList.add('hidden');
+                        unsubscribeAll();
                     }
                 });
             });
@@ -653,19 +657,60 @@
             }
         });
 
+        async function fetchUserProfile(user) {
+            const q = query(collection(db, "users"), where("uid", "==", user.uid));
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                currentUserProfile = { id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() };
+            } else {
+                console.error("Could not find user profile in Firestore.");
+                currentUserProfile = null;
+            }
+        }
+
         function initializeDataListeners() {
-            onSnapshot(collection(db, "restaurants"), (snapshot) => {
+            unsubscribeAll(); // Clear old listeners before creating new ones
+
+            if (!currentUserProfile) return;
+
+            const isSuperAdmin = currentUserProfile.role === 'Super Admin';
+            const assignedRestaurants = currentUserProfile.restaurants || [];
+
+            let restaurantQuery;
+            if (isSuperAdmin) {
+                restaurantQuery = collection(db, "restaurants");
+            } else if (assignedRestaurants.length > 0) {
+                restaurantQuery = query(collection(db, "restaurants"), where("name", "in", assignedRestaurants));
+            } else {
+                restaurantData = [];
+                renderAll();
+                return;
+            }
+            
+            const unsubRestaurants = onSnapshot(restaurantQuery, (snapshot) => {
                 restaurantData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderAll();
             });
-            onSnapshot(collection(db, "users"), (snapshot) => {
+
+            const unsubUsers = onSnapshot(collection(db, "users"), (snapshot) => {
                 userData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (!isSuperAdmin) {
+                    userData = userData.filter(user => user.restaurants.some(r => assignedRestaurants.includes(r)));
+                }
                 renderAll();
             });
-            onSnapshot(collection(db, "menuItems"), (snapshot) => {
+
+            const unsubMenu = onSnapshot(collection(db, "menuItems"), (snapshot) => {
                 menuData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderAll();
             });
+
+            unsubscribeListeners = [unsubRestaurants, unsubUsers, unsubMenu];
+        }
+
+        function unsubscribeAll() {
+            unsubscribeListeners.forEach(unsub => unsub());
+            unsubscribeListeners = [];
         }
 
 
@@ -714,6 +759,8 @@
             if (editButton) openUserModal('edit', editButton.closest('tr').dataset.id);
             const deleteButton = e.target.closest('.delete-user-btn');
             if (deleteButton) handleDeleteUser(deleteButton.closest('tr').dataset.id);
+            const resetPasswordButton = e.target.closest('.reset-password-btn');
+            if (resetPasswordButton) handleResetPassword(resetPasswordButton.closest('tr').dataset.id);
         });
         restaurantSearchInput.addEventListener('focus', () => restaurantDropdown.classList.remove('hidden'));
         restaurantSearchInput.addEventListener('blur', () => setTimeout(() => restaurantDropdown.classList.add('hidden'), 150));
@@ -856,6 +903,7 @@
                         <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.lastLogin}</td>
                         <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
                             <button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
+                            <button class="reset-password-btn"><i data-lucide="key-round" class="w-5 h-5 text-gray-500"></i></button>
                             <button class="delete-user-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
                         </td>
                     `;
@@ -1292,6 +1340,19 @@
                     await deleteDoc(doc(db, "users", id));
                 }
             });
+        }
+
+        async function handleResetPassword(id) {
+            const user = userData.find(u => u.id === id);
+            if (user && user.email) {
+                try {
+                    await sendPasswordResetEmail(auth, user.email);
+                    alert(`Password reset email sent to ${user.email}`);
+                } catch (error) {
+                    console.error("Error sending password reset email:", error);
+                    alert("Could not send password reset email.");
+                }
+            }
         }
 
         // --- AI FUNCTIONS ---
