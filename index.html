@@ -66,6 +66,42 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Mobile Table Styles */
+        @media (max-width: 767px) {
+            .responsive-table thead {
+                display: none;
+            }
+            .responsive-table tbody, .responsive-table tr, .responsive-table td {
+                display: block;
+                width: 100%;
+            }
+            .responsive-table tr {
+                margin-bottom: 1rem;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.5rem;
+                padding: 1rem;
+            }
+            .responsive-table td {
+                padding-left: 50%;
+                position: relative;
+                text-align: right;
+                border-bottom: 1px solid #f3f4f6;
+            }
+            .responsive-table td:last-child {
+                border-bottom: none;
+            }
+            .responsive-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0.5rem;
+                width: 45%;
+                padding-right: 0.5rem;
+                text-align: left;
+                font-weight: 600;
+                color: #111827;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-sm">
@@ -208,7 +244,7 @@
             <main id="restaurant-management-content" class="flex-1 overflow-x-auto overflow-y-auto bg-white p-4 md:p-8">
                 <div class="min-w-full inline-block align-middle">
                     <div class="overflow-hidden border rounded-lg">
-                        <table id="restaurantTable" class="min-w-full divide-y divide-gray-200">
+                        <table id="restaurantTable" class="min-w-full divide-y divide-gray-200 responsive-table">
                              <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="0">Name</th>
@@ -221,7 +257,7 @@
                                     <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
+                            <tbody class="bg-white divide-y divide-gray-200 md:divide-y-0"></tbody>
                         </table>
                     </div>
                 </div>
@@ -231,7 +267,7 @@
             <main id="menu-content" class="flex-1 overflow-x-auto overflow-y-auto bg-white p-4 md:p-8 hidden">
                  <div class="min-w-full inline-block align-middle">
                     <div class="overflow-hidden border rounded-lg">
-                        <table id="menuTable" class="min-w-full divide-y divide-gray-200">
+                        <table id="menuTable" class="min-w-full divide-y divide-gray-200 responsive-table">
                              <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="p-4"><input type="checkbox" id="select-all-menu-items" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
@@ -242,7 +278,7 @@
                                     <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
+                            <tbody class="bg-white divide-y divide-gray-200 md:divide-y-0"></tbody>
                         </table>
                     </div>
                 </div>
@@ -252,7 +288,7 @@
             <main id="user-management-content" class="flex-1 overflow-x-auto overflow-y-auto bg-white p-4 md:p-8 hidden">
                 <div class="min-w-full inline-block align-middle">
                     <div class="overflow-hidden border rounded-lg">
-                        <table id="userTable" class="min-w-full divide-y divide-gray-200">
+                        <table id="userTable" class="min-w-full divide-y divide-gray-200 responsive-table">
                            <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="p-4"><input type="checkbox" id="select-all-users" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
@@ -265,7 +301,7 @@
                                     <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
+                            <tbody class="bg-white divide-y divide-gray-200 md:divide-y-0"></tbody>
                         </table>
                     </div>
                 </div>
@@ -281,7 +317,7 @@
     </div>
 
     <!-- Add/Edit Restaurant Modal -->
-    <div id="restaurant-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+    <div id="restaurant-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
                 <h3 id="modal-title" class="text-lg font-semibold">Add Restaurant</h3>
@@ -297,7 +333,7 @@
                 </div>
                  <div class="relative">
                     <label for="res-owner-search" class="block text-xs font-medium text-gray-700">Owner</label>
-                    <input type="text" id="res-owner-search" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" autocomplete="off">
+                    <input type="text" id="res-owner-search" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" autocomplete="off">
                     <div id="owner-dropdown" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto hidden"></div>
                 </div>
                 <div>
@@ -334,7 +370,7 @@
     </div>
 
     <!-- Add/Edit User Modal -->
-    <div id="user-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+    <div id="user-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
                 <h3 id="user-modal-title" class="text-lg font-semibold">Add User</h3>
@@ -392,7 +428,7 @@
     </div>
 
     <!-- Add/Edit Menu Item Modal -->
-    <div id="menu-item-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center">
+    <div id="menu-item-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-3xl">
             <div class="flex justify-between items-center border-b pb-3 mb-4">
                 <h3 id="menu-item-modal-title" class="text-lg font-semibold">Add Menu Item</h3>
@@ -528,7 +564,6 @@
         import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         // --- FIREBASE CONFIG ---
-        // IMPORTANT: Replace with your actual Firebase configuration
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
         apiKey: "AIzaSyCBGMJzHbwD3Y95fwRKVgdYU2KBQ7oDYHQ",
@@ -662,6 +697,7 @@
             const querySnapshot = await getDocs(q);
             if (!querySnapshot.empty) {
                 currentUserProfile = { id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() };
+                userAvatarBtn.title = currentUserProfile.name;
             } else {
                 console.error("Could not find user profile in Firestore.");
                 currentUserProfile = null;
@@ -676,32 +712,34 @@
             const isSuperAdmin = currentUserProfile.role === 'Super Admin';
             const assignedRestaurants = currentUserProfile.restaurants || [];
 
-            let restaurantQuery;
-            if (isSuperAdmin) {
-                restaurantQuery = collection(db, "restaurants");
-            } else if (assignedRestaurants.length > 0) {
-                restaurantQuery = query(collection(db, "restaurants"), where("name", "in", assignedRestaurants));
-            } else {
-                restaurantData = [];
-                renderAll();
-                return;
-            }
-            
-            const unsubRestaurants = onSnapshot(restaurantQuery, (snapshot) => {
-                restaurantData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const unsubRestaurants = onSnapshot(collection(db, "restaurants"), (snapshot) => {
+                const allRestaurants = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (isSuperAdmin) {
+                    restaurantData = allRestaurants;
+                } else {
+                    restaurantData = allRestaurants.filter(r => assignedRestaurants.includes(r.name));
+                }
                 renderAll();
             });
 
             const unsubUsers = onSnapshot(collection(db, "users"), (snapshot) => {
-                userData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                if (!isSuperAdmin) {
-                    userData = userData.filter(user => user.restaurants.some(r => assignedRestaurants.includes(r)));
+                const allUsers = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (isSuperAdmin) {
+                    userData = allUsers;
+                } else {
+                    userData = allUsers.filter(user => user.restaurants.some(r => assignedRestaurants.includes(r)));
                 }
                 renderAll();
             });
 
             const unsubMenu = onSnapshot(collection(db, "menuItems"), (snapshot) => {
-                menuData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const allMenuItems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if (isSuperAdmin) {
+                    menuData = allMenuItems;
+                } else {
+                    const assignedRestaurantIds = restaurantData.map(r => r.id);
+                    menuData = allMenuItems.filter(item => assignedRestaurantIds.includes(item.restaurantId));
+                }
                 renderAll();
             });
 
@@ -736,7 +774,6 @@
         addRestaurantBtn.addEventListener('click', () => openRestaurantModal('add'));
         closeModalBtn.addEventListener('click', closeRestaurantModal);
         cancelModalBtn.addEventListener('click', closeRestaurantModal);
-        restaurantModal.addEventListener('click', (e) => { if(e.target === restaurantModal) closeRestaurantModal(); });
         restaurantForm.addEventListener('submit', handleRestaurantFormSubmit);
         restaurantTableBody.addEventListener('click', (e) => {
             const editButton = e.target.closest('.edit-btn');
@@ -752,7 +789,6 @@
         addUserBtn.addEventListener('click', () => openUserModal('add'));
         closeUserModalBtn.addEventListener('click', closeUserModal);
         cancelUserModalBtn.addEventListener('click', closeUserModal);
-        userModal.addEventListener('click', (e) => { if(e.target === userModal) closeUserModal(); });
         userForm.addEventListener('submit', handleUserFormSubmit);
         userTableBody.addEventListener('click', (e) => {
             const editButton = e.target.closest('.edit-user-btn');
@@ -770,7 +806,6 @@
         addMenuItemBtn.addEventListener('click', () => openMenuItemModal('add'));
         closeMenuItemModalBtn.addEventListener('click', closeMenuItemModal);
         cancelMenuItemModalBtn.addEventListener('click', closeMenuItemModal);
-        menuItemModal.addEventListener('click', (e) => { if(e.target === menuItemModal) closeMenuItemModal(); });
         menuItemForm.addEventListener('submit', handleMenuItemFormSubmit);
         menuTableBody.addEventListener('click', (e) => {
             const editButton = e.target.closest('.edit-menu-item-btn');
@@ -783,7 +818,6 @@
 
         // Confirm Modal Listeners
         cancelConfirmBtn.addEventListener('click', () => confirmModal.style.display = 'none');
-        confirmModal.addEventListener('click', (e) => { if(e.target === confirmModal) confirmModal.style.display = 'none'; });
 
 
         // --- RENDER FUNCTIONS ---
