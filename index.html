@@ -160,6 +160,10 @@
                     <i data-lucide="users" class="w-5 h-5 mr-3"></i>
                     User Management
                 </a>
+                <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md" data-target="order-food-content">
+                    <i data-lucide="shopping-cart" class="w-5 h-5 mr-3"></i>
+                    Order Food
+                </a>
             </nav>
         </aside>
 
@@ -181,22 +185,27 @@
                         </div>
                         
                         <!-- Action Buttons Container -->
-                        <div id="restaurant-actions" class="items-center space-x-3 hidden sm:flex">
+                        <div id="restaurant-actions" class="items-center space-x-3 hidden">
                             <button id="add-restaurant-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add Restaurant</button>
                         </div>
-                         <div id="menu-actions" class="items-center space-x-2 hidden sm:flex">
+                         <div id="menu-actions" class="items-center space-x-2 hidden">
                              <select id="menuRestaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
                                 <option value="">Select Restaurant</option>
                             </select>
                             <button id="add-menu-item-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs whitespace-nowrap">Add Item</button>
                             <button id="delete-selected-menu-items-btn" class="bg-red-600 text-white px-3 py-1.5 rounded-md hover:bg-red-700 text-xs whitespace-nowrap hidden">Delete Selected</button>
                         </div>
-                        <div id="user-actions" class="items-center space-x-2 hidden sm:flex">
+                        <div id="user-actions" class="items-center space-x-2 hidden">
                              <select id="restaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
                                 <option value="all">All Restaurants</option>
                             </select>
                             <button id="add-user-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs whitespace-nowrap">Add User</button>
                              <button id="delete-selected-users-btn" class="bg-red-600 text-white px-3 py-1.5 rounded-md hover:bg-red-700 text-xs whitespace-nowrap hidden">Delete Selected</button>
+                        </div>
+                         <div id="order-food-actions" class="items-center space-x-2 hidden">
+                             <select id="order-restaurant-filter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
+                                <option value="">Select Restaurant</option>
+                            </select>
                         </div>
                         
                          <div class="relative">
@@ -236,6 +245,10 @@
                      <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md" data-target="user-management-content">
                         <i data-lucide="users" class="w-5 h-5 mr-3"></i>
                         User Management
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md" data-target="order-food-content">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 mr-3"></i>
+                        Order Food
                     </a>
                 </nav>
             </div>
@@ -304,6 +317,54 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200"></tbody>
                         </table>
+                    </div>
+                </div>
+            </main>
+            
+            <!-- Order Food Page -->
+            <main id="order-food-content" class="flex-1 overflow-y-auto bg-white p-4 md:p-8 hidden">
+                <div class="max-w-7xl mx-auto">
+                    <div id="order-content-container" class="hidden">
+                        <div class="mb-4 border-b border-gray-200">
+                            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                                <button id="view-menu-tab" class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">View Menu</button>
+                                <button id="interactive-menu-tab" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">Interactive Menu</button>
+                            </nav>
+                        </div>
+
+                        <!-- Normal Menu View -->
+                        <div id="normal-menu-view"></div>
+
+                        <!-- Interactive Menu View -->
+                        <div id="interactive-menu-view" class="hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 p-4 border rounded-lg bg-gray-50">
+                                <div>
+                                    <label for="filter-portion" class="block text-xs font-medium text-gray-700">Portion Size</label>
+                                    <select id="filter-portion" class="mt-1 block w-full text-xs">
+                                        <option value="all">All</option>
+                                        <option>Mini</option><option>Small</option><option>Medium</option><option>Large</option><option>Extra Large</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="filter-cuisine" class="block text-xs font-medium text-gray-700">Cuisine</label>
+                                    <select id="filter-cuisine" class="mt-1 block w-full text-xs">
+                                        <option value="all">All</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="filter-taste" class="block text-xs font-medium text-gray-700">Taste</label>
+                                    <select id="filter-taste" class="mt-1 block w-full text-xs">
+                                        <option value="all">All</option>
+                                        <option>Sweet</option><option>Creamy</option><option>Mild Spicy</option><option>Medium Spicy</option><option>Super Spicy</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="filter-prep-time" class="block text-xs font-medium text-gray-700">Max Prep Time: <span id="prep-time-value">60</span> mins</label>
+                                    <input type="range" id="filter-prep-time" min="5" max="60" value="60" step="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                </div>
+                            </div>
+                            <div id="interactive-menu-items" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -830,6 +891,7 @@
             renderUserTable();
             renderMenuTable();
             populateAllRestaurantFilters();
+            renderOrderFoodPage();
         }
 
         function renderRestaurantTable() {
@@ -988,6 +1050,7 @@
             restaurantActions.style.display = 'none';
             menuActions.style.display = 'none';
             userActions.style.display = 'none';
+            document.getElementById('order-food-actions').style.display = 'none';
 
             if (targetId === 'restaurant-management-content') {
                 headerTitle.textContent = 'Restaurant Management';
@@ -998,6 +1061,9 @@
             } else if (targetId === 'user-management-content') {
                 headerTitle.textContent = 'User Management';
                 userActions.style.display = 'flex';
+            } else if (targetId === 'order-food-content') {
+                 headerTitle.textContent = 'Order Food';
+                 document.getElementById('order-food-actions').style.display = 'flex';
             } else {
                  headerTitle.textContent = 'Dashboard';
             }
@@ -1044,6 +1110,17 @@
                 option.value = res.id;
                 option.textContent = res.name;
                 menuRestaurantFilter.appendChild(option);
+            });
+
+             // For order food filter
+            const orderRestaurantFilter = document.getElementById('order-restaurant-filter');
+            const existingOrderFilterOptions = orderRestaurantFilter.querySelectorAll('option:not([value=""])');
+            existingOrderFilterOptions.forEach(opt => opt.remove());
+            restaurantData.forEach(res => {
+                const option = document.createElement('option');
+                option.value = res.id;
+                option.textContent = res.name;
+                orderRestaurantFilter.appendChild(option);
             });
         }
 
@@ -1456,6 +1533,51 @@
                 btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate';
                 lucide.createIcons();
                 imageLoader.classList.add('hidden');
+            }
+        }
+        
+        function renderOrderFoodPage() {
+            const container = document.getElementById('order-restaurant-selector-container');
+            if (!container) return;
+            container.innerHTML = ''; // Clear previous content
+
+            if (!currentUserProfile) return;
+
+            const assignedRestaurants = restaurantData.filter(r => currentUserProfile.restaurants.includes(r.name));
+
+            if (assignedRestaurants.length === 1) {
+                const title = document.createElement('h2');
+                title.className = 'text-2xl font-bold text-gray-800';
+                title.textContent = assignedRestaurants[0].name;
+                container.appendChild(title);
+                // Automatically show menu for the single restaurant
+                document.getElementById('order-content-container').classList.remove('hidden');
+            } else if (assignedRestaurants.length > 1) {
+                const select = document.createElement('select');
+                select.id = 'order-restaurant-select-dynamic';
+                select.className = 'mt-1 block w-full md:w-1/3 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md';
+                
+                const defaultOption = document.createElement('option');
+                defaultOption.value = "";
+                defaultOption.textContent = "Select Restaurant";
+                select.appendChild(defaultOption);
+
+                assignedRestaurants.forEach(r => {
+                    const option = document.createElement('option');
+                    option.value = r.id;
+                    option.textContent = r.name;
+                    select.appendChild(option);
+                });
+                
+                container.appendChild(select);
+
+                select.addEventListener('change', (e) => {
+                    if (e.target.value) {
+                         document.getElementById('order-content-container').classList.remove('hidden');
+                    } else {
+                         document.getElementById('order-content-container').classList.add('hidden');
+                    }
+                });
             }
         }
 
