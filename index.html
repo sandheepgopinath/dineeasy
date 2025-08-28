@@ -131,31 +131,31 @@
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
             <header class="bg-white border-b border-gray-200">
-                <div class="flex items-center justify-between h-auto min-h-[4rem] px-4 md:px-8 py-2 flex-wrap">
-                    <div class="flex items-center">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between h-auto min-h-[4rem] px-4 md:px-8 py-2">
+                    <div class="flex items-center w-full md:w-auto">
                          <button id="menu-button" class="md:hidden mr-4 text-gray-600">
                             <i data-lucide="menu" class="w-6 h-6"></i>
                         </button>
-                        <h1 id="header-title" class="text-lg font-semibold text-gray-800">Restaurant Management</h1>
+                        <h1 id="header-title" class="text-base md:text-lg font-semibold text-gray-800">Restaurant Management</h1>
                     </div>
-                    <div class="flex items-center space-x-3 flex-wrap justify-end">
-                        <div class="relative">
+                    <div class="flex items-center space-x-3 w-full md:w-auto justify-between mt-2 md:mt-0">
+                        <div class="relative flex-grow">
                             <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-                            <input type="text" id="searchInput" placeholder="Search" class="pl-9 pr-4 py-1.5 w-40 md:w-56 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs">
+                            <input type="text" id="searchInput" placeholder="Search" class="pl-9 pr-4 py-1.5 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs">
                         </div>
                         
                         <!-- Action Buttons Container -->
                         <div id="restaurant-actions" class="items-center space-x-3 hidden sm:flex">
                             <button id="add-restaurant-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add Restaurant</button>
                         </div>
-                         <div id="menu-actions" class="items-center space-x-3 hidden sm:flex">
+                         <div id="menu-actions" class="items-center space-x-2 hidden sm:flex">
                              <select id="menuRestaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
                                 <option value="">Select Restaurant</option>
                             </select>
                             <button id="add-menu-item-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs whitespace-nowrap">Add Item</button>
                             <button id="delete-selected-menu-items-btn" class="bg-red-600 text-white px-3 py-1.5 rounded-md hover:bg-red-700 text-xs whitespace-nowrap hidden">Delete Selected</button>
                         </div>
-                        <div id="user-actions" class="items-center space-x-3 hidden sm:flex">
+                        <div id="user-actions" class="items-center space-x-2 hidden sm:flex">
                              <select id="restaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
                                 <option value="all">All Restaurants</option>
                             </select>
@@ -662,6 +662,9 @@
             if (!querySnapshot.empty) {
                 currentUserProfile = { id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() };
                 userAvatarBtn.title = currentUserProfile.name;
+                const initials = currentUserProfile.name.split(' ').map(n => n[0]).join('');
+                userAvatarBtn.textContent = initials;
+
             } else {
                 console.error("Could not find user profile in Firestore.");
                 currentUserProfile = null;
