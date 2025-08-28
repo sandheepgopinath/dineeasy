@@ -66,42 +66,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* Mobile Table Styles */
-        @media (max-width: 767px) {
-            .responsive-table thead {
-                display: none;
-            }
-            .responsive-table tbody, .responsive-table tr, .responsive-table td {
-                display: block;
-                width: 100%;
-            }
-            .responsive-table tr {
-                margin-bottom: 1rem;
-                border: 1px solid #e5e7eb;
-                border-radius: 0.5rem;
-                padding: 1rem;
-            }
-            .responsive-table td {
-                padding-left: 50%;
-                position: relative;
-                text-align: right;
-                border-bottom: 1px solid #f3f4f6;
-            }
-            .responsive-table td:last-child {
-                border-bottom: none;
-            }
-            .responsive-table td::before {
-                content: attr(data-label);
-                position: absolute;
-                left: 0.5rem;
-                width: 45%;
-                padding-right: 0.5rem;
-                text-align: left;
-                font-weight: 600;
-                color: #111827;
-            }
-        }
     </style>
 </head>
 <body class="bg-gray-50 text-sm">
@@ -167,14 +131,14 @@
         <div class="flex-1 flex flex-col overflow-hidden">
             <!-- Header -->
             <header class="bg-white border-b border-gray-200">
-                <div class="flex items-center justify-between h-16 px-4 md:px-8">
+                <div class="flex items-center justify-between h-auto min-h-[4rem] px-4 md:px-8 py-2 flex-wrap">
                     <div class="flex items-center">
                          <button id="menu-button" class="md:hidden mr-4 text-gray-600">
                             <i data-lucide="menu" class="w-6 h-6"></i>
                         </button>
                         <h1 id="header-title" class="text-lg font-semibold text-gray-800">Restaurant Management</h1>
                     </div>
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 flex-wrap justify-end">
                         <div class="relative">
                             <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
                             <input type="text" id="searchInput" placeholder="Search" class="pl-9 pr-4 py-1.5 w-40 md:w-56 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs">
@@ -244,20 +208,20 @@
             <main id="restaurant-management-content" class="flex-1 overflow-x-auto overflow-y-auto bg-white p-4 md:p-8">
                 <div class="min-w-full inline-block align-middle">
                     <div class="overflow-hidden border rounded-lg">
-                        <table id="restaurantTable" class="min-w-full divide-y divide-gray-200 responsive-table">
+                        <table id="restaurantTable" class="min-w-full divide-y divide-gray-200">
                              <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="0">Name</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Owner</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Contact</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Address</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Onboarding Date</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Plan Type</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="6">Last Payment</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="0">Name</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Owner</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Contact</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Address</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Onboarding</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Plan</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="6">Payment</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200 md:divide-y-0"></tbody>
+                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
                         </table>
                     </div>
                 </div>
@@ -267,18 +231,19 @@
             <main id="menu-content" class="flex-1 overflow-x-auto overflow-y-auto bg-white p-4 md:p-8 hidden">
                  <div class="min-w-full inline-block align-middle">
                     <div class="overflow-hidden border rounded-lg">
-                        <table id="menuTable" class="min-w-full divide-y divide-gray-200 responsive-table">
+                        <table id="menuTable" class="min-w-full divide-y divide-gray-200">
                              <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="p-4"><input type="checkbox" id="select-all-menu-items" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Name</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Category</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Price</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Time to Prep.</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                    <th scope="col" class="p-2 md:p-4"><input type="checkbox" id="select-all-menu-items" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Name</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Restaurant</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Category</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Price</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Time to Prep.</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200 md:divide-y-0"></tbody>
+                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
                         </table>
                     </div>
                 </div>
@@ -288,20 +253,20 @@
             <main id="user-management-content" class="flex-1 overflow-x-auto overflow-y-auto bg-white p-4 md:p-8 hidden">
                 <div class="min-w-full inline-block align-middle">
                     <div class="overflow-hidden border rounded-lg">
-                        <table id="userTable" class="min-w-full divide-y divide-gray-200 responsive-table">
+                        <table id="userTable" class="min-w-full divide-y divide-gray-200">
                            <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="p-4"><input type="checkbox" id="select-all-users" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Name</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Email</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Restaurant</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Status</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Role</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="6">Last log in</th>
-                                    <th scope="col" class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                    <th scope="col" class="p-2 md:p-4"><input type="checkbox" id="select-all-users" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Name</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Email</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Restaurant</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Status</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Role</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="6">Last log in</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200 md:divide-y-0"></tbody>
+                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
                         </table>
                     </div>
                 </div>
@@ -563,7 +528,6 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // --- FIREBASE CONFIG ---
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
         apiKey: "AIzaSyCBGMJzHbwD3Y95fwRKVgdYU2KBQ7oDYHQ",
@@ -845,14 +809,14 @@
                     newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
                     newRow.dataset.id = res.id;
                     newRow.innerHTML = `
-                        <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${res.name}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-blue-500 font-medium underline">${res.owner}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.contact}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.address}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.onboarding}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${res.plan === 'Premium' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}">${res.plan}</span></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$${res.payment}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                        <td data-label="Name" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs font-medium text-gray-900">${res.name}</td>
+                        <td data-label="Owner" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-blue-500 font-medium underline">${res.owner}</td>
+                        <td data-label="Contact" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${res.contact}</td>
+                        <td data-label="Address" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${res.address}</td>
+                        <td data-label="Onboarding" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${res.onboarding}</td>
+                        <td data-label="Plan" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${res.plan === 'Premium' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}">${res.plan}</span></td>
+                        <td data-label="Payment" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">$${res.payment}</td>
+                        <td data-label="Action" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2 justify-end">
                             <button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
                             <button class="delete-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
                         </td>
@@ -866,7 +830,7 @@
             menuTableBody.innerHTML = '';
             const selectedRestaurantId = menuRestaurantFilter.value;
             if (!selectedRestaurantId) {
-                showEmptyState(menuTableBody, 6, 'Please select a restaurant to see its menu.');
+                showEmptyState(menuTableBody, 7, 'Please select a restaurant to see its menu.');
                 return;
             }
 
@@ -880,21 +844,23 @@
             });
 
             if (filteredData.length === 0 && !searchTerm) {
-                showEmptyState(menuTableBody, 6, 'No menu items for this restaurant yet.', 'Add Item', () => openMenuItemModal('add'));
+                showEmptyState(menuTableBody, 7, 'No menu items for this restaurant yet.', 'Add Item', () => openMenuItemModal('add'));
             } else if (filteredData.length === 0) {
-                showEmptyState(menuTableBody, 6, 'No results found for your search.');
+                showEmptyState(menuTableBody, 7, 'No results found for your search.');
             } else {
                 filteredData.forEach((item, index) => {
+                    const restaurant = restaurantData.find(r => r.id === item.restaurantId);
                     const newRow = menuTableBody.insertRow();
                     newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
                     newRow.dataset.id = item.id;
                     newRow.innerHTML = `
-                        <td class="p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded menu-item-checkbox" data-id="${item.id}"></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${item.name}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${item.category}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$${item.price}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${item.prepTime} mins</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                        <td class="p-2 md:p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded menu-item-checkbox" data-id="${item.id}"></td>
+                        <td data-label="Name" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs font-medium text-gray-900">${item.name}</td>
+                        <td data-label="Restaurant" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${restaurant ? restaurant.name : ''}</td>
+                        <td data-label="Category" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${item.category}</td>
+                        <td data-label="Price" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">$${item.price}</td>
+                        <td data-label="Prep Time" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${item.prepTime} mins</td>
+                        <td data-label="Action" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2 justify-end">
                             <button class="edit-menu-item-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
                             <button class="delete-menu-item-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
                         </td>
@@ -928,14 +894,14 @@
                     newRow.dataset.id = user.id;
                     const restaurantHTML = user.restaurants.map(r => `<span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">${r}</span>`).join('');
                     newRow.innerHTML = `
-                        <td class="p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded user-checkbox" data-id="${user.id}"></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${user.name}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.email}</td>
-                        <td class="px-4 py-2 text-xs text-gray-500"><div class="flex flex-wrap gap-1">${restaurantHTML}</div></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${user.status}</span></td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.role}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.lastLogin}</td>
-                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                        <td class="p-2 md:p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded user-checkbox" data-id="${user.id}"></td>
+                        <td data-label="Name" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs font-medium text-gray-900">${user.name}</td>
+                        <td data-label="Email" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${user.email}</td>
+                        <td data-label="Restaurant" class="px-2 py-1 md:px-4 md:py-2 text-xs text-gray-500"><div class="flex flex-wrap gap-1 justify-end">${restaurantHTML}</div></td>
+                        <td data-label="Status" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${user.status}</span></td>
+                        <td data-label="Role" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${user.role}</td>
+                        <td data-label="Last Login" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${user.lastLogin}</td>
+                        <td data-label="Action" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2 justify-end">
                             <button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
                             <button class="reset-password-btn"><i data-lucide="key-round" class="w-5 h-5 text-gray-500"></i></button>
                             <button class="delete-user-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
