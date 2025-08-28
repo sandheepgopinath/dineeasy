@@ -80,7 +80,7 @@
                 </div>
                 <p class="text-gray-500">Welcome back! Please login to your account.</p>
             </div>
-            <form class="space-y-6" action="#" method="POST">
+            <form id="login-form" class="space-y-6">
                 <div>
                     <label for="email" class="text-sm font-medium text-gray-700">Email address</label>
                     <input id="email" name="email" type="email" autocomplete="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="you@example.com">
@@ -90,7 +90,7 @@
                     <input id="password" name="password" type="password" autocomplete="current-password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm" placeholder="••••••••">
                 </div>
                 <div>
-                    <button id="login-button" type="button" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
+                    <button id="login-button" type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-900">
                         Login
                     </button>
                 </div>
@@ -514,783 +514,806 @@
     </div>
 
 
-    <script>
-        lucide.createIcons();
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // --- FIREBASE CONFIG ---
+        // IMPORTANT: Replace with your actual Firebase configuration
+        const firebaseConfig = {
+        apiKey: "AIzaSyCBGMJzHbwD3Y95fwRKVgdYU2KBQ7oDYHQ",
+        authDomain: "dineeasy-8176e.firebaseapp.com",
+        projectId: "dineeasy-8176e",
+        storageBucket: "dineeasy-8176e.firebasestorage.app",
+        messagingSenderId: "811985378716",
+        appId: "1:811985378716:web:26c599db464c67a537bc59",
+        measurementId: "G-0F0ERHYX32"
+        };
+
+
+        // --- INITIALIZE FIREBASE ---
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- DATA STORE ---
+        let restaurantData = [];
+        let userData = [];
+        let menuData = [];
+
+        // --- ELEMENTS ---
+        const loginScreen = document.getElementById('login-screen');
+        const dashboardScreen = document.getElementById('dashboard-screen');
+        const loginForm = document.getElementById('login-form');
+        const menuButton = document.getElementById('menu-button');
+        const closeMenuButton = document.getElementById('close-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const searchInput = document.getElementById('searchInput');
+        const restaurantTableBody = document.querySelector('#restaurantTable tbody');
+        const menuTableBody = document.querySelector('#menuTable tbody');
+        const userTableBody = document.querySelector('#userTable tbody');
+        const navLinks = document.querySelectorAll('#sidebar-nav a, #mobile-nav a');
+        const contentSections = document.querySelectorAll('main');
+        const headerTitle = document.getElementById('header-title');
+        const restaurantActions = document.getElementById('restaurant-actions');
+        const menuActions = document.getElementById('menu-actions');
+        const userActions = document.getElementById('user-actions');
+        const restaurantFilter = document.getElementById('restaurantFilter');
+        const menuRestaurantFilter = document.getElementById('menuRestaurantFilter');
+        let currentView = 'restaurant-management-content';
+
+        // Restaurant Modal elements
+        const restaurantModal = document.getElementById('restaurant-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const cancelModalBtn = document.getElementById('cancel-modal-btn');
+        const restaurantForm = document.getElementById('restaurant-form');
+        const addRestaurantBtn = document.getElementById('add-restaurant-btn');
+        const ownerSearchInput = document.getElementById('res-owner-search');
+        const ownerDropdown = document.getElementById('owner-dropdown');
         
-        document.addEventListener('DOMContentLoaded', () => {
+        // User Modal elements
+        const userModal = document.getElementById('user-modal');
+        const userModalTitle = document.getElementById('user-modal-title');
+        const closeUserModalBtn = document.getElementById('close-user-modal-btn');
+        const cancelUserModalBtn = document.getElementById('cancel-user-modal-btn');
+        const userForm = document.getElementById('user-form');
+        const addUserBtn = document.getElementById('add-user-btn');
+        const multiSelectContainer = document.getElementById('multi-select-container');
+        const restaurantSearchInput = document.getElementById('restaurant-search-input');
+        const restaurantDropdown = document.getElementById('restaurant-dropdown');
 
-            // --- DATA STORE ---
-            let restaurantData = [
-                { id: 1, name: 'The Golden Spoon', owner: 'Emily Carter', contact: '+1-555-123-4567', address: '123 Main St, Anytown, USA', onboarding: '2023-01-15', plan: 'Premium', payment: '199.99' },
-                { id: 2, name: 'The Cozy Corner', owner: 'David Lee', contact: '+1-555-987-6543', address: '456 Oak Ave, Anytown, USA', onboarding: '2023-03-22', plan: 'Basic', payment: '99.99' },
-                { id: 3, name: 'The Spicy Grill', owner: 'Sophia Rodriguez', contact: '+1-555-246-8013', address: '789 Pine Ln, Anytown, USA', onboarding: '2023-05-10', plan: 'Premium', payment: '199.99' }
-            ];
+        // Menu Item Modal elements
+        const menuItemModal = document.getElementById('menu-item-modal');
+        const menuItemModalTitle = document.getElementById('menu-item-modal-title');
+        const closeMenuItemModalBtn = document.getElementById('close-menu-item-modal-btn');
+        const cancelMenuItemModalBtn = document.getElementById('cancel-menu-item-modal-btn');
+        const menuItemForm = document.getElementById('menu-item-form');
+        const addMenuItemBtn = document.getElementById('add-menu-item-btn');
+        const generateDescriptionBtn = document.getElementById('generate-description-btn');
+        const generateImageBtn = document.getElementById('generate-image-btn');
+        const imagePreview = document.getElementById('item-image-preview');
+        const imageLoader = document.getElementById('image-loader');
+        const imagePlaceholder = document.getElementById('image-placeholder');
+        const uploadImageBtn = document.getElementById('upload-image-btn');
+        const imageUploadInput = document.getElementById('item-image-upload');
 
-            let userData = [
-                { id: 1, name: 'Emily Carter', email: 'emily.carter@example.com', restaurants: ['The Golden Spoon'], status: 'Active', role: 'Admin', lastLogin: '2024-08-26 10:30 AM' },
-                { id: 2, name: 'David Lee', email: 'david.lee@example.com', restaurants: ['The Cozy Corner'], status: 'Active', role: 'User', lastLogin: '2024-08-25 08:00 PM' },
-                { id: 3, name: 'Sophia Rodriguez', email: 'sophia.rodriguez@example.com', restaurants: ['The Spicy Grill'], status: 'Inactive', role: 'User', lastLogin: '2024-07-15 02:15 PM' }
-            ];
+        // Confirm Modal Elements
+        const confirmModal = document.getElementById('confirm-modal');
+        const confirmTitle = document.getElementById('confirm-title');
+        const confirmMessage = document.getElementById('confirm-message');
+        const confirmInputContainer = document.getElementById('confirm-input-container');
+        const confirmInput = document.getElementById('confirm-input');
+        const cancelConfirmBtn = document.getElementById('cancel-confirm-btn');
+        let confirmBtn = document.getElementById('confirm-btn');
+        
 
-            let menuData = [
-                { id: 1, restaurantId: 1, name: 'Golden Soup', description: 'Our signature soup.', imageUrl: '', price: '12.50', cuisine: 'International', taste: 'Creamy', category: 'Starter', portionSizes: ['Small', 'Medium'], prepTime: '15' },
-                { id: 2, restaurantId: 2, name: 'Cozy Burger', description: 'A classic beef burger.', imageUrl: '', price: '15.00', cuisine: 'American', taste: 'Medium Spicy', category: 'Main Course', portionSizes: ['Medium', 'Large'], prepTime: '20' },
-            ];
-
-            // --- ELEMENTS ---
-            const loginScreen = document.getElementById('login-screen');
-            const dashboardScreen = document.getElementById('dashboard-screen');
-            const loginButton = document.getElementById('login-button');
-            const menuButton = document.getElementById('menu-button');
-            const closeMenuButton = document.getElementById('close-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            const searchInput = document.getElementById('searchInput');
-            const restaurantTableBody = document.querySelector('#restaurantTable tbody');
-            const menuTableBody = document.querySelector('#menuTable tbody');
-            const userTableBody = document.querySelector('#userTable tbody');
-            const navLinks = document.querySelectorAll('#sidebar-nav a, #mobile-nav a');
-            const contentSections = document.querySelectorAll('main');
-            const headerTitle = document.getElementById('header-title');
-            const restaurantActions = document.getElementById('restaurant-actions');
-            const menuActions = document.getElementById('menu-actions');
-            const userActions = document.getElementById('user-actions');
-            const restaurantFilter = document.getElementById('restaurantFilter');
-            const menuRestaurantFilter = document.getElementById('menuRestaurantFilter');
-            let currentView = 'restaurant-management-content';
-
-            // Restaurant Modal elements
-            const restaurantModal = document.getElementById('restaurant-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            const cancelModalBtn = document.getElementById('cancel-modal-btn');
-            const restaurantForm = document.getElementById('restaurant-form');
-            const addRestaurantBtn = document.getElementById('add-restaurant-btn');
-            const ownerSearchInput = document.getElementById('res-owner-search');
-            const ownerDropdown = document.getElementById('owner-dropdown');
-            
-            // User Modal elements
-            const userModal = document.getElementById('user-modal');
-            const userModalTitle = document.getElementById('user-modal-title');
-            const closeUserModalBtn = document.getElementById('close-user-modal-btn');
-            const cancelUserModalBtn = document.getElementById('cancel-user-modal-btn');
-            const userForm = document.getElementById('user-form');
-            const addUserBtn = document.getElementById('add-user-btn');
-            const multiSelectContainer = document.getElementById('multi-select-container');
-            const restaurantSearchInput = document.getElementById('restaurant-search-input');
-            const restaurantDropdown = document.getElementById('restaurant-dropdown');
-
-            // Menu Item Modal elements
-            const menuItemModal = document.getElementById('menu-item-modal');
-            const menuItemModalTitle = document.getElementById('menu-item-modal-title');
-            const closeMenuItemModalBtn = document.getElementById('close-menu-item-modal-btn');
-            const cancelMenuItemModalBtn = document.getElementById('cancel-menu-item-modal-btn');
-            const menuItemForm = document.getElementById('menu-item-form');
-            const addMenuItemBtn = document.getElementById('add-menu-item-btn');
-            const generateDescriptionBtn = document.getElementById('generate-description-btn');
-            const generateImageBtn = document.getElementById('generate-image-btn');
-            const imagePreview = document.getElementById('item-image-preview');
-            const imageLoader = document.getElementById('image-loader');
-            const imagePlaceholder = document.getElementById('image-placeholder');
-            const uploadImageBtn = document.getElementById('upload-image-btn');
-            const imageUploadInput = document.getElementById('item-image-upload');
-
-            // Confirm Modal Elements
-            const confirmModal = document.getElementById('confirm-modal');
-            const confirmTitle = document.getElementById('confirm-title');
-            const confirmMessage = document.getElementById('confirm-message');
-            const confirmInputContainer = document.getElementById('confirm-input-container');
-            const confirmInput = document.getElementById('confirm-input');
-            const cancelConfirmBtn = document.getElementById('cancel-confirm-btn');
-            let confirmBtn = document.getElementById('confirm-btn');
-            
-
-            // --- INITIALIZATION ---
-            loginButton.addEventListener('click', () => {
+        // --- INITIALIZATION ---
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+             if (!email || !password) {
+                alert("Please enter both email and password.");
+                return;
+            }
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
                 loginScreen.classList.add('hidden');
                 dashboardScreen.classList.remove('hidden');
                 dashboardScreen.classList.add('flex');
+                initializeDataListeners();
+            } catch (error) {
+                console.error("Firebase email/password sign-in failed:", error);
+                alert("Login failed. Please check your email and password.");
+            }
+        });
+
+        function initializeDataListeners() {
+            onSnapshot(collection(db, "restaurants"), (snapshot) => {
+                restaurantData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderAll();
-                setupView(currentView);
             });
-
-
-            // --- EVENT LISTENERS ---
-            menuButton.addEventListener('click', () => mobileMenu.classList.remove('-translate-x-full'));
-            closeMenuButton.addEventListener('click', () => mobileMenu.classList.add('-translate-x-full'));
-            searchInput.addEventListener('keyup', handleSearch);
-            restaurantFilter.addEventListener('change', () => renderUserTable());
-            menuRestaurantFilter.addEventListener('change', () => renderMenuTable());
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    setupView(link.dataset.target);
-                    mobileMenu.classList.add('-translate-x-full');
-                });
-            });
-
-            // Restaurant Modal listeners
-            addRestaurantBtn.addEventListener('click', () => openRestaurantModal('add'));
-            closeModalBtn.addEventListener('click', closeRestaurantModal);
-            cancelModalBtn.addEventListener('click', closeRestaurantModal);
-            restaurantModal.addEventListener('click', (e) => { if(e.target === restaurantModal) closeRestaurantModal(); });
-            restaurantForm.addEventListener('submit', handleRestaurantFormSubmit);
-            restaurantTableBody.addEventListener('click', (e) => {
-                const editButton = e.target.closest('.edit-btn');
-                if (editButton) openRestaurantModal('edit', parseInt(editButton.closest('tr').dataset.id));
-                const deleteButton = e.target.closest('.delete-btn');
-                if (deleteButton) handleDeleteRestaurant(parseInt(deleteButton.closest('tr').dataset.id));
-            });
-            ownerSearchInput.addEventListener('focus', () => ownerDropdown.classList.remove('hidden'));
-            ownerSearchInput.addEventListener('blur', () => setTimeout(() => ownerDropdown.classList.add('hidden'), 150));
-            ownerSearchInput.addEventListener('keyup', filterOwners);
-
-            // User Modal Listeners
-            addUserBtn.addEventListener('click', () => openUserModal('add'));
-            closeUserModalBtn.addEventListener('click', closeUserModal);
-            cancelUserModalBtn.addEventListener('click', closeUserModal);
-            userModal.addEventListener('click', (e) => { if(e.target === userModal) closeUserModal(); });
-            userForm.addEventListener('submit', handleUserFormSubmit);
-            userTableBody.addEventListener('click', (e) => {
-                const editButton = e.target.closest('.edit-user-btn');
-                if (editButton) openUserModal('edit', parseInt(editButton.closest('tr').dataset.id));
-                const deleteButton = e.target.closest('.delete-user-btn');
-                if (deleteButton) handleDeleteUser(parseInt(deleteButton.closest('tr').dataset.id));
-            });
-            restaurantSearchInput.addEventListener('focus', () => restaurantDropdown.classList.remove('hidden'));
-            restaurantSearchInput.addEventListener('blur', () => setTimeout(() => restaurantDropdown.classList.add('hidden'), 150));
-            restaurantSearchInput.addEventListener('keyup', filterRestaurantsForDropdown);
-
-            // Menu Item Modal Listeners
-            addMenuItemBtn.addEventListener('click', () => openMenuItemModal('add'));
-            closeMenuItemModalBtn.addEventListener('click', closeMenuItemModal);
-            cancelMenuItemModalBtn.addEventListener('click', closeMenuItemModal);
-            menuItemModal.addEventListener('click', (e) => { if(e.target === menuItemModal) closeMenuItemModal(); });
-            menuItemForm.addEventListener('submit', handleMenuItemFormSubmit);
-            menuTableBody.addEventListener('click', (e) => {
-                const editButton = e.target.closest('.edit-menu-item-btn');
-                if (editButton) openMenuItemModal('edit', parseInt(editButton.closest('tr').dataset.id));
-            });
-            generateDescriptionBtn.addEventListener('click', handleGenerateDescription);
-            generateImageBtn.addEventListener('click', handleGenerateImage);
-            uploadImageBtn.addEventListener('click', () => imageUploadInput.click());
-            imageUploadInput.addEventListener('change', handleImageUpload);
-
-            // Confirm Modal Listeners
-            cancelConfirmBtn.addEventListener('click', () => confirmModal.style.display = 'none');
-            confirmModal.addEventListener('click', (e) => { if(e.target === confirmModal) confirmModal.style.display = 'none'; });
-
-
-            // --- RENDER FUNCTIONS ---
-            function renderAll() {
-                renderRestaurantTable();
-                renderUserTable();
-                renderMenuTable();
-                populateAllRestaurantFilters();
-            }
-
-            function renderRestaurantTable() {
-                restaurantTableBody.innerHTML = '';
-                const searchTerm = searchInput.value.toLowerCase();
-                const filteredData = (currentView === 'restaurant-management-content' && searchTerm)
-                    ? restaurantData.filter(r => r.name.toLowerCase().includes(searchTerm) || r.owner.toLowerCase().includes(searchTerm))
-                    : restaurantData;
-
-                if (restaurantData.length === 0) {
-                    showEmptyState(restaurantTableBody, 8, 'No restaurants found.', 'Add Restaurant', () => openRestaurantModal('add'));
-                } else if (filteredData.length === 0) {
-                    showEmptyState(restaurantTableBody, 8, 'No results found for your search.');
-                } else {
-                    filteredData.forEach((res, index) => {
-                        const newRow = restaurantTableBody.insertRow();
-                        newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
-                        newRow.dataset.id = res.id;
-                        newRow.innerHTML = `
-                            <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${res.name}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-blue-500 font-medium underline">${res.owner}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.contact}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.address}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.onboarding}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${res.plan === 'Premium' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}">${res.plan}</span></td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$${res.payment}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
-                                <button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
-                                <button class="delete-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
-                            </td>
-                        `;
-                    });
-                }
-                lucide.createIcons();
-            }
-             
-            function renderMenuTable() {
-                menuTableBody.innerHTML = '';
-                const selectedRestaurantId = parseInt(menuRestaurantFilter.value);
-                if (!selectedRestaurantId) {
-                    showEmptyState(menuTableBody, 6, 'Please select a restaurant to see its menu.');
-                    return;
-                }
-
-                const searchTerm = searchInput.value.toLowerCase();
-                const filteredData = menuData.filter(item => {
-                    const restaurantMatch = item.restaurantId === selectedRestaurantId;
-                    const searchMatch = (currentView === 'menu-content' && searchTerm)
-                        ? item.name.toLowerCase().includes(searchTerm) || item.category.toLowerCase().includes(searchTerm)
-                        : true;
-                    return restaurantMatch && searchMatch;
-                });
-
-                if (filteredData.length === 0 && !searchTerm) {
-                    showEmptyState(menuTableBody, 6, 'No menu items for this restaurant yet.', 'Add Item', () => openMenuItemModal('add'));
-                } else if (filteredData.length === 0) {
-                    showEmptyState(menuTableBody, 6, 'No results found for your search.');
-                } else {
-                    filteredData.forEach((item, index) => {
-                        const newRow = menuTableBody.insertRow();
-                        newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
-                        newRow.dataset.id = item.id;
-                        newRow.innerHTML = `
-                            <td class="p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded menu-item-checkbox" data-id="${item.id}"></td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${item.name}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${item.category}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$${item.price}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${item.prepTime} mins</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
-                                <button class="edit-menu-item-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
-                                <button class="delete-menu-item-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
-                            </td>
-                        `;
-                    });
-                }
-                 lucide.createIcons();
-            }
-
-            function renderUserTable() {
-                userTableBody.innerHTML = '';
-                const searchTerm = searchInput.value.toLowerCase();
-                const selectedRestaurant = restaurantFilter.value;
-                
-                const filteredData = userData.filter(user => {
-                    const searchMatch = (currentView === 'user-management-content' && searchTerm)
-                        ? user.name.toLowerCase().includes(searchTerm) || user.email.toLowerCase().includes(searchTerm)
-                        : true;
-                    const filterMatch = selectedRestaurant === 'all' || user.restaurants.includes(selectedRestaurant);
-                    return searchMatch && filterMatch;
-                });
-
-                if (userData.length === 0) {
-                    showEmptyState(userTableBody, 8, 'No users found.', 'Add User', () => openUserModal('add'));
-                } else if (filteredData.length === 0) {
-                     showEmptyState(userTableBody, 8, 'No results found for your search or filter.');
-                } else {
-                    filteredData.forEach((user, index) => {
-                        const newRow = userTableBody.insertRow();
-                        newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
-                        newRow.dataset.id = user.id;
-                        const restaurantHTML = user.restaurants.map(r => `<span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">${r}</span>`).join('');
-                        newRow.innerHTML = `
-                            <td class="p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded user-checkbox" data-id="${user.id}"></td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${user.name}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.email}</td>
-                            <td class="px-4 py-2 text-xs text-gray-500"><div class="flex flex-wrap gap-1">${restaurantHTML}</div></td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${user.status}</span></td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.role}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.lastLogin}</td>
-                            <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
-                                <button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
-                                <button class="delete-user-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
-                            </td>
-                        `;
-                    });
-                }
-                lucide.createIcons();
-            }
-
-            function showEmptyState(tbody, colspan, message, buttonText = null, buttonAction = null) {
-                const row = tbody.insertRow();
-                const cell = row.insertCell();
-                cell.colSpan = colspan;
-                cell.className = 'text-center py-12';
-                
-                let buttonHtml = '';
-                if (buttonText && buttonAction) {
-                    buttonHtml = `<button id="empty-state-btn" class="mt-4 bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">${buttonText}</button>`;
-                }
-
-                cell.innerHTML = `
-                    <div class="text-center">
-                        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2z" />
-                        </svg>
-                        <h3 class="mt-2 text-sm font-medium text-gray-900">${message}</h3>
-                        ${buttonHtml}
-                    </div>
-                `;
-                
-                if (buttonAction) {
-                    cell.querySelector('#empty-state-btn').addEventListener('click', buttonAction);
-                }
-            }
-
-            // --- GENERAL FUNCTIONS ---
-            function setupView(targetId) {
-                currentView = targetId;
-                contentSections.forEach(section => section.classList.add('hidden'));
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) targetSection.classList.remove('hidden');
-
-                restaurantActions.style.display = 'none';
-                menuActions.style.display = 'none';
-                userActions.style.display = 'none';
-
-                if (targetId === 'restaurant-management-content') {
-                    headerTitle.textContent = 'Restaurant Management';
-                    restaurantActions.style.display = 'flex';
-                } else if (targetId === 'menu-content') {
-                    headerTitle.textContent = 'Menu Management';
-                    menuActions.style.display = 'flex';
-                } else if (targetId === 'user-management-content') {
-                    headerTitle.textContent = 'User Management';
-                    userActions.style.display = 'flex';
-                } else {
-                     headerTitle.textContent = 'Dashboard';
-                }
-
-                document.querySelectorAll('#sidebar-nav a, #mobile-nav a').forEach(nav => {
-                    nav.classList.remove('bg-gray-900', 'text-white');
-                    nav.classList.add('text-gray-300');
-                    if (nav.dataset.target === targetId) {
-                        nav.classList.add('bg-gray-900', 'text-white');
-                        nav.classList.remove('text-gray-300');
-                    }
-                });
-                handleSearch(); // Re-filter on view change
-            }
-
-            function handleSearch() {
-                if (currentView === 'restaurant-management-content') {
-                    renderRestaurantTable();
-                } else if (currentView === 'user-management-content') {
-                    renderUserTable();
-                } else if (currentView === 'menu-content') {
-                    renderMenuTable();
-                }
-            }
-
-            function populateAllRestaurantFilters() {
-                const restaurantNames = new Set(restaurantData.map(r => r.name));
-                
-                // For user management filter
-                const existingUserFilterOptions = restaurantFilter.querySelectorAll('option:not([value="all"])');
-                existingUserFilterOptions.forEach(opt => opt.remove());
-                restaurantNames.forEach(name => {
-                    const option = document.createElement('option');
-                    option.value = name;
-                    option.textContent = name;
-                    restaurantFilter.appendChild(option);
-                });
-
-                // For menu management filter
-                const existingMenuFilterOptions = menuRestaurantFilter.querySelectorAll('option:not([value=""])');
-                existingMenuFilterOptions.forEach(opt => opt.remove());
-                restaurantData.forEach(res => {
-                    const option = document.createElement('option');
-                    option.value = res.id;
-                    option.textContent = res.name;
-                    menuRestaurantFilter.appendChild(option);
-                });
-            }
-
-            // --- RESTAURANT MODAL ---
-            function openRestaurantModal(mode, id = null) {
-                restaurantForm.reset();
-                populateOwnerDropdown();
-                if (mode === 'add') {
-                    modalTitle.textContent = 'Add Restaurant';
-                    document.getElementById('res-id').value = '';
-                } else if (mode === 'edit' && id) {
-                    modalTitle.textContent = 'Edit Restaurant';
-                    const res = restaurantData.find(r => r.id === id);
-                    if(res) {
-                        document.getElementById('res-id').value = res.id;
-                        document.getElementById('res-name').value = res.name;
-                        document.getElementById('res-owner-search').value = res.owner;
-                        document.getElementById('res-contact').value = res.contact;
-                        document.getElementById('res-address').value = res.address;
-                        document.getElementById('res-onboarding').value = res.onboarding;
-                        document.getElementById('res-plan').value = res.plan;
-                        document.getElementById('res-payment').value = res.payment;
-                    }
-                }
-                restaurantModal.style.display = 'flex';
-                lucide.createIcons();
-            }
-
-            function closeRestaurantModal() {
-                restaurantModal.style.display = 'none';
-            }
-
-            function handleRestaurantFormSubmit(e) {
-                e.preventDefault();
-                const formData = {
-                    id: document.getElementById('res-id').value ? parseInt(document.getElementById('res-id').value) : Date.now(),
-                    name: document.getElementById('res-name').value,
-                    owner: document.getElementById('res-owner-search').value,
-                    contact: document.getElementById('res-contact').value,
-                    address: document.getElementById('res-address').value,
-                    onboarding: document.getElementById('res-onboarding').value,
-                    plan: document.getElementById('res-plan').value,
-                    payment: parseFloat(document.getElementById('res-payment').value).toFixed(2)
-                };
-
-                const index = restaurantData.findIndex(r => r.id === formData.id);
-                if (index > -1) {
-                    restaurantData[index] = formData;
-                } else {
-                    restaurantData.push(formData);
-                }
+            onSnapshot(collection(db, "users"), (snapshot) => {
+                userData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 renderAll();
-                closeRestaurantModal();
-            }
+            });
+            onSnapshot(collection(db, "menuItems"), (snapshot) => {
+                menuData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderAll();
+            });
+        }
 
-            function populateOwnerDropdown() {
-                ownerDropdown.innerHTML = '';
-                const userNames = new Set(userData.map(u => u.name));
-                userNames.forEach(name => {
-                    const optionDiv = document.createElement('div');
-                    optionDiv.textContent = name;
-                    optionDiv.className = 'px-3 py-2 cursor-pointer hover:bg-gray-100';
-                    optionDiv.addEventListener('mousedown', () => {
-                        ownerSearchInput.value = name;
-                        ownerDropdown.classList.add('hidden');
-                    });
-                    ownerDropdown.appendChild(optionDiv);
-                });
-            }
 
-            function filterOwners() {
-                const filter = ownerSearchInput.value.toLowerCase();
-                const options = ownerDropdown.getElementsByTagName('div');
-                for (let i = 0; i < options.length; i++) {
-                    if (options[i].textContent.toLowerCase().includes(filter)) {
-                        options[i].style.display = "";
-                    } else {
-                        options[i].style.display = "none";
-                    }
-                }
-            }
+        // --- EVENT LISTENERS ---
+        menuButton.addEventListener('click', () => mobileMenu.classList.remove('-translate-x-full'));
+        closeMenuButton.addEventListener('click', () => mobileMenu.classList.add('-translate-x-full'));
+        searchInput.addEventListener('keyup', handleSearch);
+        restaurantFilter.addEventListener('change', () => renderUserTable());
+        menuRestaurantFilter.addEventListener('change', () => renderMenuTable());
 
-             // --- USER MODAL ---
-            function openUserModal(mode, id = null) {
-                userForm.reset();
-                clearMultiSelect();
-                if (mode === 'add') {
-                    userModalTitle.textContent = 'Add User';
-                    document.getElementById('user-id').value = '';
-                } else if (mode === 'edit' && id) {
-                    userModalTitle.textContent = 'Edit User';
-                    const user = userData.find(u => u.id === id);
-                    if (user) {
-                        document.getElementById('user-id').value = user.id;
-                        document.getElementById('user-name').value = user.name;
-                        document.getElementById('user-email').value = user.email;
-                        user.restaurants.forEach(addRestaurantToMultiSelect);
-                        document.getElementById('user-status').value = user.status;
-                        document.getElementById('user-role').value = user.role;
-                    }
-                }
-                populateRestaurantDropdown();
-                userModal.style.display = 'flex';
-                lucide.createIcons();
-            }
-
-            function closeUserModal() {
-                userModal.style.display = 'none';
-            }
-
-            function handleUserFormSubmit(e) {
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
                 e.preventDefault();
-                const selectedRestaurants = Array.from(multiSelectContainer.querySelectorAll('.multi-select-pill')).map(pill => pill.dataset.value);
-                const formData = {
-                    id: document.getElementById('user-id').value ? parseInt(document.getElementById('user-id').value) : Date.now(),
-                    name: document.getElementById('user-name').value,
-                    email: document.getElementById('user-email').value,
-                    restaurants: selectedRestaurants,
-                    status: document.getElementById('user-status').value,
-                    role: document.getElementById('user-role').value,
-                    lastLogin: 'Just now'
-                };
-                
-                const index = userData.findIndex(u => u.id === formData.id);
-                if (index > -1) {
-                    userData[index] = formData;
-                } else {
-                    userData.push(formData);
-                }
-                renderUserTable();
-                closeUserModal();
-            }
+                setupView(link.dataset.target);
+                mobileMenu.classList.add('-translate-x-full');
+            });
+        });
 
-            // Multi-select functions
-            function populateRestaurantDropdown() {
-                restaurantDropdown.innerHTML = '';
-                const selected = getSelectedRestaurants();
-                const available = restaurantData.map(r => r.name).filter(r => !selected.includes(r));
-                
-                available.forEach(name => {
-                    const optionDiv = document.createElement('div');
-                    optionDiv.textContent = name;
-                    optionDiv.className = 'px-3 py-2 cursor-pointer hover:bg-gray-100';
-                    optionDiv.addEventListener('mousedown', () => {
-                        addRestaurantToMultiSelect(name);
-                        populateRestaurantDropdown();
-                    });
-                    restaurantDropdown.appendChild(optionDiv);
+        // Restaurant Modal listeners
+        addRestaurantBtn.addEventListener('click', () => openRestaurantModal('add'));
+        closeModalBtn.addEventListener('click', closeRestaurantModal);
+        cancelModalBtn.addEventListener('click', closeRestaurantModal);
+        restaurantModal.addEventListener('click', (e) => { if(e.target === restaurantModal) closeRestaurantModal(); });
+        restaurantForm.addEventListener('submit', handleRestaurantFormSubmit);
+        restaurantTableBody.addEventListener('click', (e) => {
+            const editButton = e.target.closest('.edit-btn');
+            if (editButton) openRestaurantModal('edit', editButton.closest('tr').dataset.id);
+            const deleteButton = e.target.closest('.delete-btn');
+            if (deleteButton) handleDeleteRestaurant(deleteButton.closest('tr').dataset.id);
+        });
+        ownerSearchInput.addEventListener('focus', () => ownerDropdown.classList.remove('hidden'));
+        ownerSearchInput.addEventListener('blur', () => setTimeout(() => ownerDropdown.classList.add('hidden'), 150));
+        ownerSearchInput.addEventListener('keyup', filterOwners);
+
+        // User Modal Listeners
+        addUserBtn.addEventListener('click', () => openUserModal('add'));
+        closeUserModalBtn.addEventListener('click', closeUserModal);
+        cancelUserModalBtn.addEventListener('click', closeUserModal);
+        userModal.addEventListener('click', (e) => { if(e.target === userModal) closeUserModal(); });
+        userForm.addEventListener('submit', handleUserFormSubmit);
+        userTableBody.addEventListener('click', (e) => {
+            const editButton = e.target.closest('.edit-user-btn');
+            if (editButton) openUserModal('edit', editButton.closest('tr').dataset.id);
+            const deleteButton = e.target.closest('.delete-user-btn');
+            if (deleteButton) handleDeleteUser(deleteButton.closest('tr').dataset.id);
+        });
+        restaurantSearchInput.addEventListener('focus', () => restaurantDropdown.classList.remove('hidden'));
+        restaurantSearchInput.addEventListener('blur', () => setTimeout(() => restaurantDropdown.classList.add('hidden'), 150));
+        restaurantSearchInput.addEventListener('keyup', filterRestaurantsForDropdown);
+
+        // Menu Item Modal Listeners
+        addMenuItemBtn.addEventListener('click', () => openMenuItemModal('add'));
+        closeMenuItemModalBtn.addEventListener('click', closeMenuItemModal);
+        cancelMenuItemModalBtn.addEventListener('click', closeMenuItemModal);
+        menuItemModal.addEventListener('click', (e) => { if(e.target === menuItemModal) closeMenuItemModal(); });
+        menuItemForm.addEventListener('submit', handleMenuItemFormSubmit);
+        menuTableBody.addEventListener('click', (e) => {
+            const editButton = e.target.closest('.edit-menu-item-btn');
+            if (editButton) openMenuItemModal('edit', editButton.closest('tr').dataset.id);
+        });
+        generateDescriptionBtn.addEventListener('click', handleGenerateDescription);
+        generateImageBtn.addEventListener('click', handleGenerateImage);
+        uploadImageBtn.addEventListener('click', () => imageUploadInput.click());
+        imageUploadInput.addEventListener('change', handleImageUpload);
+
+        // Confirm Modal Listeners
+        cancelConfirmBtn.addEventListener('click', () => confirmModal.style.display = 'none');
+        confirmModal.addEventListener('click', (e) => { if(e.target === confirmModal) confirmModal.style.display = 'none'; });
+
+
+        // --- RENDER FUNCTIONS ---
+        function renderAll() {
+            renderRestaurantTable();
+            renderUserTable();
+            renderMenuTable();
+            populateAllRestaurantFilters();
+        }
+
+        function renderRestaurantTable() {
+            restaurantTableBody.innerHTML = '';
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredData = (currentView === 'restaurant-management-content' && searchTerm)
+                ? restaurantData.filter(r => r.name.toLowerCase().includes(searchTerm) || r.owner.toLowerCase().includes(searchTerm))
+                : restaurantData;
+
+            if (restaurantData.length === 0) {
+                showEmptyState(restaurantTableBody, 8, 'No restaurants found.', 'Add Restaurant', () => openRestaurantModal('add'));
+            } else if (filteredData.length === 0) {
+                showEmptyState(restaurantTableBody, 8, 'No results found for your search.');
+            } else {
+                filteredData.forEach((res, index) => {
+                    const newRow = restaurantTableBody.insertRow();
+                    newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
+                    newRow.dataset.id = res.id;
+                    newRow.innerHTML = `
+                        <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${res.name}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-blue-500 font-medium underline">${res.owner}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.contact}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.address}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${res.onboarding}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${res.plan === 'Premium' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}">${res.plan}</span></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$${res.payment}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                            <button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
+                            <button class="delete-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
+                        </td>
+                    `;
                 });
             }
+            lucide.createIcons();
+        }
+         
+        function renderMenuTable() {
+            menuTableBody.innerHTML = '';
+            const selectedRestaurantId = menuRestaurantFilter.value;
+            if (!selectedRestaurantId) {
+                showEmptyState(menuTableBody, 6, 'Please select a restaurant to see its menu.');
+                return;
+            }
+
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredData = menuData.filter(item => {
+                const restaurantMatch = item.restaurantId === selectedRestaurantId;
+                const searchMatch = (currentView === 'menu-content' && searchTerm)
+                    ? item.name.toLowerCase().includes(searchTerm) || item.category.toLowerCase().includes(searchTerm)
+                    : true;
+                return restaurantMatch && searchMatch;
+            });
+
+            if (filteredData.length === 0 && !searchTerm) {
+                showEmptyState(menuTableBody, 6, 'No menu items for this restaurant yet.', 'Add Item', () => openMenuItemModal('add'));
+            } else if (filteredData.length === 0) {
+                showEmptyState(menuTableBody, 6, 'No results found for your search.');
+            } else {
+                filteredData.forEach((item, index) => {
+                    const newRow = menuTableBody.insertRow();
+                    newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
+                    newRow.dataset.id = item.id;
+                    newRow.innerHTML = `
+                        <td class="p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded menu-item-checkbox" data-id="${item.id}"></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${item.name}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${item.category}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">$${item.price}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${item.prepTime} mins</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                            <button class="edit-menu-item-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
+                            <button class="delete-menu-item-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
+                        </td>
+                    `;
+                });
+            }
+             lucide.createIcons();
+        }
+
+        function renderUserTable() {
+            userTableBody.innerHTML = '';
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedRestaurant = restaurantFilter.value;
             
-            function addRestaurantToMultiSelect(name) {
-                const pill = document.createElement('span');
-                pill.className = 'multi-select-pill flex items-center bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full';
-                pill.dataset.value = name;
-                pill.innerHTML = `
-                    ${name}
-                    <button type="button" class="ml-1.5 -mr-1 flex-shrink-0 inline-flex items-center justify-center h-4 w-4 rounded-full text-blue-400 hover:bg-blue-200 hover:text-blue-500 focus:outline-none focus:bg-blue-500 focus:text-white">
-                        <i data-lucide="x" class="h-3 w-3"></i>
-                    </button>
-                `;
-                pill.querySelector('button').addEventListener('click', () => {
-                    pill.remove();
+            const filteredData = userData.filter(user => {
+                const searchMatch = (currentView === 'user-management-content' && searchTerm)
+                    ? user.name.toLowerCase().includes(searchTerm) || user.email.toLowerCase().includes(searchTerm)
+                    : true;
+                const filterMatch = selectedRestaurant === 'all' || user.restaurants.includes(selectedRestaurant);
+                return searchMatch && filterMatch;
+            });
+
+            if (userData.length === 0) {
+                showEmptyState(userTableBody, 8, 'No users found.', 'Add User', () => openUserModal('add'));
+            } else if (filteredData.length === 0) {
+                 showEmptyState(userTableBody, 8, 'No results found for your search or filter.');
+            } else {
+                filteredData.forEach((user, index) => {
+                    const newRow = userTableBody.insertRow();
+                    newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
+                    newRow.dataset.id = user.id;
+                    const restaurantHTML = user.restaurants.map(r => `<span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">${r}</span>`).join('');
+                    newRow.innerHTML = `
+                        <td class="p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded user-checkbox" data-id="${user.id}"></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs font-medium text-gray-900">${user.name}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.email}</td>
+                        <td class="px-4 py-2 text-xs text-gray-500"><div class="flex flex-wrap gap-1">${restaurantHTML}</div></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${user.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">${user.status}</span></td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.role}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500">${user.lastLogin}</td>
+                        <td class="px-4 py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2">
+                            <button class="edit-user-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
+                            <button class="delete-user-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
+                        </td>
+                    `;
+                });
+            }
+            lucide.createIcons();
+        }
+
+        function showEmptyState(tbody, colspan, message, buttonText = null, buttonAction = null) {
+            const row = tbody.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = colspan;
+            cell.className = 'text-center py-12';
+            
+            let buttonHtml = '';
+            if (buttonText && buttonAction) {
+                buttonHtml = `<button id="empty-state-btn" class="mt-4 bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">${buttonText}</button>`;
+            }
+
+            cell.innerHTML = `
+                <div class="text-center">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2z" />
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900">${message}</h3>
+                    ${buttonHtml}
+                </div>
+            `;
+            
+            if (buttonAction) {
+                cell.querySelector('#empty-state-btn').addEventListener('click', buttonAction);
+            }
+        }
+
+        // --- GENERAL FUNCTIONS ---
+        function setupView(targetId) {
+            currentView = targetId;
+            contentSections.forEach(section => section.classList.add('hidden'));
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) targetSection.classList.remove('hidden');
+
+            restaurantActions.style.display = 'none';
+            menuActions.style.display = 'none';
+            userActions.style.display = 'none';
+
+            if (targetId === 'restaurant-management-content') {
+                headerTitle.textContent = 'Restaurant Management';
+                restaurantActions.style.display = 'flex';
+            } else if (targetId === 'menu-content') {
+                headerTitle.textContent = 'Menu Management';
+                menuActions.style.display = 'flex';
+            } else if (targetId === 'user-management-content') {
+                headerTitle.textContent = 'User Management';
+                userActions.style.display = 'flex';
+            } else {
+                 headerTitle.textContent = 'Dashboard';
+            }
+
+            document.querySelectorAll('#sidebar-nav a, #mobile-nav a').forEach(nav => {
+                nav.classList.remove('bg-gray-900', 'text-white');
+                nav.classList.add('text-gray-300');
+                if (nav.dataset.target === targetId) {
+                    nav.classList.add('bg-gray-900', 'text-white');
+                    nav.classList.remove('text-gray-300');
+                }
+            });
+            handleSearch(); // Re-filter on view change
+        }
+
+        function handleSearch() {
+            if (currentView === 'restaurant-management-content') {
+                renderRestaurantTable();
+            } else if (currentView === 'user-management-content') {
+                renderUserTable();
+            } else if (currentView === 'menu-content') {
+                renderMenuTable();
+            }
+        }
+
+        function populateAllRestaurantFilters() {
+            const restaurantNames = new Set(restaurantData.map(r => r.name));
+            
+            // For user management filter
+            const existingUserFilterOptions = restaurantFilter.querySelectorAll('option:not([value="all"])');
+            existingUserFilterOptions.forEach(opt => opt.remove());
+            restaurantNames.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.textContent = name;
+                restaurantFilter.appendChild(option);
+            });
+
+            // For menu management filter
+            const existingMenuFilterOptions = menuRestaurantFilter.querySelectorAll('option:not([value=""])');
+            existingMenuFilterOptions.forEach(opt => opt.remove());
+            restaurantData.forEach(res => {
+                const option = document.createElement('option');
+                option.value = res.id;
+                option.textContent = res.name;
+                menuRestaurantFilter.appendChild(option);
+            });
+        }
+
+        // --- RESTAURANT MODAL ---
+        function openRestaurantModal(mode, id = null) {
+            restaurantForm.reset();
+            populateOwnerDropdown();
+            if (mode === 'add') {
+                modalTitle.textContent = 'Add Restaurant';
+                document.getElementById('res-id').value = '';
+            } else if (mode === 'edit' && id) {
+                modalTitle.textContent = 'Edit Restaurant';
+                const res = restaurantData.find(r => r.id === id);
+                if(res) {
+                    document.getElementById('res-id').value = res.id;
+                    document.getElementById('res-name').value = res.name;
+                    document.getElementById('res-owner-search').value = res.owner;
+                    document.getElementById('res-contact').value = res.contact;
+                    document.getElementById('res-address').value = res.address;
+                    document.getElementById('res-onboarding').value = res.onboarding;
+                    document.getElementById('res-plan').value = res.plan;
+                    document.getElementById('res-payment').value = res.payment;
+                }
+            }
+            restaurantModal.style.display = 'flex';
+            lucide.createIcons();
+        }
+
+        function closeRestaurantModal() {
+            restaurantModal.style.display = 'none';
+        }
+
+        async function handleRestaurantFormSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('res-id').value;
+            const formData = {
+                name: document.getElementById('res-name').value,
+                owner: document.getElementById('res-owner-search').value,
+                contact: document.getElementById('res-contact').value,
+                address: document.getElementById('res-address').value,
+                onboarding: document.getElementById('res-onboarding').value,
+                plan: document.getElementById('res-plan').value,
+                payment: parseFloat(document.getElementById('res-payment').value).toFixed(2)
+            };
+
+            if (id) {
+                await updateDoc(doc(db, "restaurants", id), formData);
+            } else {
+                await addDoc(collection(db, "restaurants"), formData);
+            }
+            closeRestaurantModal();
+        }
+
+        function populateOwnerDropdown() {
+            ownerDropdown.innerHTML = '';
+            const userNames = new Set(userData.map(u => u.name));
+            userNames.forEach(name => {
+                const optionDiv = document.createElement('div');
+                optionDiv.textContent = name;
+                optionDiv.className = 'px-3 py-2 cursor-pointer hover:bg-gray-100';
+                optionDiv.addEventListener('mousedown', () => {
+                    ownerSearchInput.value = name;
+                    ownerDropdown.classList.add('hidden');
+                });
+                ownerDropdown.appendChild(optionDiv);
+            });
+        }
+
+        function filterOwners() {
+            const filter = ownerSearchInput.value.toLowerCase();
+            const options = ownerDropdown.getElementsByTagName('div');
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].textContent.toLowerCase().includes(filter)) {
+                    options[i].style.display = "";
+                } else {
+                    options[i].style.display = "none";
+                }
+            }
+        }
+
+         // --- USER MODAL ---
+        function openUserModal(mode, id = null) {
+            userForm.reset();
+            clearMultiSelect();
+            if (mode === 'add') {
+                userModalTitle.textContent = 'Add User';
+                document.getElementById('user-id').value = '';
+            } else if (mode === 'edit' && id) {
+                userModalTitle.textContent = 'Edit User';
+                const user = userData.find(u => u.id === id);
+                if (user) {
+                    document.getElementById('user-id').value = user.id;
+                    document.getElementById('user-name').value = user.name;
+                    document.getElementById('user-email').value = user.email;
+                    user.restaurants.forEach(addRestaurantToMultiSelect);
+                    document.getElementById('user-status').value = user.status;
+                    document.getElementById('user-role').value = user.role;
+                }
+            }
+            populateRestaurantDropdown();
+            userModal.style.display = 'flex';
+            lucide.createIcons();
+        }
+
+        function closeUserModal() {
+            userModal.style.display = 'none';
+        }
+
+        async function handleUserFormSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('user-id').value;
+            const selectedRestaurants = Array.from(multiSelectContainer.querySelectorAll('.multi-select-pill')).map(pill => pill.dataset.value);
+            const formData = {
+                name: document.getElementById('user-name').value,
+                email: document.getElementById('user-email').value,
+                restaurants: selectedRestaurants,
+                status: document.getElementById('user-status').value,
+                role: document.getElementById('user-role').value,
+                lastLogin: 'Just now'
+            };
+            
+            if (id) {
+                await updateDoc(doc(db, "users", id), formData);
+            } else {
+                await addDoc(collection(db, "users"), formData);
+            }
+            closeUserModal();
+        }
+
+        // Multi-select functions
+        function populateRestaurantDropdown() {
+            restaurantDropdown.innerHTML = '';
+            const selected = getSelectedRestaurants();
+            const available = restaurantData.map(r => r.name).filter(r => !selected.includes(r));
+            
+            available.forEach(name => {
+                const optionDiv = document.createElement('div');
+                optionDiv.textContent = name;
+                optionDiv.className = 'px-3 py-2 cursor-pointer hover:bg-gray-100';
+                optionDiv.addEventListener('mousedown', () => {
+                    addRestaurantToMultiSelect(name);
                     populateRestaurantDropdown();
                 });
-                multiSelectContainer.insertBefore(pill, restaurantSearchInput);
-                lucide.createIcons({nodes: [pill]});
-            }
+                restaurantDropdown.appendChild(optionDiv);
+            });
+        }
+        
+        function addRestaurantToMultiSelect(name) {
+            const pill = document.createElement('span');
+            pill.className = 'multi-select-pill flex items-center bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full';
+            pill.dataset.value = name;
+            pill.innerHTML = `
+                ${name}
+                <button type="button" class="ml-1.5 -mr-1 flex-shrink-0 inline-flex items-center justify-center h-4 w-4 rounded-full text-blue-400 hover:bg-blue-200 hover:text-blue-500 focus:outline-none focus:bg-blue-500 focus:text-white">
+                    <i data-lucide="x" class="h-3 w-3"></i>
+                </button>
+            `;
+            pill.querySelector('button').addEventListener('click', () => {
+                pill.remove();
+                populateRestaurantDropdown();
+            });
+            multiSelectContainer.insertBefore(pill, restaurantSearchInput);
+            lucide.createIcons({nodes: [pill]});
+        }
 
-            function getSelectedRestaurants() {
-                return Array.from(multiSelectContainer.querySelectorAll('.multi-select-pill')).map(pill => pill.dataset.value);
-            }
+        function getSelectedRestaurants() {
+            return Array.from(multiSelectContainer.querySelectorAll('.multi-select-pill')).map(pill => pill.dataset.value);
+        }
 
-            function clearMultiSelect() {
-                multiSelectContainer.querySelectorAll('.multi-select-pill').forEach(pill => pill.remove());
-                restaurantSearchInput.value = '';
-            }
+        function clearMultiSelect() {
+            multiSelectContainer.querySelectorAll('.multi-select-pill').forEach(pill => pill.remove());
+            restaurantSearchInput.value = '';
+        }
 
-            function filterRestaurantsForDropdown() {
-                const filter = restaurantSearchInput.value.toLowerCase();
-                const options = restaurantDropdown.getElementsByTagName('div');
-                for (let i = 0; i < options.length; i++) {
-                    if (options[i].textContent.toLowerCase().includes(filter)) {
-                        options[i].style.display = "";
-                    } else {
-                        options[i].style.display = "none";
-                    }
-                }
-            }
-
-            // --- MENU ITEM MODAL ---
-            function openMenuItemModal(mode, id = null) {
-                menuItemForm.reset();
-                imagePreview.src = '';
-                imagePreview.classList.add('hidden');
-                imagePlaceholder.classList.remove('hidden');
-
-                if (mode === 'add') {
-                    menuItemModalTitle.textContent = 'Add Menu Item';
-                    document.getElementById('menu-item-id').value = '';
-                } else if (mode === 'edit' && id) {
-                    menuItemModalTitle.textContent = 'Edit Menu Item';
-                    const item = menuData.find(i => i.id === id);
-                    if (item) {
-                        document.getElementById('menu-item-id').value = item.id;
-                        document.getElementById('item-name').value = item.name;
-                        document.getElementById('item-description').value = item.description;
-                        document.getElementById('item-image-url').value = item.imageUrl;
-                        if(item.imageUrl) {
-                            imagePreview.src = item.imageUrl;
-                            imagePreview.classList.remove('hidden');
-                            imagePlaceholder.classList.add('hidden');
-                        }
-                        document.getElementById('item-price').value = item.price;
-                        document.getElementById('item-cuisine').value = item.cuisine;
-                        document.getElementById('item-taste').value = item.taste;
-                        document.getElementById('item-category').value = item.category;
-                        document.getElementById('item-prep-time').value = item.prepTime;
-                        
-                        const checkboxes = menuItemForm.querySelectorAll('input[type="checkbox"]');
-                        checkboxes.forEach(cb => {
-                            cb.checked = item.portionSizes.includes(cb.value);
-                        });
-                    }
-                }
-                menuItemModal.style.display = 'flex';
-                lucide.createIcons();
-            }
-
-            function closeMenuItemModal() {
-                menuItemModal.style.display = 'none';
-            }
-
-            function handleMenuItemFormSubmit(e) {
-                e.preventDefault();
-                const selectedPortions = Array.from(menuItemForm.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-                const formData = {
-                    id: document.getElementById('menu-item-id').value ? parseInt(document.getElementById('menu-item-id').value) : Date.now(),
-                    restaurantId: parseInt(menuRestaurantFilter.value),
-                    name: document.getElementById('item-name').value,
-                    description: document.getElementById('item-description').value,
-                    imageUrl: document.getElementById('item-image-url').value,
-                    price: parseFloat(document.getElementById('item-price').value).toFixed(2),
-                    cuisine: document.getElementById('item-cuisine').value,
-                    taste: document.getElementById('item-taste').value,
-                    category: document.getElementById('item-category').value,
-                    prepTime: document.getElementById('item-prep-time').value,
-                    portionSizes: selectedPortions
-                };
-
-                const index = menuData.findIndex(i => i.id === formData.id);
-                if (index > -1) {
-                    menuData[index] = formData;
+        function filterRestaurantsForDropdown() {
+            const filter = restaurantSearchInput.value.toLowerCase();
+            const options = restaurantDropdown.getElementsByTagName('div');
+            for (let i = 0; i < options.length; i++) {
+                if (options[i].textContent.toLowerCase().includes(filter)) {
+                    options[i].style.display = "";
                 } else {
-                    menuData.push(formData);
+                    options[i].style.display = "none";
                 }
-                renderMenuTable();
-                closeMenuItemModal();
             }
-            
-            function handleImageUpload(event) {
-                const file = event.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        document.getElementById('item-image-url').value = e.target.result;
-                        imagePreview.src = e.target.result;
+        }
+
+        // --- MENU ITEM MODAL ---
+        function openMenuItemModal(mode, id = null) {
+            menuItemForm.reset();
+            imagePreview.src = '';
+            imagePreview.classList.add('hidden');
+            imagePlaceholder.classList.remove('hidden');
+
+            if (mode === 'add') {
+                menuItemModalTitle.textContent = 'Add Menu Item';
+                document.getElementById('menu-item-id').value = '';
+            } else if (mode === 'edit' && id) {
+                menuItemModalTitle.textContent = 'Edit Menu Item';
+                const item = menuData.find(i => i.id === id);
+                if (item) {
+                    document.getElementById('menu-item-id').value = item.id;
+                    document.getElementById('item-name').value = item.name;
+                    document.getElementById('item-description').value = item.description;
+                    document.getElementById('item-image-url').value = item.imageUrl;
+                    if(item.imageUrl) {
+                        imagePreview.src = item.imageUrl;
                         imagePreview.classList.remove('hidden');
                         imagePlaceholder.classList.add('hidden');
                     }
-                    reader.readAsDataURL(file);
-                }
-            }
-
-            // --- DELETION & CONFIRMATION ---
-            function openConfirmModal({ title, message, requiresInput, onConfirm }) {
-                confirmTitle.textContent = title;
-                confirmMessage.textContent = message;
-                confirmInput.value = '';
-
-                if (requiresInput) {
-                    confirmInputContainer.style.display = 'block';
-                    confirmBtn.disabled = true;
-                    confirmInput.onkeyup = () => {
-                        confirmBtn.disabled = confirmInput.value !== 'Delete';
-                    };
-                } else {
-                    confirmInputContainer.style.display = 'none';
-                    confirmBtn.disabled = false;
-                }
-
-                confirmModal.style.display = 'flex';
-
-                const newConfirmBtn = confirmBtn.cloneNode(true);
-                confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
-                newConfirmBtn.addEventListener('click', () => {
-                    onConfirm();
-                    confirmModal.style.display = 'none';
-                });
-                confirmBtn = newConfirmBtn;
-            }
-
-            function handleDeleteRestaurant(id) {
-                const restaurant = restaurantData.find(r => r.id === id);
-                openConfirmModal({
-                    title: `Delete ${restaurant.name}`,
-                    message: `This action cannot be undone. This will permanently delete the restaurant.`,
-                    requiresInput: true,
-                    onConfirm: () => {
-                        restaurantData = restaurantData.filter(r => r.id !== id);
-                        renderAll();
-                    }
-                });
-            }
-
-            function handleDeleteUser(id) {
-                const user = userData.find(u => u.id === id);
-                openConfirmModal({
-                    title: `Delete ${user.name}`,
-                    message: `Are you sure you want to delete this user? This action cannot be undone.`,
-                    requiresInput: false,
-                    onConfirm: () => {
-                        userData = userData.filter(u => u.id !== id);
-                        renderUserTable();
-                    }
-                });
-            }
-
-            // --- AI FUNCTIONS ---
-            async function handleGenerateDescription(e) {
-                const btn = e.target;
-                btn.disabled = true;
-                btn.innerHTML = '<div class="loader"></div>';
-
-                const prompt = `Generate a short, intersting and tasty menu description under 200 characters for a dish with these details. Do not use any markdown formatting:
-                - Name: ${document.getElementById('item-name').value}
-                - Category: ${document.getElementById('item-category').value}
-                - Cuisine: ${document.getElementById('item-cuisine').value}
-                - Taste Profile: ${document.getElementById('item-taste').value}
-                - Price: $${document.getElementById('item-price').value}`;
-                
-                try {
-                    const response = await fetch('/api/generateDescription', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt })
+                    document.getElementById('item-price').value = item.price;
+                    document.getElementById('item-cuisine').value = item.cuisine;
+                    document.getElementById('item-taste').value = item.taste;
+                    document.getElementById('item-category').value = item.category;
+                    document.getElementById('item-prep-time').value = item.prepTime;
+                    
+                    const checkboxes = menuItemForm.querySelectorAll('input[type="checkbox"]');
+                    checkboxes.forEach(cb => {
+                        cb.checked = item.portionSizes.includes(cb.value);
                     });
-                    const result = await response.json();
-                    document.getElementById('item-description').value = result.text.trim().replace(/\*/g, '');
-                } catch (error) {
-                    console.error("Error generating description:", error);
-                    alert("Failed to generate description.");
-                } finally {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate with AI';
-                    lucide.createIcons();
                 }
             }
+            menuItemModal.style.display = 'flex';
+            lucide.createIcons();
+        }
 
-            async function handleGenerateImage(e) {
-                const btn = e.target;
-                btn.disabled = true;
-                btn.innerHTML = '<div class="loader"></div>';
-                imageLoader.classList.remove('hidden');
-                imagePreview.classList.add('hidden');
-                imagePlaceholder.classList.add('hidden');
+        function closeMenuItemModal() {
+            menuItemModal.style.display = 'none';
+        }
 
-                const prompt = `Professional, vibrant food photography of a dish named "${document.getElementById('item-name').value}". It is a ${document.getElementById('item-cuisine').value} ${document.getElementById('item-category').value} with a ${document.getElementById('item-taste').value} taste profile. The dish should look delicious and be presented on a clean, modern plate.`;
+        async function handleMenuItemFormSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('menu-item-id').value;
+            const selectedPortions = Array.from(menuItemForm.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+            const formData = {
+                restaurantId: menuRestaurantFilter.value,
+                name: document.getElementById('item-name').value,
+                description: document.getElementById('item-description').value,
+                imageUrl: document.getElementById('item-image-url').value,
+                price: parseFloat(document.getElementById('item-price').value).toFixed(2),
+                cuisine: document.getElementById('item-cuisine').value,
+                taste: document.getElementById('item-taste').value,
+                category: document.getElementById('item-category').value,
+                prepTime: document.getElementById('item-prep-time').value,
+                portionSizes: selectedPortions
+            };
 
-                try {
-                    const response = await fetch('/api/generateImage', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ prompt })
-                    });
-                    const result = await response.json();
-                    if (result.imageUrl) {
-                        document.getElementById('item-image-url').value = result.imageUrl;
-                        imagePreview.src = result.imageUrl;
-                        imagePreview.classList.remove('hidden');
-                    }
-                } catch (error) {
-                    console.error("Error generating image:", error);
-                    alert("Failed to generate image.");
-                } finally {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate';
-                    lucide.createIcons();
-                    imageLoader.classList.add('hidden');
+            if (id) {
+                await updateDoc(doc(db, "menuItems", id), formData);
+            } else {
+                await addDoc(collection(db, "menuItems"), formData);
+            }
+            closeMenuItemModal();
+        }
+        
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('item-image-url').value = e.target.result;
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
+                    imagePlaceholder.classList.add('hidden');
                 }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // --- DELETION & CONFIRMATION ---
+        function openConfirmModal({ title, message, requiresInput, onConfirm }) {
+            confirmTitle.textContent = title;
+            confirmMessage.textContent = message;
+            confirmInput.value = '';
+
+            if (requiresInput) {
+                confirmInputContainer.style.display = 'block';
+                confirmBtn.disabled = true;
+                confirmInput.onkeyup = () => {
+                    confirmBtn.disabled = confirmInput.value !== 'Delete';
+                };
+            } else {
+                confirmInputContainer.style.display = 'none';
+                confirmBtn.disabled = false;
             }
 
-        });
+            confirmModal.style.display = 'flex';
+
+            const newConfirmBtn = confirmBtn.cloneNode(true);
+            confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+            newConfirmBtn.addEventListener('click', () => {
+                onConfirm();
+                confirmModal.style.display = 'none';
+            });
+            confirmBtn = newConfirmBtn;
+        }
+
+        async function handleDeleteRestaurant(id) {
+            const restaurant = restaurantData.find(r => r.id === id);
+            openConfirmModal({
+                title: `Delete ${restaurant.name}`,
+                message: `This action cannot be undone. This will permanently delete the restaurant.`,
+                requiresInput: true,
+                onConfirm: async () => {
+                    await deleteDoc(doc(db, "restaurants", id));
+                }
+            });
+        }
+
+        async function handleDeleteUser(id) {
+            const user = userData.find(u => u.id === id);
+            openConfirmModal({
+                title: `Delete ${user.name}`,
+                message: `Are you sure you want to delete this user? This action cannot be undone.`,
+                requiresInput: false,
+                onConfirm: async () => {
+                    await deleteDoc(doc(db, "users", id));
+                }
+            });
+        }
+
+        // --- AI FUNCTIONS ---
+        async function handleGenerateDescription(e) {
+            const btn = e.target;
+            btn.disabled = true;
+            btn.innerHTML = '<div class="loader"></div>';
+
+            const prompt = `Generate a short, impactful menu description under 100 characters for a dish with these details. Do not use any markdown formatting:
+            - Name: ${document.getElementById('item-name').value}
+            - Category: ${document.getElementById('item-category').value}
+            - Cuisine: ${document.getElementById('item-cuisine').value}
+            - Taste Profile: ${document.getElementById('item-taste').value}
+            - Price: $${document.getElementById('item-price').value}`;
+            
+            try {
+                const response = await fetch('/api/generateDescription', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+                const result = await response.json();
+                document.getElementById('item-description').value = result.text.trim().replace(/\*/g, '');
+            } catch (error) {
+                console.error("Error generating description:", error);
+                alert("Failed to generate description.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate with AI';
+                lucide.createIcons();
+            }
+        }
+
+        async function handleGenerateImage(e) {
+            const btn = e.target;
+            btn.disabled = true;
+            btn.innerHTML = '<div class="loader"></div>';
+            imageLoader.classList.remove('hidden');
+            imagePreview.classList.add('hidden');
+            imagePlaceholder.classList.add('hidden');
+
+            const prompt = `Professional, vibrant food photography of a dish named "${document.getElementById('item-name').value}". It is a ${document.getElementById('item-cuisine').value} ${document.getElementById('item-category').value} with a ${document.getElementById('item-taste').value} taste profile. The dish should look delicious and be presented on a clean, modern plate.`;
+
+            try {
+                const response = await fetch('/api/generateImage', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt })
+                });
+                const result = await response.json();
+                if (result.imageUrl) {
+                    document.getElementById('item-image-url').value = result.imageUrl;
+                    imagePreview.src = result.imageUrl;
+                    imagePreview.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error("Error generating image:", error);
+                alert("Failed to generate image.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate';
+                lucide.createIcons();
+                imageLoader.classList.add('hidden');
+            }
+        }
+
     </script>
 </body>
 </html>
