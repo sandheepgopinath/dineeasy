@@ -66,6 +66,42 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Mobile Table Styles */
+        @media (max-width: 767px) {
+            .responsive-table thead {
+                display: none;
+            }
+            .responsive-table tbody, .responsive-table tr, .responsive-table td {
+                display: block;
+                width: 100%;
+            }
+            .responsive-table tr {
+                margin-bottom: 1rem;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.5rem;
+                padding: 1rem;
+            }
+            .responsive-table td {
+                padding-left: 50%;
+                position: relative;
+                text-align: right;
+                border-bottom: 1px solid #f3f4f6;
+            }
+            .responsive-table td:last-child {
+                border-bottom: none;
+            }
+            .responsive-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0.5rem;
+                width: 45%;
+                padding-right: 0.5rem;
+                text-align: left;
+                font-weight: 600;
+                color: #111827;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-sm">
@@ -528,12 +564,13 @@
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // --- FIREBASE CONFIG ---
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
         const firebaseConfig = {
         apiKey: "AIzaSyCBGMJzHbwD3Y95fwRKVgdYU2KBQ7oDYHQ",
         authDomain: "dineeasy-8176e.firebaseapp.com",
         projectId: "dineeasy-8176e",
-        storageBucket: "dineeasy-8176e.firebasestorage.app",
+        storageBucket: "dineeasy-8176e.appspot.com",
         messagingSenderId: "811985378716",
         appId: "1:811985378716:web:26c599db464c67a537bc59",
         measurementId: "G-0F0ERHYX32"
