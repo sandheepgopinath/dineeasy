@@ -195,21 +195,21 @@
                         
                         <!-- Action Buttons Container -->
                         <div id="restaurant-actions" class="items-center space-x-3 hidden">
-                            <button id="add-restaurant-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">Add Restaurant</button>
+                            <button id="add-restaurant-btn" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-black/60 text-xs">Add Restaurant</button>
                         </div>
                          <div id="menu-actions" class="items-center space-x-2 hidden">
                              <select id="menuRestaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
                                 <option value="">Select Restaurant</option>
                             </select>
-                            <button id="add-menu-item-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs whitespace-nowrap">Add Item</button>
-                            <button id="delete-selected-menu-items-btn" class="bg-red-600 text-white px-3 py-1.5 rounded-md hover:bg-red-700 text-xs whitespace-nowrap hidden">Delete Selected</button>
+                            <button id="add-menu-item-btn" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-black/60 text-xs whitespace-nowrap">Add Item</button>
+                            <button id="delete-selected-menu-items-btn" class="bg-red-500/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-red-500/60 text-xs whitespace-nowrap hidden">Delete Selected</button>
                         </div>
                         <div id="user-actions" class="items-center space-x-2 hidden">
                              <select id="restaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
                                 <option value="all">All Restaurants</option>
                             </select>
-                            <button id="add-user-btn" class="bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs whitespace-nowrap">Add User</button>
-                             <button id="delete-selected-users-btn" class="bg-red-600 text-white px-3 py-1.5 rounded-md hover:bg-red-700 text-xs whitespace-nowrap hidden">Delete Selected</button>
+                            <button id="add-user-btn" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-black/60 text-xs whitespace-nowrap">Add User</button>
+                             <button id="delete-selected-users-btn" class="bg-red-500/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-red-500/60 text-xs whitespace-nowrap hidden">Delete Selected</button>
                         </div>
                          <div id="order-food-actions" class="items-center space-x-2 hidden">
                              <select id="order-restaurant-filter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
@@ -377,26 +377,26 @@
         </div>
         
         <!-- Cart Icon -->
-        <button id="cart-button" class="fixed bottom-8 right-8 w-16 h-16 bg-gray-900 text-white rounded-full flex items-center justify-center shadow-lg hidden z-40">
+        <button id="cart-button" class="fixed bottom-8 right-8 w-16 h-16 bg-black/50 backdrop-blur-lg text-white border border-white/20 rounded-full flex items-center justify-center shadow-lg hidden z-40">
             <i data-lucide="shopping-cart" class="w-8 h-8"></i>
             <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center">0</span>
         </button>
 
         <!-- Order Status Footer -->
         <div id="order-status-footer" class="fixed bottom-0 left-0 right-0 p-4 hidden z-40">
-            <div class="max-w-4xl mx-auto bg-white/70 backdrop-blur-sm rounded-lg shadow-lg flex items-center justify-between p-4">
+            <div class="max-w-4xl mx-auto bg-white/60 backdrop-blur-xl rounded-lg shadow-lg flex items-center justify-between p-4 border border-white/30">
                 <div>
                     <p class="text-sm text-gray-600">Order Status</p>
                     <p id="order-status-text" class="font-bold text-gray-900">Order Received</p>
                 </div>
-                 <button id="edit-order-btn" class="bg-white/80 backdrop-blur-sm text-gray-800 px-4 py-2 rounded-md hover:bg-white text-xs font-semibold">Edit Order</button>
+                 <button id="edit-order-btn" class="bg-white/50 backdrop-blur-lg text-gray-800 px-4 py-2 rounded-md hover:bg-white/70 border border-white/30 text-xs font-semibold">Edit Order</button>
             </div>
         </div>
 
     </div>
 
     <!-- Cart Panel -->
-    <div id="cart-panel" class="fixed inset-y-0 right-0 w-full md:w-96 bg-white shadow-lg z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <div id="cart-panel" class="fixed inset-y-0 right-0 w-full md:w-96 bg-white/60 backdrop-blur-xl shadow-lg z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-l border-white/30">
         <div class="flex items-center justify-between p-4 border-b">
             <h2 class="text-lg font-semibold">Your Order</h2>
             <button id="close-cart-btn"><i data-lucide="x" class="w-6 h-6"></i></button>
@@ -413,7 +413,7 @@
                 <span>Total:</span>
                 <span id="cart-total">₹0.00</span>
             </div>
-            <button id="confirm-order-btn" class="mt-4 w-full bg-gray-900 text-white font-semibold py-3 rounded-md hover:bg-gray-800">Confirm Order</button>
+            <button id="confirm-order-btn" class="mt-4 w-full bg-black/50 backdrop-blur-lg text-white border border-white/20 font-semibold py-3 rounded-md hover:bg-black/60">Confirm Order</button>
         </div>
     </div>
 
@@ -464,8 +464,8 @@
                     <input type="number" step="0.01" id="res-payment" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
                 <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
-                    <button type="button" id="cancel-modal-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900">Save</button>
+                    <button type="button" id="cancel-modal-btn" class="bg-white/50 backdrop-blur-lg border border-white/30 px-4 py-2 text-gray-800 rounded-md hover:bg-white/70">Cancel</button>
+                    <button type="submit" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-4 py-2 rounded-md hover:bg-black/60">Save</button>
                 </div>
             </form>
         </div>
@@ -522,8 +522,8 @@
                     </div>
                 </div>
                 <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
-                    <button type="button" id="cancel-user-modal-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900">Save</button>
+                    <button type="button" id="cancel-user-modal-btn" class="bg-white/50 backdrop-blur-lg border border-white/30 px-4 py-2 text-gray-800 rounded-md hover:bg-white/70">Cancel</button>
+                    <button type="submit" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-4 py-2 rounded-md hover:bg-black/60">Save</button>
                 </div>
             </form>
         </div>
@@ -636,8 +636,8 @@
                     </div>
                 </div>
                 <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
-                    <button type="button" id="cancel-menu-item-modal-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 flex items-center justify-center w-24">Save</button>
+                    <button type="button" id="cancel-menu-item-modal-btn" class="bg-white/50 backdrop-blur-lg border border-white/30 px-4 py-2 text-gray-800 rounded-md hover:bg-white/70">Cancel</button>
+                    <button type="submit" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-4 py-2 rounded-md hover:bg-black/60 flex items-center justify-center w-24">Save</button>
                 </div>
             </form>
         </div>
@@ -1179,7 +1179,7 @@
             
             let buttonHtml = '';
             if (buttonText && buttonAction) {
-                buttonHtml = `<button id="empty-state-btn" class="mt-4 bg-gray-900 text-white px-3 py-1.5 rounded-md hover:bg-gray-800 text-xs">${buttonText}</button>`;
+                buttonHtml = `<button id="empty-state-btn" class="mt-4 bg-black/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-black/60 text-xs">${buttonText}</button>`;
             }
 
             cell.innerHTML = `
@@ -2020,14 +2020,14 @@
             if (itemInCart && itemInCart.quantity > 0) {
                 return `
                     <div class="flex items-center justify-center space-x-2">
-                        <button class="quantity-change-btn w-8 h-8 rounded-md bg-gray-200 text-lg font-bold" data-item-id="${itemId}" data-change="-1">-</button>
+                        <button class="quantity-change-btn w-8 h-8 rounded-md bg-white/50 backdrop-blur-lg text-lg font-bold" data-item-id="${itemId}" data-change="-1">-</button>
                         <span class="text-lg font-bold w-8 text-center">${itemInCart.quantity}</span>
-                        <button class="quantity-change-btn w-8 h-8 rounded-md bg-gray-200 text-lg font-bold" data-item-id="${itemId}" data-change="1">+</button>
+                        <button class="quantity-change-btn w-8 h-8 rounded-md bg-white/50 backdrop-blur-lg text-lg font-bold" data-item-id="${itemId}" data-change="1">+</button>
                     </div>
                 `;
             } else {
                 return `
-                    <button class="add-to-cart-btn w-full bg-gray-900 text-white font-semibold py-2 rounded-md hover:bg-gray-800 flex items-center justify-center gap-2">
+                    <button class="add-to-cart-btn w-full bg-black/50 backdrop-blur-lg text-white border border-white/20 font-semibold py-2 rounded-md hover:bg-black/60 flex items-center justify-center gap-2">
                         <i data-lucide="utensils-crossed" class="w-4 h-4"></i> Add to Order
                     </button>
                 `;
