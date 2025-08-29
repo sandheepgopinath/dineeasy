@@ -377,10 +377,22 @@
         </div>
         
         <!-- Cart Icon -->
-        <button id="cart-button" class="fixed bottom-8 right-8 w-16 h-16 bg-gray-900 text-white rounded-full flex items-center justify-center shadow-lg hidden">
+        <button id="cart-button" class="fixed bottom-8 right-8 w-16 h-16 bg-gray-900 text-white rounded-full flex items-center justify-center shadow-lg hidden z-40">
             <i data-lucide="shopping-cart" class="w-8 h-8"></i>
             <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center">0</span>
         </button>
+
+        <!-- Order Status Footer -->
+        <div id="order-status-footer" class="fixed bottom-0 left-0 right-0 p-4 hidden z-40">
+            <div class="max-w-4xl mx-auto bg-white/70 backdrop-blur-sm rounded-lg shadow-lg flex items-center justify-between p-4">
+                <div>
+                    <p class="text-sm text-gray-600">Order Status</p>
+                    <p id="order-status-text" class="font-bold text-gray-900">Order Received</p>
+                </div>
+                 <button id="edit-order-btn" class="bg-white/80 backdrop-blur-sm text-gray-800 px-4 py-2 rounded-md hover:bg-white text-xs font-semibold">Edit Order</button>
+            </div>
+        </div>
+
     </div>
 
     <!-- Cart Panel -->
@@ -651,7 +663,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs, serverTimestamp, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         // --- FIREBASE CONFIG ---
@@ -686,6 +698,8 @@
         let unsubscribeListeners = [];
         let fileToUpload = null;
         let cart = {};
+        let currentActiveOrder = null;
+        let currentOrderUnsubscribe = null;
 
         // --- ELEMENTS ---
         const loginScreen = document.getElementById('login-screen');
@@ -720,6 +734,11 @@
         const cartTotalEl = document.getElementById('cart-total');
         const confirmOrderBtn = document.getElementById('confirm-order-btn');
         const interactiveMenuItemsContainer = document.getElementById('interactive-menu-items');
+        
+        // Order Status Footer Elements
+        const orderStatusFooter = document.getElementById('order-status-footer');
+        const orderStatusText = document.getElementById('order-status-text');
+        const editOrderBtn = document.getElementById('edit-order-btn');
 
 
         // Restaurant Modal elements
@@ -779,6 +798,7 @@
                         dashboardScreen.classList.add('flex');
                         initializeDataListeners();
                         setupView('dashboard-content');
+                        checkForActiveOrder(user.uid);
                     } else {
                         loginScreen.classList.remove('hidden');
                         dashboardScreen.classList.add('hidden');
@@ -807,14 +827,14 @@
             const q = query(collection(db, "users"), where("uid", "==", user.uid));
             const querySnapshot = await getDocs(q);
             if (!querySnapshot.empty) {
-                currentUserProfile = { id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() };
+                currentUserProfile = { id: querySnapshot.docs[0].id, uid: user.uid, ...querySnapshot.docs[0].data() };
                 userAvatarBtn.title = currentUserProfile.name;
                 const initials = currentUserProfile.name.split(' ').map(n => n[0]).join('');
                 userAvatarBtn.textContent = initials;
 
             } else {
                 console.error("Could not find user profile in Firestore.");
-                currentUserProfile = null;
+                currentUserProfile = { uid: user.uid, email: user.email, name: "New User"};
             }
         }
 
@@ -863,6 +883,10 @@
         function unsubscribeAll() {
             unsubscribeListeners.forEach(unsub => unsub());
             unsubscribeListeners = [];
+            if(currentOrderUnsubscribe) {
+                currentOrderUnsubscribe();
+                currentOrderUnsubscribe = null;
+            }
         }
 
 
@@ -873,7 +897,10 @@
         restaurantFilter.addEventListener('change', () => renderUserTable());
         menuRestaurantFilter.addEventListener('change', () => renderMenuTable());
         userAvatarBtn.addEventListener('click', () => logoutDropdown.classList.toggle('hidden'));
-        logoutBtn.addEventListener('click', () => signOut(auth));
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth);
+            orderStatusFooter.classList.add('hidden');
+        });
         document.getElementById('order-restaurant-filter').addEventListener('change', renderOrderFoodPage);
 
 
@@ -939,6 +966,8 @@
         closeCartBtn.addEventListener('click', () => cartPanel.classList.add('translate-x-full'));
         confirmOrderBtn.addEventListener('click', handleConfirmOrder);
         interactiveMenuItemsContainer.addEventListener('click', handleOrderInteraction);
+        cartItemsContainer.addEventListener('click', handleCartInteraction);
+        editOrderBtn.addEventListener('click', handleEditOrder);
 
 
         // --- RENDER FUNCTIONS ---
@@ -1586,6 +1615,8 @@
             e.preventDefault();
             const saveButton = menuItemForm.querySelector('button[type="submit"]');
             saveButton.disabled = true;
+            let originalButtonText = saveButton.innerHTML;
+            saveButton.innerHTML = '<div class="loader"></div>';
 
             try {
                 const id = document.getElementById('menu-item-id').value;
@@ -1642,7 +1673,7 @@
                 alert("Failed to save menu item. This is often due to incorrect Firebase Storage security rules. Please check the console for more details.");
             } finally {
                 saveButton.disabled = false;
-                saveButton.textContent = 'Save';
+                saveButton.innerHTML = originalButtonText;
             }
         }
         
@@ -2002,6 +2033,15 @@
                 `;
             }
         }
+        
+        function handleCartInteraction(e) {
+            const quantityChangeBtn = e.target.closest('.cart-quantity-change-btn');
+             if (quantityChangeBtn) {
+                const itemId = quantityChangeBtn.dataset.itemId;
+                const change = parseInt(quantityChangeBtn.dataset.change, 10);
+                updateCart(itemId, change);
+            }
+        }
 
         function handleOrderInteraction(e) {
             const addToCartBtn = e.target.closest('.add-to-cart-btn');
@@ -2061,11 +2101,18 @@
                 const itemEl = document.createElement('div');
                 itemEl.className = 'flex items-center justify-between';
                 itemEl.innerHTML = `
-                    <div>
-                        <p class="font-semibold">${item.name}</p>
-                        <p class="text-xs text-gray-500">₹${item.price} x ${item.quantity}</p>
+                     <div class="flex items-center gap-4">
+                        <img src="${item.imageUrl || 'https://placehold.co/40x40'}" class="w-12 h-12 rounded object-cover">
+                        <div>
+                            <p class="font-semibold">${item.name}</p>
+                            <p class="text-xs text-gray-500">₹${item.price}</p>
+                        </div>
                     </div>
-                    <span class="font-semibold">₹${(item.price * item.quantity).toFixed(2)}</span>
+                    <div class="flex items-center gap-2">
+                        <button class="cart-quantity-change-btn w-6 h-6 rounded bg-gray-200" data-item-id="${item.id}" data-change="-1">-</button>
+                        <span>${item.quantity}</span>
+                        <button class="cart-quantity-change-btn w-6 h-6 rounded bg-gray-200" data-item-id="${item.id}" data-change="1">+</button>
+                    </div>
                 `;
                 cartItemsContainer.appendChild(itemEl);
             });
@@ -2102,8 +2149,9 @@
             };
 
             try {
-                await addDoc(collection(db, "orders"), orderData);
+                const docRef = await addDoc(collection(db, "orders"), orderData);
                 alert("Order placed successfully!");
+                listenToOrderStatus(docRef.id);
                 cart = {};
                 renderCartUI();
                 renderInteractiveMenuItems(menuData.filter(item => item.restaurantId === selectedRestaurantId));
@@ -2114,6 +2162,72 @@
             }
         }
         
+        function handleEditOrder() {
+            if (!currentActiveOrder) return;
+            cart = {};
+            currentActiveOrder.items.forEach(item => {
+                const fullItem = menuData.find(m => m.id === item.itemId);
+                if (fullItem) {
+                    cart[item.itemId] = { ...fullItem, quantity: item.quantity };
+                }
+            });
+            
+            renderCartUI();
+            cartPanel.classList.remove('translate-x-full');
+            orderStatusFooter.classList.add('hidden');
+            if (currentOrderUnsubscribe) {
+                currentOrderUnsubscribe();
+                currentOrderUnsubscribe = null;
+            }
+        }
+
+        async function checkForActiveOrder(userId) {
+            const q = query(
+                collection(db, "orders"), 
+                where("userId", "==", userId), 
+                orderBy("createdAt", "desc"),
+                limit(1)
+            );
+            const querySnapshot = await getDocs(q);
+            if (!querySnapshot.empty) {
+                const lastOrder = { id: querySnapshot.docs[0].id, ...querySnapshot.docs[0].data() };
+                const nonTerminalStatus = !['Delivered', 'Cancelled'].includes(lastOrder.status);
+                
+                // Also check if order is recent (e.g., within last day)
+                const oneDayAgo = new Date();
+                oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+                const orderDate = lastOrder.createdAt.toDate();
+
+                if (nonTerminalStatus && orderDate > oneDayAgo) {
+                    listenToOrderStatus(lastOrder.id);
+                }
+            }
+        }
+
+        function listenToOrderStatus(orderId) {
+             if (currentOrderUnsubscribe) {
+                currentOrderUnsubscribe();
+            }
+            currentOrderUnsubscribe = onSnapshot(doc(db, "orders", orderId), (doc) => {
+                currentActiveOrder = { id: doc.id, ...doc.data() };
+                if (currentActiveOrder && !['Delivered', 'Cancelled'].includes(currentActiveOrder.status)) {
+                    orderStatusText.textContent = currentActiveOrder.status;
+                    orderStatusFooter.classList.remove('hidden');
+
+                    if(currentActiveOrder.status === 'Placed') {
+                        editOrderBtn.classList.remove('hidden');
+                    } else {
+                        editOrderBtn.classList.add('hidden');
+                    }
+                } else {
+                    orderStatusFooter.classList.add('hidden');
+                    if (currentOrderUnsubscribe) {
+                        currentOrderUnsubscribe();
+                        currentOrderUnsubscribe = null;
+                    }
+                }
+            });
+        }
 
         // Initialize sorting functionality for all tables
         document.querySelectorAll('.sortable-header').forEach(header => {
