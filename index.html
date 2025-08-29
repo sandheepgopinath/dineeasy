@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -261,6 +262,31 @@
                 </nav>
             </div>
 
+             <!-- Dashboard Content -->
+            <main id="dashboard-content" class="flex-1 overflow-y-auto bg-gray-100 p-4 md:p-8 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-sm font-medium text-gray-500">Total Restaurants</h3>
+                        <p id="total-restaurants" class="mt-2 text-3xl font-bold text-gray-900">0</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-sm font-medium text-gray-500">Total Users</h3>
+                        <p id="total-users" class="mt-2 text-3xl font-bold text-gray-900">0</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <h3 class="text-sm font-medium text-gray-500">Total Menu Items</h3>
+                        <p id="total-menu-items" class="mt-2 text-3xl font-bold text-gray-900">0</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Menu Items per Restaurant</h3>
+                    <div class="h-96">
+                       <canvas id="menu-items-chart"></canvas>
+                    </div>
+                </div>
+            </main>
+
             <!-- Restaurant Table -->
             <main id="restaurant-management-content" class="flex-1 overflow-x-auto overflow-y-auto bg-white p-4 md:p-8">
                 <div class="min-w-full inline-block align-middle">
@@ -292,11 +318,12 @@
                              <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="p-2 md:p-4"><input type="checkbox" id="select-all-menu-items" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Name</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Restaurant</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Category</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Price</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Time to Prep.</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Name</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Restaurant</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Category</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Price</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="6">Time to Prep.</th>
                                     <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
@@ -399,7 +426,7 @@
                     </div>
                 </div>
                  <div>
-                    <label for="res-payment" class="block text-xs font-medium text-gray-700">Last Payment ($)</label>
+                    <label for="res-payment" class="block text-xs font-medium text-gray-700">Last Payment (₹)</label>
                     <input type="number" step="0.01" id="res-payment" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
                 <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
@@ -555,7 +582,7 @@
                             </div>
                         </div>
                         <div>
-                            <label for="item-price" class="block text-xs font-medium text-gray-700">Price ($) <span class="text-red-500">*</span></label>
+                            <label for="item-price" class="block text-xs font-medium text-gray-700">Price (₹) <span class="text-red-500">*</span></label>
                             <input type="number" step="0.01" id="item-price" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                         </div>
                         <div>
@@ -576,7 +603,7 @@
                 </div>
                 <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
                     <button type="button" id="cancel-menu-item-modal-btn" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">Cancel</button>
-                    <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900">Save</button>
+                    <button type="submit" class="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-900 flex items-center justify-center w-24">Save</button>
                 </div>
             </form>
         </div>
@@ -603,6 +630,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         // --- FIREBASE CONFIG ---
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -621,6 +649,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // --- DATA STORE ---
         let restaurantData = [];
@@ -628,6 +657,7 @@
         let menuData = [];
         let currentUserProfile = null;
         let unsubscribeListeners = [];
+        let fileToUpload = null;
 
         // --- ELEMENTS ---
         const loginScreen = document.getElementById('login-screen');
@@ -709,6 +739,7 @@
                         dashboardScreen.classList.remove('hidden');
                         dashboardScreen.classList.add('flex');
                         initializeDataListeners();
+                        setupView('dashboard-content');
                     } else {
                         loginScreen.classList.remove('hidden');
                         dashboardScreen.classList.add('hidden');
@@ -871,10 +902,79 @@
             renderUserTable();
             renderMenuTable();
             populateAllRestaurantFilters();
+            renderDashboard();
             if (currentView === 'order-food-content') {
                 renderOrderFoodPage();
             }
         }
+
+        function renderDashboard() {
+            if (currentView !== 'dashboard-content') return;
+
+            document.getElementById('total-restaurants').textContent = restaurantData.length;
+            document.getElementById('total-users').textContent = userData.length;
+            document.getElementById('total-menu-items').textContent = menuData.length;
+
+            renderMenuItemsChart();
+        }
+
+        let menuItemsChart = null;
+        function renderMenuItemsChart() {
+            const chartCanvas = document.getElementById('menu-items-chart');
+            if (!chartCanvas) return;
+
+            const ctx = chartCanvas.getContext('2d');
+            const data = {
+                labels: [],
+                datasets: [{
+                    label: '# of Menu Items',
+                    data: [],
+                    backgroundColor: 'rgba(17, 24, 39, 0.8)',
+                    borderColor: 'rgba(17, 24, 39, 1)',
+                    borderWidth: 1
+                }]
+            };
+
+            const menuCountByRestaurant = menuData.reduce((acc, item) => {
+                const restaurant = restaurantData.find(r => r.id === item.restaurantId);
+                if (restaurant) {
+                    acc[restaurant.name] = (acc[restaurant.name] || 0) + 1;
+                }
+                return acc;
+            }, {});
+
+            // Also include restaurants with 0 menu items
+            restaurantData.forEach(r => {
+                if (!menuCountByRestaurant[r.name]) {
+                    menuCountByRestaurant[r.name] = 0;
+                }
+            });
+
+            data.labels = Object.keys(menuCountByRestaurant);
+            data.datasets[0].data = Object.values(menuCountByRestaurant);
+
+            if (menuItemsChart) {
+                menuItemsChart.destroy();
+            }
+
+            menuItemsChart = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
 
         function renderRestaurantTable() {
             restaurantTableBody.innerHTML = '';
@@ -899,7 +999,7 @@
                         <td data-label="Address" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${res.address}</td>
                         <td data-label="Onboarding" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${res.onboarding}</td>
                         <td data-label="Plan" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs"><span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${res.plan === 'Premium' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-800'}">${res.plan}</span></td>
-                        <td data-label="Payment" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">$${res.payment}</td>
+                        <td data-label="Payment" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">₹${res.payment}</td>
                         <td data-label="Action" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2 justify-end">
                             <button class="edit-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
                             <button class="delete-btn"><i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i></button>
@@ -914,7 +1014,7 @@
             menuTableBody.innerHTML = '';
             const selectedRestaurantId = menuRestaurantFilter.value;
             if (!selectedRestaurantId) {
-                showEmptyState(menuTableBody, 7, 'Please select a restaurant to see its menu.');
+                showEmptyState(menuTableBody, 8, 'Please select a restaurant to see its menu.');
                 return;
             }
 
@@ -928,9 +1028,9 @@
             });
 
             if (filteredData.length === 0 && !searchTerm) {
-                showEmptyState(menuTableBody, 7, 'No menu items for this restaurant yet.', 'Add Item', () => openMenuItemModal('add'));
+                showEmptyState(menuTableBody, 8, 'No menu items for this restaurant yet.', 'Add Item', () => openMenuItemModal('add'));
             } else if (filteredData.length === 0) {
-                showEmptyState(menuTableBody, 7, 'No results found for your search.');
+                showEmptyState(menuTableBody, 8, 'No results found for your search.');
             } else {
                 filteredData.forEach((item, index) => {
                     const restaurant = restaurantData.find(r => r.id === item.restaurantId);
@@ -939,10 +1039,11 @@
                     newRow.dataset.id = item.id;
                     newRow.innerHTML = `
                         <td class="p-2 md:p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded menu-item-checkbox" data-id="${item.id}"></td>
+                        <td data-label="Image" class="px-2 py-1 md:px-4 md:py-2"><img src="${item.imageUrl || 'https://placehold.co/40x40/e2e8f0/e2e8f0?text=.'}" class="w-10 h-10 object-cover rounded"></td>
                         <td data-label="Name" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs font-medium text-gray-900">${item.name}</td>
                         <td data-label="Restaurant" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${restaurant ? restaurant.name : ''}</td>
                         <td data-label="Category" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${item.category}</td>
-                        <td data-label="Price" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">$${item.price}</td>
+                        <td data-label="Price" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">₹${item.price}</td>
                         <td data-label="Prep Time" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${item.prepTime} mins</td>
                         <td data-label="Action" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500 flex items-center space-x-2 justify-end">
                             <button class="edit-menu-item-btn"><i data-lucide="edit-2" class="w-5 h-5"></i></button> 
@@ -1046,7 +1147,7 @@
             } else if (targetId === 'order-food-content') {
                  headerTitle.textContent = 'Order Food';
                  document.getElementById('order-food-actions').style.display = 'flex';
-            } else {
+            } else if (targetId === 'dashboard-content') {
                  headerTitle.textContent = 'Dashboard';
             }
 
@@ -1345,6 +1446,7 @@
         // --- MENU ITEM MODAL ---
         function openMenuItemModal(mode, id = null) {
             menuItemForm.reset();
+            fileToUpload = null;
             imagePreview.src = '';
             imagePreview.classList.add('hidden');
             imagePlaceholder.classList.remove('hidden');
@@ -1387,35 +1489,56 @@
 
         async function handleMenuItemFormSubmit(e) {
             e.preventDefault();
-            const id = document.getElementById('menu-item-id').value;
-            const selectedPortions = Array.from(menuItemForm.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
-            const formData = {
-                restaurantId: menuRestaurantFilter.value,
-                name: document.getElementById('item-name').value,
-                description: document.getElementById('item-description').value,
-                imageUrl: document.getElementById('item-image-url').value,
-                price: parseFloat(document.getElementById('item-price').value).toFixed(2),
-                cuisine: document.getElementById('item-cuisine').value,
-                taste: document.getElementById('item-taste').value,
-                category: document.getElementById('item-category').value,
-                prepTime: document.getElementById('item-prep-time').value,
-                portionSizes: selectedPortions
-            };
+            const saveButton = menuItemForm.querySelector('button[type="submit"]');
+            saveButton.disabled = true;
+            saveButton.innerHTML = '<div class="loader"></div>';
 
-            if (id) {
-                await updateDoc(doc(db, "menuItems", id), formData);
-            } else {
-                await addDoc(collection(db, "menuItems"), formData);
+            try {
+                const id = document.getElementById('menu-item-id').value;
+                const selectedPortions = Array.from(menuItemForm.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+                let imageUrl = document.getElementById('item-image-url').value;
+
+                if (fileToUpload) {
+                    const storageRef = ref(storage, `menuItems/${Date.now()}_${fileToUpload.name}`);
+                    await uploadBytes(storageRef, fileToUpload);
+                    imageUrl = await getDownloadURL(storageRef);
+                }
+                
+                const formData = {
+                    restaurantId: menuRestaurantFilter.value,
+                    name: document.getElementById('item-name').value,
+                    description: document.getElementById('item-description').value,
+                    imageUrl: imageUrl,
+                    price: parseFloat(document.getElementById('item-price').value).toFixed(2),
+                    cuisine: document.getElementById('item-cuisine').value,
+                    taste: document.getElementById('item-taste').value,
+                    category: document.getElementById('item-category').value,
+                    prepTime: document.getElementById('item-prep-time').value,
+                    portionSizes: selectedPortions
+                };
+
+                if (id) {
+                    await updateDoc(doc(db, "menuItems", id), formData);
+                } else {
+                    await addDoc(collection(db, "menuItems"), formData);
+                }
+                fileToUpload = null;
+                closeMenuItemModal();
+            } catch (error) {
+                console.error("Error saving menu item:", error);
+                alert("Failed to save menu item. This is often due to incorrect Firebase Storage security rules. Please check the console for more details.");
+            } finally {
+                saveButton.disabled = false;
+                saveButton.textContent = 'Save';
             }
-            closeMenuItemModal();
         }
         
         function handleImageUpload(event) {
             const file = event.target.files[0];
             if (file) {
+                fileToUpload = file;
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('item-image-url').value = e.target.result;
                     imagePreview.src = e.target.result;
                     imagePreview.classList.remove('hidden');
                     imagePlaceholder.classList.add('hidden');
@@ -1500,16 +1623,13 @@
             - Category: ${document.getElementById('item-category').value}
             - Cuisine: ${document.getElementById('item-cuisine').value}
             - Taste Profile: ${document.getElementById('item-taste').value}
-            - Price: $${document.getElementById('item-price').value}`;
+            - Price: ₹${document.getElementById('item-price').value}`;
             
             try {
-                const response = await fetch('/api/generateDescription', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt })
-                });
-                const result = await response.json();
-                document.getElementById('item-description').value = result.text.trim().replace(/\*/g, '');
+                // This part needs a backend to work in production. Placeholder for now.
+                // const response = await fetch('/api/generateDescription', { ... });
+                // const result = await response.json();
+                document.getElementById('item-description').value = "AI description generation is not set up for production.";
             } catch (error) {
                 console.error("Error generating description:", error);
                 alert("Failed to generate description.");
@@ -1531,17 +1651,11 @@
             const prompt = `Professional, vibrant food photography of a dish named "${document.getElementById('item-name').value}". It is a ${document.getElementById('item-cuisine').value} ${document.getElementById('item-category').value} with a ${document.getElementById('item-taste').value} taste profile. The dish should look delicious and be presented on a clean, modern plate.`;
 
             try {
-                const response = await fetch('/api/generateImage', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt })
-                });
-                const result = await response.json();
-                if (result.imageUrl) {
-                    document.getElementById('item-image-url').value = result.imageUrl;
-                    imagePreview.src = result.imageUrl;
-                    imagePreview.classList.remove('hidden');
-                }
+                // This part needs a backend to work in production. Placeholder for now.
+                // const response = await fetch('/api/generateImage', { ... });
+                // const result = await response.json();
+                alert("AI image generation is not set up for production.");
+                imagePlaceholder.classList.remove('hidden');
             } catch (error) {
                 console.error("Error generating image:", error);
                 alert("Failed to generate image.");
@@ -1676,7 +1790,7 @@
                         <div>
                             <div class="flex justify-between items-start">
                                 <h4 class="font-bold text-gray-900">${item.name}</h4>
-                                <span class="text-lg font-bold text-gray-900">$${item.price}</span>
+                                <span class="text-lg font-bold text-gray-900">₹${item.price}</span>
                             </div>
                             <p class="text-xs text-gray-600 mt-1 mb-3">${item.description}</p>
                             <div class="flex flex-wrap gap-2 mb-3">
