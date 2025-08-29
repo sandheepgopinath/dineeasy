@@ -294,13 +294,13 @@
                         <table id="restaurantTable" class="min-w-full divide-y divide-gray-200">
                              <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="0">Name</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Owner</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Contact</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Address</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Onboarding</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Plan</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="6">Payment</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="name">Name</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="owner">Owner</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="contact">Contact</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="address">Address</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="onboarding">Onboarding</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="plan">Plan</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="payment">Payment</th>
                                     <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
@@ -317,13 +317,13 @@
                         <table id="menuTable" class="min-w-full divide-y divide-gray-200">
                              <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="p-2 md:p-4"><input type="checkbox" id="select-all-menu-items" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
+                                    <th scope="col" class="p-4 text-center"><input type="checkbox" id="select-all-menu-items" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
                                     <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Name</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Restaurant</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Category</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Price</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="6">Time to Prep.</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="name">Name</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="restaurantId">Restaurant</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="category">Category</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="price">Price</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="prepTime">Time to Prep.</th>
                                     <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
@@ -340,13 +340,13 @@
                         <table id="userTable" class="min-w-full divide-y divide-gray-200">
                            <thead class="bg-gray-50">
                                 <tr>
-                                    <th scope="col" class="p-2 md:p-4"><input type="checkbox" id="select-all-users" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="1">Name</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="2">Email</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="3">Restaurant</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="4">Status</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="5">Role</th>
-                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-column-index="6">Last log in</th>
+                                    <th scope="col" class="p-4 text-center"><input type="checkbox" id="select-all-users" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded"></th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="name">Name</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="email">Email</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="restaurants">Restaurant</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="status">Status</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="role">Role</th>
+                                    <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sortable-header" data-sort-key="lastLogin">Last log in</th>
                                     <th scope="col" class="px-2 py-1 md:px-4 md:py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                                 </tr>
                             </thead>
@@ -376,13 +376,35 @@
             </main>
         </div>
         
-        <!-- Help Button -->
-        <div class="fixed bottom-8 right-8">
-            <button class="w-12 h-12 bg-gray-900 text-white rounded-full flex items-center justify-center shadow-lg">
-                <i data-lucide="help-circle" class="w-6 h-6"></i>
-            </button>
+        <!-- Cart Icon -->
+        <button id="cart-button" class="fixed bottom-8 right-8 w-16 h-16 bg-gray-900 text-white rounded-full flex items-center justify-center shadow-lg hidden">
+            <i data-lucide="shopping-cart" class="w-8 h-8"></i>
+            <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center">0</span>
+        </button>
+    </div>
+
+    <!-- Cart Panel -->
+    <div id="cart-panel" class="fixed inset-y-0 right-0 w-full md:w-96 bg-white shadow-lg z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="flex items-center justify-between p-4 border-b">
+            <h2 class="text-lg font-semibold">Your Order</h2>
+            <button id="close-cart-btn"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-4 space-y-4">
+            <!-- Cart items will be generated by JS -->
+        </div>
+        <div class="p-4 border-t">
+            <div>
+                <label for="chef-notes" class="block text-sm font-medium text-gray-700">Notes for the Chef (Optional)</label>
+                <textarea id="chef-notes" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+            </div>
+            <div class="flex justify-between items-center mt-4 text-lg font-bold">
+                <span>Total:</span>
+                <span id="cart-total">₹0.00</span>
+            </div>
+            <button id="confirm-order-btn" class="mt-4 w-full bg-gray-900 text-white font-semibold py-3 rounded-md hover:bg-gray-800">Confirm Order</button>
         </div>
     </div>
+
 
     <!-- Add/Edit Restaurant Modal -->
     <div id="restaurant-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden items-center justify-center p-4">
@@ -629,7 +651,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc, writeBatch, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
         // --- FIREBASE CONFIG ---
@@ -643,6 +665,11 @@
         appId: "1:811985378716:web:26c599db464c67a537bc59",
         measurementId: "G-0F0ERHYX32"
         };
+
+        // --- GEMINI API KEY ---
+        // IMPORTANT: Replace with your actual Gemini API Key
+        // Make sure to restrict this key to your website's domain in the Google Cloud Console.
+        const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY";
 
 
         // --- INITIALIZE FIREBASE ---
@@ -658,6 +685,7 @@
         let currentUserProfile = null;
         let unsubscribeListeners = [];
         let fileToUpload = null;
+        let cart = {};
 
         // --- ELEMENTS ---
         const loginScreen = document.getElementById('login-screen');
@@ -682,6 +710,17 @@
         const logoutDropdown = document.getElementById('logout-dropdown');
         const logoutBtn = document.getElementById('logout-btn');
         let currentView = 'restaurant-management-content';
+
+        // Cart Elements
+        const cartButton = document.getElementById('cart-button');
+        const cartCountBadge = document.getElementById('cart-count-badge');
+        const cartPanel = document.getElementById('cart-panel');
+        const closeCartBtn = document.getElementById('close-cart-btn');
+        const cartItemsContainer = document.getElementById('cart-items-container');
+        const cartTotalEl = document.getElementById('cart-total');
+        const confirmOrderBtn = document.getElementById('confirm-order-btn');
+        const interactiveMenuItemsContainer = document.getElementById('interactive-menu-items');
+
 
         // Restaurant Modal elements
         const restaurantModal = document.getElementById('restaurant-modal');
@@ -894,6 +933,12 @@
 
         // Confirm Modal Listeners
         cancelConfirmBtn.addEventListener('click', () => confirmModal.style.display = 'none');
+        
+        // Cart Listeners
+        cartButton.addEventListener('click', () => cartPanel.classList.remove('translate-x-full'));
+        closeCartBtn.addEventListener('click', () => cartPanel.classList.add('translate-x-full'));
+        confirmOrderBtn.addEventListener('click', handleConfirmOrder);
+        interactiveMenuItemsContainer.addEventListener('click', handleOrderInteraction);
 
 
         // --- RENDER FUNCTIONS ---
@@ -1038,7 +1083,7 @@
                     newRow.className = index % 2 === 0 ? 'hover:bg-gray-50' : 'bg-gray-50 hover:bg-gray-100';
                     newRow.dataset.id = item.id;
                     newRow.innerHTML = `
-                        <td class="p-2 md:p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded menu-item-checkbox" data-id="${item.id}"></td>
+                        <td class="p-4 text-center"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded menu-item-checkbox" data-id="${item.id}"></td>
                         <td data-label="Image" class="px-2 py-1 md:px-4 md:py-2"><img src="${item.imageUrl || 'https://placehold.co/40x40/e2e8f0/e2e8f0?text=.'}" class="w-10 h-10 object-cover rounded"></td>
                         <td data-label="Name" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs font-medium text-gray-900">${item.name}</td>
                         <td data-label="Restaurant" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${restaurant ? restaurant.name : ''}</td>
@@ -1079,7 +1124,7 @@
                     newRow.dataset.id = user.id;
                     const restaurantHTML = user.restaurants.map(r => `<span class="px-2 py-0.5 bg-gray-200 text-gray-800 rounded-full text-xs">${r}</span>`).join('');
                     newRow.innerHTML = `
-                        <td class="p-2 md:p-4"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded user-checkbox" data-id="${user.id}"></td>
+                        <td class="p-4 text-center"><input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded user-checkbox" data-id="${user.id}"></td>
                         <td data-label="Name" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs font-medium text-gray-900">${user.name}</td>
                         <td data-label="Email" class="px-2 py-1 md:px-4 md:py-2 whitespace-nowrap text-xs text-gray-500">${user.email}</td>
                         <td data-label="Restaurant" class="px-2 py-1 md:px-4 md:py-2 text-xs text-gray-500"><div class="flex flex-wrap gap-1 justify-end">${restaurantHTML}</div></td>
@@ -1681,26 +1726,62 @@
         }
 
         // --- AI FUNCTIONS ---
+        // Helper function to convert Base64 to Blob
+        function b64toBlob(b64Data, contentType='', sliceSize=512) {
+            const byteCharacters = atob(b64Data);
+            const byteArrays = [];
+            for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+                const slice = byteCharacters.slice(offset, offset + sliceSize);
+                const byteNumbers = new Array(slice.length);
+                for (let i = 0; i < slice.length; i++) {
+                    byteNumbers[i] = slice.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                byteArrays.push(byteArray);
+            }
+            return new Blob(byteArrays, {type: contentType});
+        }
+
+
         async function handleGenerateDescription(e) {
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY") {
+                alert("Please add your Gemini API Key to the script.");
+                return;
+            }
+
             const btn = e.target;
             btn.disabled = true;
             btn.innerHTML = '<div class="loader"></div>';
 
-            const prompt = `Generate a short, impactful menu description under 100 characters for a dish with these details. Do not use any markdown formatting:
+            const userPrompt = `Generate a short, impactful menu description under 100 characters for a dish with these details. Do not use any markdown formatting:
             - Name: ${document.getElementById('item-name').value}
             - Category: ${document.getElementById('item-category').value}
             - Cuisine: ${document.getElementById('item-cuisine').value}
             - Taste Profile: ${document.getElementById('item-taste').value}
             - Price: ₹${document.getElementById('item-price').value}`;
             
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${GEMINI_API_KEY}`;
+            const payload = { contents: [{ parts: [{ text: userPrompt }] }] };
+            
             try {
-                // This part needs a backend to work in production. Placeholder for now.
-                // const response = await fetch('/api/generateDescription', { ... });
-                // const result = await response.json();
-                document.getElementById('item-description').value = "AI description generation is not set up for production.";
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+                const result = await response.json();
+                const description = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (description) {
+                    document.getElementById('item-description').value = description.trim().replace(/\*/g, '');
+                } else {
+                     throw new Error("No description found in API response.");
+                }
             } catch (error) {
                 console.error("Error generating description:", error);
-                alert("Failed to generate description.");
+                alert("Failed to generate description. Check the console for details.");
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate with AI';
@@ -1709,6 +1790,10 @@
         }
 
         async function handleGenerateImage(e) {
+             if (!GEMINI_API_KEY || GEMINI_API_KEY === "YOUR_GEMINI_API_KEY") {
+                alert("Please add your Gemini API Key to the script.");
+                return;
+            }
             const btn = e.target;
             btn.disabled = true;
             btn.innerHTML = '<div class="loader"></div>';
@@ -1716,17 +1801,37 @@
             imagePreview.classList.add('hidden');
             imagePlaceholder.classList.add('hidden');
 
-            const prompt = `Professional, vibrant food photography of a dish named "${document.getElementById('item-name').value}". It is a ${document.getElementById('item-cuisine').value} ${document.getElementById('item-category').value} with a ${document.getElementById('item-taste').value} taste profile. The dish should look delicious and be presented on a clean, modern plate.`;
+            const userPrompt = `Professional, vibrant food photography of a dish named "${document.getElementById('item-name').value}". It is a ${document.getElementById('item-cuisine').value} ${document.getElementById('item-category').value} with a ${document.getElementById('item-taste').value} taste profile. The dish should look delicious and be presented on a clean, modern plate.`;
+
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${GEMINI_API_KEY}`;
+            const payload = { instances: [{ prompt: userPrompt }], parameters: { "sampleCount": 1} };
 
             try {
-                // This part needs a backend to work in production. Placeholder for now.
-                // const response = await fetch('/api/generateImage', { ... });
-                // const result = await response.json();
-                alert("AI image generation is not set up for production.");
-                imagePlaceholder.classList.remove('hidden');
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    throw new Error(`API call failed with status: ${response.status}`);
+                }
+                const result = await response.json();
+                const base64Data = result.predictions?.[0]?.bytesBase64Encoded;
+                if (base64Data) {
+                    const blob = b64toBlob(base64Data, 'image/png');
+                    const fileName = `ai-generated-${Date.now()}.png`;
+                    fileToUpload = new File([blob], fileName, { type: 'image/png' });
+                    
+                    imagePreview.src = URL.createObjectURL(fileToUpload);
+                    imagePreview.classList.remove('hidden');
+
+                } else {
+                    throw new Error("No image data found in API response.");
+                }
             } catch (error) {
                 console.error("Error generating image:", error);
-                alert("Failed to generate image.");
+                alert("Failed to generate image. Check the console for details.");
+                imagePlaceholder.classList.remove('hidden');
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = '<i data-lucide="sparkles" class="w-4 h-4"></i> Generate';
@@ -1868,14 +1973,229 @@
                                ${detailsHTML}
                             </div>
                         </div>
-                        <button class="mt-4 w-full bg-gray-900 text-white font-semibold py-2 rounded-md hover:bg-gray-800 flex items-center justify-center gap-2">
-                            <i data-lucide="utensils-crossed" class="w-4 h-4"></i> Add to Order
-                        </button>
+                        <div class="order-button-container mt-4 w-full" data-item-id="${item.id}">
+                            ${getOrderItemHTML(item.id)}
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
             });
             lucide.createIcons();
+        }
+        
+        // --- CART FUNCTIONS ---
+        function getOrderItemHTML(itemId) {
+            const itemInCart = cart[itemId];
+            if (itemInCart && itemInCart.quantity > 0) {
+                return `
+                    <div class="flex items-center justify-center space-x-2">
+                        <button class="quantity-change-btn w-8 h-8 rounded-md bg-gray-200 text-lg font-bold" data-item-id="${itemId}" data-change="-1">-</button>
+                        <span class="text-lg font-bold w-8 text-center">${itemInCart.quantity}</span>
+                        <button class="quantity-change-btn w-8 h-8 rounded-md bg-gray-200 text-lg font-bold" data-item-id="${itemId}" data-change="1">+</button>
+                    </div>
+                `;
+            } else {
+                return `
+                    <button class="add-to-cart-btn w-full bg-gray-900 text-white font-semibold py-2 rounded-md hover:bg-gray-800 flex items-center justify-center gap-2">
+                        <i data-lucide="utensils-crossed" class="w-4 h-4"></i> Add to Order
+                    </button>
+                `;
+            }
+        }
+
+        function handleOrderInteraction(e) {
+            const addToCartBtn = e.target.closest('.add-to-cart-btn');
+            const quantityChangeBtn = e.target.closest('.quantity-change-btn');
+
+            if (addToCartBtn) {
+                const container = addToCartBtn.parentElement;
+                const itemId = container.dataset.itemId;
+                updateCart(itemId, 1);
+            } else if (quantityChangeBtn) {
+                const itemId = quantityChangeBtn.dataset.itemId;
+                const change = parseInt(quantityChangeBtn.dataset.change, 10);
+                updateCart(itemId, change);
+            }
+        }
+
+        function updateCart(itemId, change) {
+            let item = cart[itemId];
+
+            if (!item) {
+                const menuItem = menuData.find(i => i.id === itemId);
+                if (!menuItem) return;
+                cart[itemId] = { ...menuItem, quantity: 0 };
+                item = cart[itemId];
+            }
+
+            item.quantity += change;
+
+            if (item.quantity <= 0) {
+                delete cart[itemId];
+            }
+            
+            renderCartUI();
+            
+            const buttonContainer = interactiveMenuItemsContainer.querySelector(`.order-button-container[data-item-id="${itemId}"]`);
+            if (buttonContainer) {
+                buttonContainer.innerHTML = getOrderItemHTML(itemId);
+                lucide.createIcons();
+            }
+        }
+        
+        function renderCartUI() {
+            const cartItemKeys = Object.keys(cart);
+            cartItemsContainer.innerHTML = '';
+            
+            if (cartItemKeys.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="text-center text-gray-500">Your cart is empty.</p>';
+                cartButton.classList.add('hidden');
+                cartTotalEl.textContent = '₹0.00';
+                return;
+            }
+
+            let total = 0;
+            cartItemKeys.forEach(key => {
+                const item = cart[key];
+                total += item.price * item.quantity;
+                const itemEl = document.createElement('div');
+                itemEl.className = 'flex items-center justify-between';
+                itemEl.innerHTML = `
+                    <div>
+                        <p class="font-semibold">${item.name}</p>
+                        <p class="text-xs text-gray-500">₹${item.price} x ${item.quantity}</p>
+                    </div>
+                    <span class="font-semibold">₹${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                cartItemsContainer.appendChild(itemEl);
+            });
+            
+            cartTotalEl.textContent = `₹${total.toFixed(2)}`;
+            cartCountBadge.textContent = cartItemKeys.length;
+            cartButton.classList.remove('hidden');
+        }
+        
+        async function handleConfirmOrder() {
+            const selectedRestaurantId = document.getElementById('order-restaurant-filter').value;
+            if (Object.keys(cart).length === 0 || !selectedRestaurantId) {
+                alert("Your cart is empty or no restaurant is selected.");
+                return;
+            }
+            
+            const orderItems = Object.values(cart).map(item => ({
+                itemId: item.id,
+                name: item.name,
+                price: item.price,
+                quantity: item.quantity
+            }));
+            
+            const total = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+            const orderData = {
+                restaurantId: selectedRestaurantId,
+                userId: currentUserProfile.uid,
+                items: orderItems,
+                totalPrice: total.toFixed(2),
+                notes: document.getElementById('chef-notes').value,
+                status: 'Placed',
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, "orders"), orderData);
+                alert("Order placed successfully!");
+                cart = {};
+                renderCartUI();
+                renderInteractiveMenuItems(menuData.filter(item => item.restaurantId === selectedRestaurantId));
+                cartPanel.classList.add('translate-x-full');
+            } catch (error) {
+                console.error("Error placing order:", error);
+                alert("Could not place order. Please try again.");
+            }
+        }
+        
+
+        // Initialize sorting functionality for all tables
+        document.querySelectorAll('.sortable-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const table = header.closest('table');
+                const sortKey = header.dataset.sortKey;
+                const currentSort = header.classList.contains('asc') ? 'asc' : (header.classList.contains('desc') ? 'desc' : null);
+                
+                table.querySelectorAll('.sortable-header').forEach(h => h.classList.remove('asc', 'desc'));
+                
+                let direction = 'asc';
+                if (currentSort === 'asc') {
+                    direction = 'desc';
+                    header.classList.add('desc');
+                } else {
+                    header.classList.add('asc');
+                }
+                
+                sortTable(table.id, sortKey, direction);
+            });
+        });
+        
+        function sortTable(tableId, sortKey, direction) {
+            let data;
+            let renderFunction;
+
+            if (tableId === 'restaurantTable') {
+                data = restaurantData;
+                renderFunction = renderRestaurantTable;
+            } else if (tableId === 'userTable') {
+                data = userData;
+                renderFunction = renderUserTable;
+            } else if (tableId === 'menuTable') {
+                data = menuData;
+                renderFunction = renderMenuTable;
+            }
+
+            data.sort((a, b) => {
+                let valA = a[sortKey];
+                let valB = b[sortKey];
+
+                if (sortKey === 'price' || sortKey === 'payment' || sortKey === 'prepTime') {
+                    valA = parseFloat(valA);
+                    valB = parseFloat(valB);
+                }
+                
+                if (typeof valA === 'string') valA = valA.toLowerCase();
+                if (typeof valB === 'string') valB = valB.toLowerCase();
+                
+                if (valA < valB) return direction === 'asc' ? -1 : 1;
+                if (valA > valB) return direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            renderFunction();
+        }
+        
+        // Checkbox functionality
+        document.getElementById('select-all-menu-items').addEventListener('change', (e) => {
+            document.querySelectorAll('.menu-item-checkbox').forEach(cb => cb.checked = e.target.checked);
+            toggleDeleteButton();
+        });
+         document.getElementById('select-all-users').addEventListener('change', (e) => {
+            document.querySelectorAll('.user-checkbox').forEach(cb => cb.checked = e.target.checked);
+            toggleDeleteButton();
+        });
+
+        document.querySelector('#menuTable tbody').addEventListener('change', (e) => {
+             if (e.target.classList.contains('menu-item-checkbox')) toggleDeleteButton();
+        });
+        document.querySelector('#userTable tbody').addEventListener('change', (e) => {
+             if (e.target.classList.contains('user-checkbox')) toggleDeleteButton();
+        });
+
+        function toggleDeleteButton() {
+             if (currentView === 'menu-content') {
+                const anyChecked = document.querySelectorAll('.menu-item-checkbox:checked').length > 0;
+                document.getElementById('delete-selected-menu-items-btn').classList.toggle('hidden', !anyChecked);
+            } else if (currentView === 'user-management-content') {
+                 const anyChecked = document.querySelectorAll('.user-checkbox:checked').length > 0;
+                 document.getElementById('delete-selected-users-btn').classList.toggle('hidden', !anyChecked);
+            }
         }
 
     </script>
