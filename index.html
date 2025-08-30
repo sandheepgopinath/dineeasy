@@ -110,36 +110,11 @@
             color: #ffffff;
             border-color: #111827;
         }
-
-        .glass-button-blue {
-            background: rgba(59, 130, 246, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            color: #1e3a8a;
+        
+        .dragging {
+            opacity: 0.5;
+            background: #e0f2fe;
         }
-        .glass-button-blue:hover {
-            background: rgba(59, 130, 246, 0.3);
-        }
-
-         .glass-button-red {
-            background: rgba(239, 68, 68, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #b91c1c;
-        }
-        .glass-button-red:hover {
-            background: rgba(239, 68, 68, 0.3);
-        }
-
-        .glass-button-gray {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-        }
-         .glass-button-gray:hover {
-            background: rgba(255, 255, 255, 0.7);
-        }
-
 
     </style>
 </head>
@@ -187,6 +162,10 @@
                     <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i>
                     Dashboard
                 </a>
+                 <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md" data-target="kot-content">
+                    <i data-lucide="clipboard-list" class="w-5 h-5 mr-3"></i>
+                    KOT
+                </a>
                 <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md" data-target="menu-content">
                     <i data-lucide="menu" class="w-5 h-5 mr-3"></i>
                     Menu
@@ -225,21 +204,21 @@
                         
                         <!-- Action Buttons Container -->
                         <div id="restaurant-actions" class="items-center space-x-3 hidden">
-                            <button id="add-restaurant-btn" class="glass-button-blue px-3 py-1.5 rounded-md text-xs">Add Restaurant</button>
+                            <button id="add-restaurant-btn" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-black/60 text-xs">Add Restaurant</button>
                         </div>
                          <div id="menu-actions" class="items-center space-x-2 hidden">
                              <select id="menuRestaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
                                 <option value="">Select Restaurant</option>
                             </select>
-                            <button id="add-menu-item-btn" class="glass-button-blue px-3 py-1.5 rounded-md text-xs whitespace-nowrap">Add Item</button>
-                            <button id="delete-selected-menu-items-btn" class="glass-button-red px-3 py-1.5 rounded-md text-xs whitespace-nowrap hidden">Delete Selected</button>
+                            <button id="add-menu-item-btn" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-black/60 text-xs whitespace-nowrap">Add Item</button>
+                            <button id="delete-selected-menu-items-btn" class="bg-red-500/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-red-500/60 text-xs whitespace-nowrap hidden">Delete Selected</button>
                         </div>
                         <div id="user-actions" class="items-center space-x-2 hidden">
                              <select id="restaurantFilter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
                                 <option value="all">All Restaurants</option>
                             </select>
-                            <button id="add-user-btn" class="glass-button-blue px-3 py-1.5 rounded-md text-xs whitespace-nowrap">Add User</button>
-                             <button id="delete-selected-users-btn" class="glass-button-red px-3 py-1.5 rounded-md text-xs whitespace-nowrap hidden">Delete Selected</button>
+                            <button id="add-user-btn" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-black/60 text-xs whitespace-nowrap">Add User</button>
+                             <button id="delete-selected-users-btn" class="bg-red-500/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-red-500/60 text-xs whitespace-nowrap hidden">Delete Selected</button>
                         </div>
                          <div id="order-food-actions" class="items-center space-x-2 hidden">
                              <select id="order-restaurant-filter" class="block w-full pl-3 pr-10 py-1.5 text-xs border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
@@ -272,6 +251,10 @@
                     <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md" data-target="dashboard-content">
                         <i data-lucide="layout-dashboard" class="w-5 h-5 mr-3"></i>
                         Dashboard
+                    </a>
+                    <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md" data-target="kot-content">
+                        <i data-lucide="clipboard-list" class="w-5 h-5 mr-3"></i>
+                        KOT
                     </a>
                     <a href="#" class="flex items-center px-4 py-2 text-gray-300 hover:bg-gray-700 hover:text-white rounded-md" data-target="menu-content">
                         <i data-lucide="menu" class="w-5 h-5 mr-3"></i>
@@ -308,13 +291,36 @@
                         <p id="total-menu-items" class="mt-2 text-3xl font-bold text-gray-900">0</p>
                     </div>
                 </div>
-
+                 <div class="bg-white p-6 rounded-lg shadow mb-8">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Orders</h3>
+                    <div class="overflow-x-auto">
+                        <table id="recent-orders-table" class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Order ID</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Restaurant</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Total</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200"></tbody>
+                        </table>
+                    </div>
+                </div>
                 <div class="bg-white p-6 rounded-lg shadow">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Menu Items per Restaurant</h3>
                     <div class="h-96">
                        <canvas id="menu-items-chart"></canvas>
                     </div>
                 </div>
+            </main>
+
+            <!-- KOT Content -->
+            <main id="kot-content" class="flex-1 overflow-y-auto bg-gray-100 p-4 md:p-8 hidden">
+                 <div id="kot-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    <!-- KOT tickets will be generated here -->
+                 </div>
             </main>
 
             <!-- Restaurant Table -->
@@ -387,7 +393,7 @@
             </main>
             
              <!-- Order Food Page -->
-            <main id="order-food-content" class="flex-1 overflow-y-auto bg-white p-4 md:p-8 hidden">
+            <main id="order-food-content" class="flex-1 overflow-y-auto bg-white p-4 md:p-8 hidden pb-32">
                 <div class="max-w-7xl mx-auto">
                     <div class="text-center mb-8">
                         <h2 class="text-3xl font-bold text-gray-800">Order Food</h2>
@@ -407,34 +413,46 @@
         </div>
         
         <!-- Cart Icon -->
-        <button id="cart-button" class="fixed bottom-28 right-8 w-16 h-16 bg-blue-500/20 backdrop-blur-lg text-blue-800 border border-blue-500/30 rounded-full flex items-center justify-center shadow-lg hidden z-40">
+        <button id="cart-button" class="fixed bottom-8 right-8 w-16 h-16 bg-black/50 backdrop-blur-lg text-white border border-white/20 rounded-full flex items-center justify-center shadow-lg hidden z-40">
             <i data-lucide="shopping-cart" class="w-8 h-8"></i>
             <span id="cart-count-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center">0</span>
         </button>
 
         <!-- Order Status Footer -->
         <div id="order-status-footer" class="fixed bottom-0 left-0 right-0 p-4 hidden z-40">
-            <div class="max-w-4xl mx-auto bg-white/60 backdrop-blur-xl rounded-lg shadow-lg flex items-center justify-between p-4 border border-white/30">
-                <div class="flex items-center space-x-4">
-                    <p class="text-sm text-gray-600">Order Status:</p>
-                    <p id="order-status-text" class="font-bold text-gray-900">Order Received</p>
+            <div class="max-w-4xl mx-auto bg-blue-400/20 backdrop-blur-xl rounded-lg shadow-lg flex items-center justify-between p-4 border border-white/30">
+                 <div class="flex items-center space-x-3">
+                    <p class="text-sm text-blue-900">Order Status:</p>
+                    <p id="order-status-text" class="font-bold text-blue-900">Order Received</p>
                 </div>
-                 <button id="edit-order-btn" class="glass-button-blue text-xs font-semibold px-4 py-2 rounded-md">Edit Order</button>
+                <div id="timer-container" class="w-1/3 hidden">
+                    <div class="flex justify-between text-xs text-blue-800">
+                        <span>Preparing...</span>
+                        <span id="timer-text"></span>
+                    </div>
+                    <div class="w-full bg-blue-200 rounded-full h-2.5 mt-1">
+                        <div id="timer-bar" class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button id="edit-order-btn" class="bg-white/50 backdrop-blur-lg text-gray-800 px-4 py-2 rounded-md hover:bg-white/70 border border-white/30 text-xs font-semibold">Edit Order</button>
+                    <button id="cancel-order-btn" class="bg-red-500/50 backdrop-blur-lg text-white px-4 py-2 rounded-md hover:bg-red-500/70 border border-white/30 text-xs font-semibold">Cancel Order</button>
+                </div>
             </div>
         </div>
 
     </div>
 
     <!-- Cart Panel -->
-    <div id="cart-panel" class="fixed inset-y-0 right-0 w-full md:w-96 bg-white/60 backdrop-blur-xl shadow-lg z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-l border-white/30">
-        <div class="flex items-center justify-between p-4 border-b">
-            <h2 class="text-lg font-semibold">Your Order</h2>
-            <button id="close-cart-btn"><i data-lucide="x" class="w-6 h-6"></i></button>
+    <div id="cart-panel" class="fixed inset-y-0 right-0 w-full md:w-96 bg-blue-400/20 backdrop-blur-xl shadow-lg z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col border-l border-white/30">
+        <div class="flex items-center justify-between p-4 border-b border-white/30">
+            <h2 class="text-lg font-semibold text-blue-900">Your Order</h2>
+            <button id="close-cart-btn"><i data-lucide="x" class="w-6 h-6 text-blue-900"></i></button>
         </div>
         <div id="cart-items-container" class="flex-1 overflow-y-auto p-4 space-y-4">
             <!-- Cart items will be generated by JS -->
         </div>
-        <div class="p-4 border-t">
+        <div class="p-4 border-t border-white/30">
             <div>
                 <label for="chef-notes" class="block text-sm font-medium text-gray-700">Notes for the Chef (Optional)</label>
                 <textarea id="chef-notes" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
@@ -443,7 +461,7 @@
                 <span>Total:</span>
                 <span id="cart-total">₹0.00</span>
             </div>
-            <button id="confirm-order-btn" class="mt-4 w-full glass-button-blue font-semibold py-3 rounded-md">Confirm Order</button>
+            <button id="confirm-order-btn" class="mt-4 w-full bg-black/50 backdrop-blur-lg text-white border border-white/20 font-semibold py-3 rounded-md hover:bg-black/60">Confirm Order</button>
         </div>
     </div>
 
@@ -494,8 +512,8 @@
                     <input type="number" step="0.01" id="res-payment" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
                 </div>
                 <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
-                    <button type="button" id="cancel-modal-btn" class="glass-button-gray px-4 py-2 text-gray-800 rounded-md">Cancel</button>
-                    <button type="submit" class="glass-button-blue px-4 py-2 rounded-md">Save</button>
+                    <button type="button" id="cancel-modal-btn" class="bg-white/50 backdrop-blur-lg border border-white/30 px-4 py-2 text-gray-800 rounded-md hover:bg-white/70">Cancel</button>
+                    <button type="submit" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-4 py-2 rounded-md hover:bg-black/60">Save</button>
                 </div>
             </form>
         </div>
@@ -552,8 +570,8 @@
                     </div>
                 </div>
                 <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
-                    <button type="button" id="cancel-user-modal-btn" class="glass-button-gray px-4 py-2 text-gray-800 rounded-md">Cancel</button>
-                    <button type="submit" class="glass-button-blue px-4 py-2 rounded-md">Save</button>
+                    <button type="button" id="cancel-user-modal-btn" class="bg-white/50 backdrop-blur-lg border border-white/30 px-4 py-2 text-gray-800 rounded-md hover:bg-white/70">Cancel</button>
+                    <button type="submit" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-4 py-2 rounded-md hover:bg-black/60">Save</button>
                 </div>
             </form>
         </div>
@@ -666,8 +684,8 @@
                     </div>
                 </div>
                 <div class="flex justify-end pt-4 space-x-2 border-t mt-4">
-                    <button type="button" id="cancel-menu-item-modal-btn" class="glass-button-gray px-4 py-2 text-gray-800 rounded-md">Cancel</button>
-                    <button type="submit" class="glass-button-blue px-4 py-2 rounded-md flex items-center justify-center w-24">Save</button>
+                    <button type="button" id="cancel-menu-item-modal-btn" class="bg-white/50 backdrop-blur-lg border border-white/30 px-4 py-2 text-gray-800 rounded-md hover:bg-white/70">Cancel</button>
+                    <button type="submit" class="bg-black/50 backdrop-blur-lg text-white border border-white/20 px-4 py-2 rounded-md hover:bg-black/60 flex items-center justify-center w-24">Save</button>
                 </div>
             </form>
         </div>
@@ -724,6 +742,7 @@
         let restaurantData = [];
         let userData = [];
         let menuData = [];
+        let allOrders = [];
         let currentUserProfile = null;
         let unsubscribeListeners = [];
         let fileToUpload = null;
@@ -769,7 +788,13 @@
         const orderStatusFooter = document.getElementById('order-status-footer');
         const orderStatusText = document.getElementById('order-status-text');
         const editOrderBtn = document.getElementById('edit-order-btn');
+        const cancelOrderBtn = document.getElementById('cancel-order-btn');
+        const timerContainer = document.getElementById('timer-container');
+        const timerText = document.getElementById('timer-text');
+        const timerBar = document.getElementById('timer-bar');
 
+        // KOT elements
+        const kotContainer = document.getElementById('kot-container');
 
         // Restaurant Modal elements
         const restaurantModal = document.getElementById('restaurant-modal');
@@ -906,8 +931,13 @@
                 }
                 renderAll();
             });
+            
+            const unsubOrders = onSnapshot(collection(db, "orders"), (snapshot) => {
+                allOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderAll();
+            });
 
-            unsubscribeListeners = [unsubRestaurants, unsubUsers, unsubMenu];
+            unsubscribeListeners = [unsubRestaurants, unsubUsers, unsubMenu, unsubOrders];
         }
 
         function unsubscribeAll() {
@@ -995,14 +1025,36 @@
         cartButton.addEventListener('click', () => cartPanel.classList.remove('translate-x-full'));
         closeCartBtn.addEventListener('click', () => {
             cartPanel.classList.add('translate-x-full');
-            if (currentActiveOrder && !['Delivered', 'Cancelled'].includes(currentActiveOrder.status)) {
-                orderStatusFooter.classList.remove('hidden');
-            }
+            updateOrderStatusFooterVisibility();
         });
         confirmOrderBtn.addEventListener('click', handleConfirmOrder);
         interactiveMenuItemsContainer.addEventListener('click', handleOrderInteraction);
         cartItemsContainer.addEventListener('click', handleCartInteraction);
         editOrderBtn.addEventListener('click', handleEditOrder);
+        cancelOrderBtn.addEventListener('click', handleCancelOrder);
+
+        // KOT Listeners
+        kotContainer.addEventListener('dragstart', e => {
+             if(e.target.classList.contains('kot-ticket')) {
+                e.target.classList.add('dragging');
+             }
+        });
+         kotContainer.addEventListener('dragend', e => {
+             if(e.target.classList.contains('kot-ticket')) {
+                e.target.classList.remove('dragging');
+             }
+        });
+        kotContainer.addEventListener('dragover', e => {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(kotContainer, e.clientY);
+            const draggable = document.querySelector('.dragging');
+            if (afterElement == null) {
+                kotContainer.appendChild(draggable);
+            } else {
+                kotContainer.insertBefore(draggable, afterElement);
+            }
+        });
+        kotContainer.addEventListener('click', handleKOTInteraction);
 
 
         // --- RENDER FUNCTIONS ---
@@ -1012,6 +1064,7 @@
             renderMenuTable();
             populateAllRestaurantFilters();
             renderDashboard();
+            renderKOTPage();
             if (currentView === 'order-food-content') {
                 renderOrderFoodPage();
             }
@@ -1025,6 +1078,7 @@
             document.getElementById('total-menu-items').textContent = menuData.length;
 
             renderMenuItemsChart();
+            renderRecentOrdersTable();
         }
 
         let menuItemsChart = null;
@@ -1081,6 +1135,34 @@
                     responsive: true,
                     maintainAspectRatio: false
                 }
+            });
+        }
+        
+        function renderRecentOrdersTable() {
+            const tableBody = document.querySelector('#recent-orders-table tbody');
+            if(!tableBody) return;
+            tableBody.innerHTML = '';
+            
+            const recentOrders = allOrders
+                .filter(order => order.status === 'Ready' || order.status === 'Delivered')
+                .sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate())
+                .slice(0, 5);
+            
+            if (recentOrders.length === 0) {
+                showEmptyState(tableBody, 5, 'No recent orders.');
+                return;
+            }
+            
+            recentOrders.forEach(order => {
+                const restaurant = restaurantData.find(r => r.id === order.restaurantId);
+                const newRow = tableBody.insertRow();
+                newRow.innerHTML = `
+                    <td class="px-4 py-2 text-xs">${order.id.substring(0, 8)}...</td>
+                    <td class="px-4 py-2 text-xs">${restaurant ? restaurant.name : 'N/A'}</td>
+                    <td class="px-4 py-2 text-xs">₹${order.totalPrice}</td>
+                    <td class="px-4 py-2 text-xs">${order.status}</td>
+                    <td class="px-4 py-2 text-xs">${order.createdAt.toDate().toLocaleDateString()}</td>
+                `;
             });
         }
 
@@ -1214,7 +1296,7 @@
             
             let buttonHtml = '';
             if (buttonText && buttonAction) {
-                buttonHtml = `<button id="empty-state-btn" class="glass-button-blue px-3 py-1.5 rounded-md text-xs mt-4">${buttonText}</button>`;
+                buttonHtml = `<button id="empty-state-btn" class="mt-4 bg-black/50 backdrop-blur-lg text-white border border-white/20 px-3 py-1.5 rounded-md hover:bg-black/60 text-xs">${buttonText}</button>`;
             }
 
             cell.innerHTML = `
@@ -1263,7 +1345,10 @@
                  document.getElementById('order-food-actions').style.display = 'flex';
             } else if (targetId === 'dashboard-content') {
                  headerTitle.textContent = 'Dashboard';
+            } else if (targetId === 'kot-content') {
+                headerTitle.textContent = 'Kitchen Order Tickets';
             }
+
 
             document.querySelectorAll('#sidebar-nav a, #mobile-nav a').forEach(nav => {
                 nav.classList.remove('bg-gray-900', 'text-white');
@@ -1273,6 +1358,7 @@
                     nav.classList.remove('text-gray-300');
                 }
             });
+            updateOrderStatusFooterVisibility();
             handleSearch(); // Re-filter on view change
         }
 
@@ -2054,15 +2140,15 @@
             const itemInCart = cart[itemId];
             if (itemInCart && itemInCart.quantity > 0) {
                 return `
-                    <div class="flex items-center justify-between w-full">
-                        <button class="quantity-change-btn w-8 h-8 rounded-md glass-button-blue text-lg font-bold" data-item-id="${itemId}" data-change="-1">-</button>
-                        <span class="text-lg font-bold w-8 text-center">${itemInCart.quantity}</span>
-                        <button class="quantity-change-btn w-8 h-8 rounded-md glass-button-blue text-lg font-bold" data-item-id="${itemId}" data-change="1">+</button>
+                    <div class="flex items-center justify-center space-x-2 w-full">
+                        <button class="quantity-change-btn flex-1 bg-black/50 backdrop-blur-lg text-white border border-white/20 font-semibold py-2 rounded-md hover:bg-black/60 text-lg" data-item-id="${itemId}" data-change="-1">-</button>
+                        <span class="text-lg font-bold w-12 text-center">${itemInCart.quantity}</span>
+                        <button class="quantity-change-btn flex-1 bg-black/50 backdrop-blur-lg text-white border border-white/20 font-semibold py-2 rounded-md hover:bg-black/60 text-lg" data-item-id="${itemId}" data-change="1">+</button>
                     </div>
                 `;
             } else {
                 return `
-                    <button class="add-to-cart-btn w-full glass-button-blue font-semibold py-2 rounded-md flex items-center justify-center gap-2">
+                    <button class="add-to-cart-btn w-full bg-black/50 backdrop-blur-lg text-white border border-white/20 font-semibold py-2 rounded-md hover:bg-black/60 flex items-center justify-center gap-2">
                         <i data-lucide="utensils-crossed" class="w-4 h-4"></i> Add to Order
                     </button>
                 `;
@@ -2168,7 +2254,8 @@
                 itemId: item.id,
                 name: item.name,
                 price: item.price,
-                quantity: item.quantity
+                quantity: item.quantity,
+                prepTime: item.prepTime
             }));
             
             const total = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -2184,8 +2271,18 @@
             };
 
             try {
-                const docRef = await addDoc(collection(db, "orders"), orderData);
-                alert("Order placed successfully!");
+                let docRef;
+                if (currentActiveOrder && currentActiveOrder.status === 'Placed') {
+                    // Update existing order
+                    docRef = doc(db, "orders", currentActiveOrder.id);
+                    await updateDoc(docRef, orderData);
+                    alert("Order updated successfully!");
+                } else {
+                    // Add new order
+                    docRef = await addDoc(collection(db, "orders"), orderData);
+                    alert("Order placed successfully!");
+                }
+
                 listenToOrderStatus(docRef.id);
                 cart = {};
                 renderCartUI();
@@ -2209,11 +2306,24 @@
             
             renderCartUI();
             cartPanel.classList.remove('translate-x-full');
-            orderStatusFooter.classList.add('hidden');
-            if (currentOrderUnsubscribe) {
-                currentOrderUnsubscribe();
-                currentOrderUnsubscribe = null;
-            }
+        }
+        
+        async function handleCancelOrder() {
+             if (!currentActiveOrder) return;
+             openConfirmModal({
+                title: 'Cancel Order',
+                message: 'Are you sure you want to cancel this order?',
+                requiresInput: false,
+                onConfirm: async () => {
+                     try {
+                        await updateDoc(doc(db, "orders", currentActiveOrder.id), { status: "Cancelled" });
+                        alert("Order has been cancelled.");
+                     } catch (error) {
+                         console.error("Error cancelling order:", error);
+                         alert("Could not cancel the order.");
+                     }
+                }
+             })
         }
 
         async function checkForActiveOrder(userId) {
@@ -2238,31 +2348,148 @@
                 }
             }
         }
-
+        
+        let timerInterval = null;
         function listenToOrderStatus(orderId) {
              if (currentOrderUnsubscribe) {
                 currentOrderUnsubscribe();
             }
             currentOrderUnsubscribe = onSnapshot(doc(db, "orders", orderId), (doc) => {
                 currentActiveOrder = { id: doc.id, ...doc.data() };
-                if (currentActiveOrder && !['Delivered', 'Cancelled'].includes(currentActiveOrder.status)) {
-                    orderStatusText.textContent = currentActiveOrder.status;
-                    orderStatusFooter.classList.remove('hidden');
-
-                    if(currentActiveOrder.status === 'Placed') {
-                        editOrderBtn.classList.remove('hidden');
-                    } else {
-                        editOrderBtn.classList.add('hidden');
-                    }
-                } else {
-                    orderStatusFooter.classList.add('hidden');
-                    if (currentOrderUnsubscribe) {
-                        currentOrderUnsubscribe();
-                        currentOrderUnsubscribe = null;
-                    }
-                }
+                updateOrderStatusFooterVisibility();
             });
         }
+        
+        function updateOrderStatusFooterVisibility() {
+             if (currentView === 'order-food-content' && currentActiveOrder && !['Delivered', 'Cancelled'].includes(currentActiveOrder.status)) {
+                orderStatusText.textContent = currentActiveOrder.status;
+                orderStatusFooter.classList.remove('hidden');
+
+                if(currentActiveOrder.status === 'Placed') {
+                    editOrderBtn.classList.remove('hidden');
+                    timerContainer.classList.add('hidden');
+                    if (timerInterval) clearInterval(timerInterval);
+                } else if(currentActiveOrder.status === 'In Preparation') {
+                    editOrderBtn.classList.add('hidden');
+                    timerContainer.classList.remove('hidden');
+                    startTimer();
+                } else {
+                     editOrderBtn.classList.add('hidden');
+                     timerContainer.classList.add('hidden');
+                     if (timerInterval) clearInterval(timerInterval);
+                }
+            } else {
+                orderStatusFooter.classList.add('hidden');
+                if (currentOrderUnsubscribe && (!currentActiveOrder || ['Delivered', 'Cancelled'].includes(currentActiveOrder.status))) {
+                    currentOrderUnsubscribe();
+                    currentOrderUnsubscribe = null;
+                }
+                 if (timerInterval) clearInterval(timerInterval);
+            }
+        }
+
+        function startTimer() {
+            if(timerInterval) clearInterval(timerInterval);
+            if (!currentActiveOrder) return;
+
+            const totalPrepTime = currentActiveOrder.items.reduce((sum, item) => sum + (parseInt(item.prepTime) || 0), 0);
+            const prepTimeInSeconds = totalPrepTime * 60;
+            const startTime = currentActiveOrder.createdAt.toDate().getTime();
+            
+            timerInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const elapsedTime = (now - startTime) / 1000;
+                const remainingTime = Math.max(0, prepTimeInSeconds - elapsedTime);
+                
+                const minutes = Math.floor(remainingTime / 60);
+                const seconds = Math.floor(remainingTime % 60);
+                timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')} left`;
+
+                const percentage = (elapsedTime / prepTimeInSeconds) * 100;
+                timerBar.style.width = `${percentage}%`;
+
+                if (remainingTime <= 0) {
+                    clearInterval(timerInterval);
+                    timerText.textContent = "Almost ready!";
+                    timerBar.style.width = '100%';
+                }
+            }, 1000);
+        }
+        
+        // KOT Functions
+        function renderKOTPage() {
+            if (currentView !== 'kot-content') return;
+            kotContainer.innerHTML = '';
+            
+            const activeOrders = allOrders.filter(order => ['Placed', 'In Preparation'].includes(order.status));
+            
+            if(activeOrders.length === 0) {
+                kotContainer.innerHTML = '<p class="text-center text-gray-500 col-span-full">No active orders.</p>';
+                return;
+            }
+            
+            activeOrders.forEach(order => {
+                const ticket = document.createElement('div');
+                ticket.className = 'kot-ticket bg-white p-4 rounded-lg shadow-md border space-y-2';
+                ticket.dataset.orderId = order.id;
+                ticket.draggable = true;
+
+                const itemsHtml = order.items.map(item => `<li>${item.quantity} x ${item.name}</li>`).join('');
+                
+                let actionButtonHtml = '';
+                if (order.status === 'Placed') {
+                    actionButtonHtml = `<button class="kot-action-btn w-full bg-blue-500 text-white py-1 rounded mt-2 text-xs" data-action="prepare">Start Preparation</button>`;
+                } else if (order.status === 'In Preparation') {
+                    actionButtonHtml = `<button class="kot-action-btn w-full bg-green-500 text-white py-1 rounded mt-2 text-xs" data-action="ready">Mark as Ready</button>`;
+                }
+
+                ticket.innerHTML = `
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <h4 class="font-bold text-sm">Order #${order.id.substring(0, 5)}</h4>
+                        <span class="text-xs text-gray-500">${new Date(order.createdAt.seconds * 1000).toLocaleTimeString()}</span>
+                    </div>
+                    <ul class="text-xs list-disc pl-4">${itemsHtml}</ul>
+                    ${order.notes ? `<p class="text-xs italic text-red-600 pt-2 border-t">Notes: ${order.notes}</p>` : ''}
+                    ${actionButtonHtml}
+                `;
+                kotContainer.appendChild(ticket);
+            });
+        }
+        
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.kot-ticket:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+        
+        async function handleKOTInteraction(e) {
+            const btn = e.target.closest('.kot-action-btn');
+            if(!btn) return;
+
+            const orderId = btn.closest('.kot-ticket').dataset.orderId;
+            const action = btn.dataset.action;
+
+            let newStatus = '';
+            if (action === 'prepare') newStatus = 'In Preparation';
+            if (action === 'ready') newStatus = 'Ready';
+
+            if (newStatus) {
+                try {
+                    await updateDoc(doc(db, 'orders', orderId), { status: newStatus });
+                } catch (error) {
+                    console.error("Failed to update order status:", error);
+                    alert("Could not update order status.");
+                }
+            }
+        }
+
 
         // Initialize sorting functionality for all tables
         document.querySelectorAll('.sortable-header').forEach(header => {
