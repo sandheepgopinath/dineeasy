@@ -933,7 +933,13 @@
             });
             
             const unsubOrders = onSnapshot(collection(db, "orders"), (snapshot) => {
-                allOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const fetchedOrders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                if(isSuperAdmin) {
+                    allOrders = fetchedOrders;
+                } else {
+                    const assignedRestaurantIds = restaurantData.map(r => r.id);
+                    allOrders = fetchedOrders.filter(order => assignedRestaurantIds.includes(order.restaurantId));
+                }
                 renderAll();
             });
 
@@ -1373,44 +1379,45 @@
         }
 
         function populateAllRestaurantFilters() {
-            const restaurantNames = new Set(restaurantData.map(r => r.name));
+             const allRestaurantOptions = restaurantData.map(res => `<option value="${res.id}">${res.name}</option>`).join('');
             
-            // For user management filter
             const userFilter = document.getElementById('restaurantFilter');
             if (userFilter) {
-                const existingUserFilterOptions = userFilter.querySelectorAll('option:not([value="all"])');
-                existingUserFilterOptions.forEach(opt => opt.remove());
-                restaurantNames.forEach(name => {
-                    const option = document.createElement('option');
-                    option.value = name;
-                    option.textContent = name;
-                    userFilter.appendChild(option);
-                });
+                const currentVal = userFilter.value;
+                userFilter.innerHTML = '<option value="all">All Restaurants</option>' + restaurantData.map(r => `<option value="${r.name}">${r.name}</option>`).join('');
+                userFilter.value = currentVal;
             }
 
-            // For menu management filter
             const menuFilter = document.getElementById('menuRestaurantFilter');
-            if(menuFilter) {
-                const existingMenuFilterOptions = menuFilter.querySelectorAll('option:not([value=""])');
-                existingMenuFilterOptions.forEach(opt => opt.remove());
-                restaurantData.forEach(res => {
-                    const option = document.createElement('option');
-                    option.value = res.id;
-                    option.textContent = res.name;
-                    menuFilter.appendChild(option);
-                });
+            if (menuFilter) {
+                const currentVal = menuFilter.value;
+                menuFilter.innerHTML = '<option value="">Select Restaurant</option>' + allRestaurantOptions;
+                menuFilter.value = currentVal;
             }
-             // For order food filter
+
             const orderFilter = document.getElementById('order-restaurant-filter');
             if (orderFilter) {
-                const existingOrderFilterOptions = orderFilter.querySelectorAll('option:not([value=""])');
-                existingOrderFilterOptions.forEach(opt => opt.remove());
-                restaurantData.forEach(res => {
-                    const option = document.createElement('option');
-                    option.value = res.id;
-                    option.textContent = res.name;
-                    orderFilter.appendChild(option);
-                });
+                const currentVal = orderFilter.value;
+                orderFilter.innerHTML = '<option value="">Select Restaurant</option>' + allRestaurantOptions;
+                
+                if (restaurantData.length === 1) {
+                    orderFilter.value = restaurantData[0].id;
+                    orderFilter.style.display = 'none';
+                    if (currentView === 'order-food-content') {
+                        headerTitle.textContent = restaurantData[0].name;
+                    }
+                } else {
+                    orderFilter.style.display = 'block';
+                    if (!currentVal && restaurantData.length > 0) {
+                        orderFilter.value = restaurantData[0].id;
+                    } else {
+                        orderFilter.value = currentVal;
+                    }
+                }
+                
+                if (currentView === 'order-food-content') {
+                    orderFilter.dispatchEvent(new Event('change'));
+                }
             }
         }
 
@@ -2007,7 +2014,7 @@
             }
 
             const restaurant = restaurantData.find(r => r.id === selectedRestaurantId);
-            if (restaurant) {
+            if (restaurant && restaurantData.length > 1) {
                 headerTitle.textContent = restaurant.name;
             }
 
